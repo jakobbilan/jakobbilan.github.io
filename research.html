@@ -86,6 +86,16 @@
         <figure id="Location3"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
     </section>
 
+        <section>
+        <div class="chart-description">
+            <h2>Section 4: Come on! Just one more graph, please, just one more graph.</h2>
+            <p> <!-- This is ANOTHER paragraph. -->
+                Another example chart, this time from FRED.
+            </p>
+        </div>
+        <figure id="Location4"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
+    </section>
+
     <!-- Do you want to add more sections? -->
         <!-- Try copying pasting the section above -->
         <!-- You'll need to change the id of the figure "<figure id="Location3"... -->
@@ -110,6 +120,11 @@
                                                                                                                     // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_2_spec = "chart2.json"
 
         vegaEmbed('#Location3', chart3) // We're using the vegaEmbed function to put a graph in the element with id figure_3
+
+        let chart4 = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/refs/heads/main/charts/library/chartLine2.json"; // We're storing the URL of the graph we want to display in a variable
+                                                                                                                    // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_2_spec = "chart2.json"
+
+        vegaEmbed('#Location4', chart4) // We're using the vegaEmbed function to put a graph in the element with id figure_3
 
         // Do you want to add more graphs?
         // try defining a new variable for figure_3_spec, adding VegaEmbed for Location3, and adding a new section in the HTML
