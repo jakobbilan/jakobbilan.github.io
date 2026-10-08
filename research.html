@@ -1,40 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- This HTML file is a portfolio page. It contains a header, a few sections, and a few charts. -->
-<!-- It uses style.css, the stylesheet shared by every page of this site. -->
-<!-- The HTML file defines the structure of the page, and the CSS file defines how it looks. -->
+<!-- The research page: an overview that links to subpages (collections, papers) -->
+<!-- Subpages are linked from this page only, not from the menu -->
 
-<!-- This is a comment -->
-<!-- Comments are not displayed in the browser -->
-<!-- They can be used to leave notes in the code -->
-
-    <!-- HTML is heirarchial: tags like this define elements on the page. 
-    Each tag does something different. For example:
-        - The <html> tag defines the whole document.
-        - The <h1> tag defines a large heading
-        - The <p> tag defines a paragraph
-        - Tags appear as an opening <div> and closing </div> pair
-    -->
-
-<head>    
-    <!-- The head tag links to resources our page needs and defines information about it. Tags in the <head> aren't displayed on the page. -->
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Research | Jakob Kilian Bilan</title> <!-- The title displayed in the browser tab, not on the page itself -->
-
-    <!-- The stylesheet shared by every page: it contains the rules for how each element on the page looks -->
+    <title>Research | Jakob Kilian Bilan</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- This is a link to the vega-lite which we're using to make graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 
-<body> 
-<!-- The body tag contains the elements that visitors to our page will see. -->
-
+<body>
     <!-- Same header as on every page; only aria-current moves to this page's link -->
     <header>
         <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
@@ -47,95 +24,19 @@
         </nav>
     </header>
 
-    <!-- class="charts" gives the chart sections their spacing in style.css -->
-    <main class="charts">
+    <main>
         <h1>Research</h1>
-        <p>On this page, I will soon maintain an active portfolio of charts that may be of interest. Please feel free to explore!</p>
 
-        <!-- We're organising the page into sections, with each section containing a chart, title and a description -->
-        <section>
-            <div class="chart-description">
-                <h2>Section 1: A basic chart</h2>
-                <p> <!-- This is a paragraph, it's the main way to display text on a web page -->
-                    For now, these charts are just examples from the GrowthLab repo. Soon, my own charts will land in their place.
-                </p>
-            </div>
-            <figure id="Location1"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
-        </section>
+        <!-- class="items": one row per subpage, like the contents of a folder -->
+        <!-- To add a row, copy the <li> ... </li> block and change the link, title and details -->
+        <ul class="items">
+            <li>
+                <a href="pp434.html">Chart Collection for PP434 – Automated Data Visualisation for Policymaking (0.5)</a>
+                <p>LSE, 2026/27</p>
+            </li>
+        </ul>
 
-        <section>
-            <div class="chart-description">
-                <h2>Section 2: Another basic chart</h2>
-                <p> <!-- This is a paragraph, it's the main way to display text on a web page -->
-                    Another example chart from the GrowthLab repo.
-                </p>
-            </div>
-            <figure id="Location2"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
-        </section>
-
-        <section>
-            <div class="chart-description">
-                <h2>Section 3: And even another basic chart</h2>
-                <p> <!-- This is a paragraph, it's the main way to display text on a web page -->
-                    Another example chart from the GrowthLab repo.
-                </p>
-            </div>
-            <figure id="Location3"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
-        </section>
-
-        <section>
-            <div class="chart-description">
-                <h2>Section 4: Just one more chart, please, just one more!</h2>
-                <p> <!-- This is ANOTHER paragraph. -->
-                    Another example chart, this time from FRED.
-                </p>
-            </div>
-            <figure id="Location4"></figure> <!-- we give it an id so we can put a vega-lite graph here with VegaEmbed -->
-        </section>
-
-        <!-- Do you want to add more sections? -->
-            <!-- Try copying pasting the section above -->
-            <!-- You'll need to change the id of the figure "<figure id="Location3"... -->
-            <!-- ... and add a new variable for the graph spec in the script at the bottom of the page -->
+        <p>Additional information coming soon.</p>
     </main>
-
-    <!-- This is a script, it's a way to run JavaScript code on the page -->
-    <script>
-        // This is a comment in JavaScript - it's a different language to HTML and CSS
-
-        // Options shared by every chart: chart text uses the page's typeface.
-        // A chart whose own spec sets a font keeps that font.
-        let options = { config: { font: 'Charter, "Bitstream Charter", "Sitka Text", Cambria, serif' } };
-
-        let chart1 = "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/2/s2_chart2.json"; // We're storing the URL of the graph we want to display in a variable
-                                                                                                                    // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_1_spec = "chart1.json"
-
-        vegaEmbed('#Location1', chart1, options) // We're using the vegaEmbed function to put a graph in the element with id figure_1
-
-        let chart2 = "wk1_chart2.json"; // We're storing the URL of the graph we want to display in a variable
-                                                                                                                    // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_2_spec = "chart2.json"
-
-        vegaEmbed('#Location2', chart2, options) // We're using the vegaEmbed function to put a graph in the element with id figure_2
-
-        let chart3 = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/refs/heads/main/charts/library/chartLine2.json"; // We're storing the URL of the graph we want to display in a variable
-                                                                                                                    // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_2_spec = "chart2.json"
-
-        vegaEmbed('#Location3', chart3, options) // We're using the vegaEmbed function to put a graph in the element with id figure_3
-
-        let chart4 = "oil_prices.json"; // We're storing the URL of the graph we want to display in a variable
-                                                                                                                    // You should have a spec for a graph in this same folder. Just specify its name here, e.g. let figure_2_spec = "chart2.json"
-
-        vegaEmbed('#Location4', chart4, options) // We're using the vegaEmbed function to put a graph in the element with id figure_3
-
-        // Do you want to add more graphs?
-        // try defining a new variable for figure_3_spec, adding VegaEmbed for Location3, and adding a new section in the HTML
-        // e.g. 
-        // let figure_3_spec = ...
-        // vegaEmbed('#Location3', figure_3_spec, options)
-
-
-    </script>
-
 </body>
-    
 </html>
