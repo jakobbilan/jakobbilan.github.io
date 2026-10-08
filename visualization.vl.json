@@ -1,0 +1,16 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/jakobbilan/jakobbilan.github.io/refs/heads/main/us_crude_oil_price.csv",
+    "format": {"type": "csv", "parse": {"date": "date", "value": "number"}}
+  },
+  "title": {"text": "Crude Oil Prices: West Texas Intermediate (WTI)"},
+  "width": 300,
+  "height": 300,
+  "mark": {"type": "line", "color": "red"},
+  "encoding": {
+    "x": {"field": "date", "type": "temporal"},
+    "y": {"field": "value", "type": "quantitative"}
+  },
+  "config": {}
+}
