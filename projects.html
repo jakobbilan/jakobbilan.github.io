@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- The projects page: current and completed projects, in the same layout as the research page -->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,9 +23,54 @@
         </nav>
     </header>
 
-    <main>
+    <!-- class="research" reuses the research page's headings, spacing and separator lines (style.css) -->
+    <main class="research">
         <h1>Projects</h1>
-        <p>Coming soon.</p>
+
+        <!-- Newest first. To add a project, copy an <article> ... </article> block into the right section -->
+        <section>
+            <h2>Current</h2>
+
+            <article class="paper">
+                <h3>Turner MBA Impact Investing Network &amp; Training (Turner MIINT)</h3>
+                <dl class="fields">
+                    <dt>Type</dt>
+                    <dd>Impact investing training programme and competition</dd>
+                    <dt>Role</dt>
+                    <dd>Member of the LSE team</dd>
+                    <dt>Organisers</dt>
+                    <dd>Wharton Impact and the Impact Capital Managers (ICM) Institute</dd>
+                    <dt>Period</dt>
+                    <dd>2026/27</dd>
+                    <dt>Description</dt>
+                    <dd>A year-long programme in which graduate student teams source an early-stage impact venture, carry out due diligence and present an investment recommendation to a panel of judges. The winning team’s company receives a $50,000 investment.</dd>
+                    <dt>Link</dt>
+                    <dd><a href="https://turnermiint.org/">Programme website</a></dd>
+                </dl>
+            </article>
+        </section>
+
+        <section>
+            <h2>Completed</h2>
+
+            <article class="paper">
+                <h3>Financing Cigéo, France’s Deep Geological Repository for Radioactive Waste</h3>
+                <dl class="fields">
+                    <dt>Type</dt>
+                    <dd>Team policy project and policy brief</dd>
+                    <dt>Programme</dt>
+                    <dd>Policy-Making Initiative for Sustainability, Sciences Po School of Public Affairs</dd>
+                    <dt>Addressed to</dt>
+                    <dd>France’s energy and climate directorate (DGEC)</dd>
+                    <dt>Period</dt>
+                    <dd>Spring 2026</dd>
+                    <dt>Description</dt>
+                    <dd>Controversy mapping and policy recommendations on how Cigéo’s costs are estimated and financed, including the discount rate nuclear operators use to provision for them. Based on ten stakeholder interviews with officials, members of Parliament, industry, civil society and economists, and presented to an expert jury.</dd>
+                    <dt>Link</dt>
+                    <dd><a href="https://www.sciencespo.fr/ecole-affaires-publiques/en/policy-lab/Policy-Making%20Initiative%20for%20Sustainability/">Programme page</a></dd>
+                </dl>
+            </article>
+        </section>
     </main>
 </body>
 </html>
