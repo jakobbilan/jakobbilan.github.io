@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- The research page: a folder for the chart collection at the top, then a list of papers and reports -->
+<!-- The research page: the chart collection at the top, then a list of papers and reports -->
 <!-- The chart collection (pp434.html) is linked from this page only, not from the menu -->
 
 <head>
@@ -24,19 +24,24 @@
         </nav>
     </header>
 
-    <main>
+    <!-- class="research" gives this page its section headings, spacing and separator lines (style.css) -->
+    <main class="research">
         <h1>Research</h1>
 
-        <!-- Folder: the whole row is one link to the subpage. The svg draws the folder icon -->
-        <a class="folder" href="pp434.html">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4.4l2 2.2h8.6A1.5 1.5 0 0 1 21 9.7v8.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></svg>
-            <span class="folder-title">Chart Collection for PP434 – Automated Data Visualisation for Policymaking</span>
-            <span class="folder-meta">LSE, 2026/27</span>
-        </a>
+        <!-- Charts: the title links to the chart collection subpage -->
+        <section>
+            <h2>Charts</h2>
+            <div class="item">
+                <h3><a href="pp434.html">Chart Collection for PP434 – Automated Data Visualisation for Policymaking</a></h3>
+                <p class="meta">LSE, 2026/27</p>
+            </div>
+        </section>
 
         <!-- Papers and reports, newest first. To add one, copy an <article> ... </article> block -->
-        <!-- Each entry: the title (h3), then a description list (dl) of label (dt) and details (dd) -->
-        <section class="papers">
+        <!-- Each entry: the title (h3), then a description list (dl) of labels (dt) and details (dd) -->
+        <!-- Disclosure rule: work in preparation shows title, type, coauthors and a one-line topic only. -->
+        <!-- Add data, design and findings once a dated public version (working paper, preprint) exists. -->
+        <section>
             <h2>Papers and reports</h2>
 
             <article class="paper">
@@ -47,9 +52,21 @@
                     <dt>Coauthors</dt>
                     <dd>Marc Ringel (Sciences Po)</dd>
                     <dt>Description</dt>
-                    <dd>Asks whether the split incentive between landlords and tenants holds back private adaptation to heat, measured as household investment in cooling equipment, by comparing renters with owners across the EU-27.</dd>
-                    <dt>Data</dt>
-                    <dd>EIB Climate Survey 2024 (EU-27); external validation with US federal surveys (RECS 2020, AHS 2015–2023)</dd>
+                    <dd>Studies whether the split incentive between landlords and tenants holds back private adaptation to heat in Europe.</dd>
+                    <dt>Link</dt>
+                    <dd>Not yet available</dd>
+                </dl>
+            </article>
+
+            <article class="paper">
+                <h3>Climate Risk to the Energy System in the EU’s National Energy and Climate Plans</h3>
+                <dl class="fields">
+                    <dt>Type</dt>
+                    <dd>Conference paper, in preparation</dd>
+                    <dt>Coauthors</dt>
+                    <dd>Marc Ringel (Sciences Po)</dd>
+                    <dt>Description</dt>
+                    <dd>A policy analysis of how EU Member States plan for climate impacts on their energy systems.</dd>
                     <dt>Link</dt>
                     <dd>Not yet available</dd>
                 </dl>
@@ -63,7 +80,7 @@
                     <dt>Coauthors</dt>
                     <dd>Robert Birkmayer, Ewa Jarosz, Etienne Oriot, Clara Simões Coelho (all Sciences Po)</dd>
                     <dt>Description</dt>
-                    <dd>Examines which factors predict willingness to pay an extra income tax to finance climate policies that benefit people on lower incomes than themselves. Country-by-country ordinal logit models (partial proportional odds where the parallel-slopes assumption fails) identify climate concern and trust in government as the strongest positive predictors; respondents aged 50 and over, and those further to the political right, are less willing to pay.</dd>
+                    <dd>Examines what predicts willingness to pay an extra income tax for climate policies that benefit people on lower incomes, using country-by-country ordinal logit models. Climate concern and trust in government are the strongest positive predictors; respondents aged 50 and over and those further to the political right are less willing to pay.</dd>
                     <dt>Data</dt>
                     <dd>EIB Climate Survey 2023 (Germany, Sweden, Italy); Eurostat income quintile share ratio (S80/S20) by NUTS 2 region</dd>
                     <dt>Link</dt>
@@ -72,7 +89,7 @@
             </article>
         </section>
 
-        <p>Additional information coming soon.</p>
+        <p class="closing">Additional information coming soon.</p>
     </main>
 </body>
 </html>

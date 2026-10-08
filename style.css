@@ -123,61 +123,60 @@ a:focus-visible {
     color: #595959;
 }
 
-/* Research page: a folder row that opens a subpage; the whole row is the link */
-.folder {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 0.75rem;
-    padding: 0.9rem 0;
-    margin-bottom: 3rem;
-    border-top: 1px solid #d9d9d9;
-    border-bottom: 1px solid #d9d9d9;
-    color: inherit;
-    text-decoration: none;
-}
-
-/* Folder icon: drawn in the text colour, spanning the title and the line below it */
-.folder svg {
-    grid-row: span 2;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-top: 0.3rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
-    stroke-linejoin: round;
-}
-
-.folder-title {
+/* Section headings in small caps over a rule, as in the PDF CV: CV and research pages */
+.cv h2,
+.research h2 {
+    font-size: 1.0625rem;
     font-weight: bold;
-    text-decoration: underline;
-    text-decoration-color: #a6a6a6;
-    text-underline-offset: 0.18em;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05em;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid #7a7a7a;
+    margin: 2.25rem 0 0.9rem;
 }
 
-.folder:hover .folder-title {
-    text-decoration-color: currentColor;
+/* Research page: sections and entries */
+.research h2 {
+    margin: 3rem 0 1.25rem;
 }
 
-.folder-meta {
-    grid-column: 2;
+.research section:first-of-type h2 {
+    margin-top: 1.5rem;
+}
+
+/* A linked item with one line of details under it (the chart collection) */
+.item h3 {
+    margin-bottom: 0.2rem;
+}
+
+.meta {
+    margin: 0;
     font-size: 1rem;
     color: #595959;
 }
 
-/* Research page: papers and reports, one entry each, separated by rules */
-.papers h2 {
-    margin-bottom: 0.75rem;
-}
-
+/* Papers and reports: one entry each, a light rule between entries */
 .paper {
-    padding: 1.25rem 0;
-    border-top: 1px solid #d9d9d9;
+    padding: 1.5rem 0;
 }
 
-.paper:last-of-type {
-    border-bottom: 1px solid #d9d9d9;
-    margin-bottom: 2.5rem;
+.paper:first-of-type {
+    padding-top: 0;
+}
+
+.paper + .paper {
+    border-top: 1px solid #dcdcdc;
+}
+
+.paper h3 {
+    margin-bottom: 0.7rem;
+}
+
+/* Closing note under the list */
+.closing {
+    margin: 1rem 0 0;
+    font-size: 1rem;
+    color: #595959;
 }
 
 /* Label | details grids: the contact page, and the fields of each paper */
@@ -202,27 +201,17 @@ a:focus-visible {
     overflow-wrap: anywhere;
 }
 
-/* Paper fields: slightly smaller and tighter than the contact page */
+/* Paper fields: slightly smaller than the contact page, with room between rows */
 .fields {
     font-size: 1rem;
-    row-gap: 0.3rem;
+    line-height: 1.55;
+    row-gap: 0.45rem;
 }
 
 /* CV page: denser type, same structure as the PDF */
 .cv {
     font-size: 1rem;
     line-height: 1.5;
-}
-
-/* Section headings in small caps over a rule, as in the PDF */
-.cv h2 {
-    font-size: 1.0625rem;
-    font-weight: bold;
-    font-variant-caps: small-caps;
-    letter-spacing: 0.05em;
-    padding-bottom: 0.15rem;
-    border-bottom: 1px solid #7a7a7a;
-    margin: 2.25rem 0 0.9rem;
 }
 
 .cv p {
@@ -295,6 +284,6 @@ a:focus-visible {
     }
 
     .fields dt {
-        margin-top: 0.5rem;
+        margin-top: 0.6rem;
     }
 }
