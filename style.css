@@ -1,11 +1,11 @@
 /* style.css: shared by every page, so the look is changed in one place */
 
-/* Page: one left-aligned column with comfortable line length */
+/* Page: one left-aligned column, lines short enough to read comfortably */
 body {
-    max-width: 38rem;
+    max-width: 44rem;
     margin: 0 auto;
     padding: 2rem 1.25rem 4rem;
-    /* Charter (Mac/iPhone), Sitka (Windows), Cambria as fallback: no font downloads */
+    /* Charter, also the typeface of the PDF CV (Mac/iPhone); Sitka (Windows), Cambria as fallback */
     font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
     font-size: 1.125rem;
     line-height: 1.6;
@@ -57,13 +57,156 @@ h1 {
     margin: 0 0 1rem;
 }
 
-/* Links inside page content */
+h2 {
+    font-size: 1.5rem;
+    font-weight: normal;
+    line-height: 1.25;
+    margin: 0 0 0.5rem;
+}
+
+/* hgroup: a heading with a line of details directly beneath it */
+hgroup {
+    margin-bottom: 2.5rem;
+}
+
+hgroup h1 {
+    margin-bottom: 0.4rem;
+}
+
+hgroup p {
+    margin: 0;
+    font-size: 1rem;
+    color: #595959;
+}
+
+/* Links inside page content: text colour with a quiet grey underline */
 main a {
-    color: #1f4e8c;
+    color: inherit;
+    text-decoration-color: #a6a6a6;
+    text-underline-offset: 0.18em;
+}
+
+main a:hover {
+    text-decoration-color: currentColor;
 }
 
 /* Visible outline when moving through links with the keyboard */
 a:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 3px;
+}
+
+/* Research page: one chart per section */
+.charts section {
+    margin-top: 3rem;
+}
+
+/* Charts wider than the column scroll sideways instead of breaking the page */
+.charts figure {
+    margin: 1rem 0 0;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Contact page: labels on the left, details on the right */
+.contact {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 0.5rem 1.5rem;
+    margin: 0;
+}
+
+.contact dt {
+    grid-column: 1;
+    color: #595959;
+}
+
+.contact dd {
+    grid-column: 2;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+/* CV page: denser type, same structure as the PDF */
+.cv {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Section headings in small caps over a rule, as in the PDF */
+.cv h2 {
+    font-size: 1.0625rem;
+    font-weight: bold;
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05em;
+    padding-bottom: 0.15rem;
+    border-bottom: 1px solid #7a7a7a;
+    margin: 2.25rem 0 0.9rem;
+}
+
+.cv p {
+    margin: 0 0 0.35rem;
+}
+
+.entry {
+    margin-bottom: 0.9rem;
+}
+
+/* One line of an entry: organisation or role on the left, place or dates on the right */
+.line {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 1.5rem;
+    align-items: baseline;
+}
+
+.line > :last-child {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.org {
+    font-weight: bold;
+}
+
+.role {
+    font-style: italic;
+}
+
+.cv ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.1rem;
+}
+
+.cv li {
+    margin-bottom: 0.15rem;
+}
+
+.cv li::marker {
+    font-size: 0.8em;
+}
+
+/* Phones: stack the two-column layouts */
+@media (max-width: 36rem) {
+    .line {
+        grid-template-columns: 1fr;
+    }
+
+    .line > :last-child {
+        text-align: left;
+    }
+
+    .contact {
+        grid-template-columns: 1fr;
+        row-gap: 0;
+    }
+
+    .contact dt,
+    .contact dd {
+        grid-column: 1;
+    }
+
+    .contact dt {
+        margin-top: 0.75rem;
+    }
 }
