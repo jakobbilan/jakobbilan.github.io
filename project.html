@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- The data science project page for PP434. The course requires this exact file name: project.html -->
+<!-- PP434 syllabus 2026/27: 5 to 8 charts, tables or visualisations; at most 800 words of text in total; -->
+<!-- four topics: aims; data (sources, how you accessed them, automation and replication); tools (cleaning, analysis, -->
+<!-- challenges and how you solved them); conclusions. Link every data source and the code behind each chart. -->
+<!-- Deadline: 7 January 2027, 16:00. All text on this page must be your own writing (course AI policy). -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Science Project | Jakob Kilian Bilan</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Vega, Vega-Lite and vega-embed: the libraries that draw the charts -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+    <!-- Same header as on every page. This page is not in the menu, so aria-current="true" marks Research, the section it belongs to -->
+    <header>
+        <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="research.html" aria-current="true">Research</a>
+            <a href="cv.html">CV</a>
+            <a href="projects.html">Projects</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <!-- class="charts" gives the sections and figures their spacing in style.css -->
+    <main class="charts">
+        <!-- Breadcrumb: the way back up to the research page -->
+        <p class="breadcrumb"><a href="research.html">Research</a> / Data Science Project</p>
+
+        <!-- Replace the heading with your project's title once you have chosen the topic (and update it on research.html) -->
+        <hgroup>
+            <h1>Data Science Project</h1>
+            <p>PP434 – Automated Data Visualisation for Policymaking 2026/27</p>
+            <p>Code and data: <a href="https://github.com/jakobbilan/jakobbilan.github.io">github.com/jakobbilan/jakobbilan.github.io</a></p>
+        </hgroup>
+
+        <section>
+            <h2>Aims</h2>
+            <p class="meta">To follow.</p>
+        </section>
+
+        <section>
+            <h2>Data</h2>
+            <p class="meta">To follow.</p>
+        </section>
+
+        <section>
+            <h2>Tools</h2>
+            <p class="meta">To follow.</p>
+        </section>
+
+        <!-- Figures: 5 to 8 in total. Each figure = the chart (div, filled by vegaEmbed) + a caption with its source and a link to its code -->
+        <!-- To add figures 6 to 8, copy a <figure> ... </figure> block and give the div the next id (figure6, figure7, figure8) -->
+        <section>
+            <h2>Figures</h2>
+            <figure><div id="figure1"></div><figcaption>Figure 1. To follow.</figcaption></figure>
+            <figure><div id="figure2"></div><figcaption>Figure 2. To follow.</figcaption></figure>
+            <figure><div id="figure3"></div><figcaption>Figure 3. To follow.</figcaption></figure>
+            <figure><div id="figure4"></div><figcaption>Figure 4. To follow.</figcaption></figure>
+            <figure><div id="figure5"></div><figcaption>Figure 5. To follow.</figcaption></figure>
+        </section>
+
+        <section>
+            <h2>Conclusions</h2>
+            <p class="meta">To follow.</p>
+        </section>
+    </main>
+
+    <script>
+        // Options shared by every chart: chart text uses the page's typeface.
+        // A chart whose own spec sets a font keeps that font.
+        let options = { config: { font: 'Charter, "Bitstream Charter", "Sitka Text", Cambria, serif' } };
+
+        // One Vega-Lite spec per figure, stored in the repository. Uncomment and adapt, for example:
+        // let figure1 = "project/figure1.json";
+        // vegaEmbed('#figure1', figure1, options)
+    </script>
+</body>
+</html>
