@@ -64,6 +64,14 @@ h2 {
     margin: 0 0 0.5rem;
 }
 
+/* h3: titles of entries, such as the papers on the research page */
+h3 {
+    font-size: 1.125rem;
+    font-weight: bold;
+    line-height: 1.4;
+    margin: 0 0 0.6rem;
+}
+
 /* hgroup: a heading with a line of details directly beneath it */
 hgroup {
     margin-bottom: 2.5rem;
@@ -96,7 +104,7 @@ a:focus-visible {
     outline-offset: 3px;
 }
 
-/* Research page: one chart per section */
+/* Chart collection page: one chart per section */
 .charts section {
     margin-top: 3rem;
 }
@@ -108,32 +116,6 @@ a:focus-visible {
     overflow-x: auto;
 }
 
-/* Research page: subpages listed as rows, like the contents of a folder */
-.items {
-    list-style: none;
-    margin: 0 0 2.5rem;
-    padding: 0;
-}
-
-.items li {
-    padding: 0.9rem 0;
-    border-top: 1px solid #d9d9d9;
-}
-
-.items li:last-child {
-    border-bottom: 1px solid #d9d9d9;
-}
-
-.items a {
-    font-weight: bold;
-}
-
-.items p {
-    margin: 0.2rem 0 0;
-    font-size: 1rem;
-    color: #595959;
-}
-
 /* Subpages: the way back up to the parent page */
 .breadcrumb {
     margin: 0 0 1rem;
@@ -141,23 +123,89 @@ a:focus-visible {
     color: #595959;
 }
 
-/* Contact page: labels on the left, details on the right */
-.contact {
+/* Research page: a folder row that opens a subpage; the whole row is the link */
+.folder {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    padding: 0.9rem 0;
+    margin-bottom: 3rem;
+    border-top: 1px solid #d9d9d9;
+    border-bottom: 1px solid #d9d9d9;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Folder icon: drawn in the text colour, spanning the title and the line below it */
+.folder svg {
+    grid-row: span 2;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.3rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+}
+
+.folder-title {
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-color: #a6a6a6;
+    text-underline-offset: 0.18em;
+}
+
+.folder:hover .folder-title {
+    text-decoration-color: currentColor;
+}
+
+.folder-meta {
+    grid-column: 2;
+    font-size: 1rem;
+    color: #595959;
+}
+
+/* Research page: papers and reports, one entry each, separated by rules */
+.papers h2 {
+    margin-bottom: 0.75rem;
+}
+
+.paper {
+    padding: 1.25rem 0;
+    border-top: 1px solid #d9d9d9;
+}
+
+.paper:last-of-type {
+    border-bottom: 1px solid #d9d9d9;
+    margin-bottom: 2.5rem;
+}
+
+/* Label | details grids: the contact page, and the fields of each paper */
+.contact,
+.fields {
     display: grid;
     grid-template-columns: 7rem 1fr;
     gap: 0.5rem 1.5rem;
     margin: 0;
 }
 
-.contact dt {
+.contact dt,
+.fields dt {
     grid-column: 1;
     color: #595959;
 }
 
-.contact dd {
+.contact dd,
+.fields dd {
     grid-column: 2;
     margin: 0;
     overflow-wrap: anywhere;
+}
+
+/* Paper fields: slightly smaller and tighter than the contact page */
+.fields {
+    font-size: 1rem;
+    row-gap: 0.3rem;
 }
 
 /* CV page: denser type, same structure as the PDF */
@@ -229,17 +277,24 @@ a:focus-visible {
         text-align: left;
     }
 
-    .contact {
+    .contact,
+    .fields {
         grid-template-columns: 1fr;
         row-gap: 0;
     }
 
     .contact dt,
-    .contact dd {
+    .contact dd,
+    .fields dt,
+    .fields dd {
         grid-column: 1;
     }
 
     .contact dt {
         margin-top: 0.75rem;
+    }
+
+    .fields dt {
+        margin-top: 0.5rem;
     }
 }
