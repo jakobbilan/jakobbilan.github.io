@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <!-- Richard Davies, Data Science -->
 
@@ -17,14 +17,38 @@ if you find that useful -->
 <!-- The head contains things that you do not see on the page -->
 
 <head>
-    <title>Page Title</title>
+    <!-- charset: read special characters (ä, é) correctly -->
+    <meta charset="utf-8">
+    <!-- viewport: scale properly on phones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jakob Kilian Bilan</title>
+    <!-- One stylesheet shared by every page, so the look is changed in one place -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <!-- The body contains thigs you see -->
 <!-- Most elements both open and close, with the content in the middle -->
 <!-- Indenting is optional, but helps with readability -->
 <body>
-    <h1>Good to see you!</h1>
-    <p>This is my personal page, currently in development. More coming soon.</p>
+    <!-- The header (name + menu) is repeated at the top of every page -->
+    <header>
+        <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
+
+        <!-- nav = the menu. Links are relative (no leading "/"), so they work at any GitHub Pages address -->
+        <!-- aria-current="page" marks the page you are on; style.css underlines it -->
+        <nav>
+            <a href="index.html" aria-current="page">Home</a>
+            <a href="research.html">Research</a>
+            <a href="cv.html">CV</a>
+            <a href="projects.html">Projects</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <!-- main holds the content specific to this page -->
+    <main>
+        <h1>Good to see you!</h1>
+        <p>This is my personal page, currently in development. More coming soon.</p>
+    </main>
 </body>
 </html>
