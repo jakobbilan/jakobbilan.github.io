@@ -9,8 +9,12 @@
   "height": 300,
   "mark": {"type": "line", "color": "red"},
   "encoding": {
-    "x": {"field": "date", "type": "temporal"},
-    "y": {"field": "value", "type": "quantitative"}
+    "x": {"field": "date", "type": "temporal", "axis": {"title": ""}},
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "axis": {"title": " USD per Barrel, not seasonally adjusted"}
+    }
   },
   "config": {}
 }
