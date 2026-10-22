@@ -133,11 +133,11 @@
         // Chart text in the page typeface, unless a spec sets its own font
         let options = { config: { font: 'Charter, "Bitstream Charter", "Sitka Text", Cambria, serif' } };
 
-        // Hosting visualisations: two specs from course repositories, two from charts/
+        // Hosting visualisations: two specs from course repositories, two from this repository
         let gdpLifeExpectancy = "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/2/s2_chart2.json";
-        let gdpPerCapita = "charts/gdp-per-capita-lines.json";
+        let gdpPerCapita = "gdp-per-capita-lines.json";
         let g7Inflation = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/refs/heads/main/charts/library/chartLine2.json";
-        let wtiOilPrice = "charts/wti-oil-price.json";
+        let wtiOilPrice = "wti-oil-price.json";
 
         vegaEmbed('#gdp-life-expectancy', gdpLifeExpectancy, options);
         vegaEmbed('#gdp-per-capita', gdpPerCapita, options);

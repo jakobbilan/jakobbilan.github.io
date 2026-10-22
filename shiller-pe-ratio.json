@@ -6,7 +6,7 @@
     }
   },
   "data": {
-    "url": "https://raw.githubusercontent.com/jakobbilan/jakobbilan.github.io/refs/heads/main/charts/shiller-pe-ratio.csv"
+    "url": "https://raw.githubusercontent.com/jakobbilan/jakobbilan.github.io/refs/heads/main/shiller-pe-ratio.csv"
   },
   "mark": {
     "type": "line",
