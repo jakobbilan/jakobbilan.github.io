@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portfolio | Jakob Kilian Bilan</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Vega, Vega-Lite and vega-embed: render the chart specs -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+    <!-- Site header, same on every page; aria-current marks Projects, the parent page -->
+    <header>
+        <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="research.html">Research</a>
+            <a href="cv.html">CV</a>
+            <a href="projects.html" aria-current="true">Projects</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="charts">
+        <p class="breadcrumb"><a href="projects.html">Projects</a> / Portfolio</p>
+
+        <hgroup>
+            <h1>Portfolio</h1>
+            <p>PP434 – Automated Data Visualisation for Policymaking 2026/27</p>
+            <p>Code and data: <a href="https://github.com/jakobbilan/jakobbilan.github.io">github.com/jakobbilan/jakobbilan.github.io</a></p>
+        </hgroup>
+
+        <p>On this page, I will soon maintain an active portfolio of charts that may be of interest. Please feel free to explore!</p>
+
+        <!-- Ten challenges, one section each; vegaEmbed fills each figure by its id -->
+        <section>
+            <h2>Hosting visualisations</h2>
+
+            <section>
+                <div class="chart-description">
+                    <h3>Section 1: A basic chart</h3>
+                    <p>For now, these charts are just examples from the GrowthLab repo. Soon, my own charts will land in their place.</p>
+                </div>
+                <figure id="gdp-life-expectancy"></figure>
+            </section>
+
+            <section>
+                <div class="chart-description">
+                    <h3>Section 2: Another basic chart</h3>
+                    <p>Another example chart from the GrowthLab repo.</p>
+                </div>
+                <figure id="gdp-per-capita"></figure>
+            </section>
+
+            <section>
+                <div class="chart-description">
+                    <h3>Section 3: And even another basic chart</h3>
+                    <p>Another example chart from the GrowthLab repo.</p>
+                </div>
+                <figure id="g7-inflation"></figure>
+            </section>
+
+            <section>
+                <div class="chart-description">
+                    <h3>Section 4: Just one more chart, please, just one more!</h3>
+                    <p>Another example chart, this time from FRED.</p>
+                </div>
+                <figure id="wti-oil-price"></figure>
+            </section>
+        </section>
+
+        <section>
+            <h2>Making a point with data</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge2"></figure>
+        </section>
+
+        <section>
+            <h2>Visualisation principles and the grammar of graphics</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge3"></figure>
+        </section>
+
+        <section>
+            <h2>Data access: APIs and scrapers</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge4"></figure>
+        </section>
+
+        <section>
+            <h2>Programming: loops and dashboards</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge5"></figure>
+        </section>
+
+        <section>
+            <h2>Maps</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge6"></figure>
+        </section>
+
+        <section>
+            <h2>Big data</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge7"></figure>
+        </section>
+
+        <section>
+            <h2>Advanced and interactive charts</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge8"></figure>
+        </section>
+
+        <section>
+            <h2>Machine learning</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge9"></figure>
+        </section>
+
+        <section>
+            <h2>Large language models</h2>
+            <p class="meta">To follow.</p>
+            <figure id="challenge10"></figure>
+        </section>
+    </main>
+
+    <script>
+        // Chart text in the page typeface, unless a spec sets its own font
+        let options = { config: { font: 'Charter, "Bitstream Charter", "Sitka Text", Cambria, serif' } };
+
+        // Hosting visualisations: two specs from course repositories, two from charts/
+        let gdpLifeExpectancy = "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/2/s2_chart2.json";
+        let gdpPerCapita = "charts/gdp-per-capita-lines.json";
+        let g7Inflation = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/refs/heads/main/charts/library/chartLine2.json";
+        let wtiOilPrice = "charts/wti-oil-price.json";
+
+        vegaEmbed('#gdp-life-expectancy', gdpLifeExpectancy, options);
+        vegaEmbed('#gdp-per-capita', gdpPerCapita, options);
+        vegaEmbed('#g7-inflation', g7Inflation, options);
+        vegaEmbed('#wti-oil-price', wtiOilPrice, options);
+    </script>
+</body>
+</html>

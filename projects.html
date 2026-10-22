@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- The projects page: current and completed projects, in the same layout as the research page -->
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +9,7 @@
 </head>
 
 <body>
-    <!-- Same header as on every page; only aria-current moves to this page's link -->
+    <!-- Site header, same on every page; aria-current marks this page in the menu -->
     <header>
         <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
         <nav>
@@ -23,15 +21,49 @@
         </nav>
     </header>
 
-    <!-- class="research" reuses the research page's headings, spacing and separator lines (style.css) -->
+    <!-- class="research": same headings and entry layout as the research page -->
     <main class="research">
         <h1>Projects</h1>
 
-        <!-- Newest first. To add a project, copy an <article> ... </article> block into the right section -->
         <section>
             <h2>Current</h2>
 
-                        <article class="paper">
+            <!-- PP434: the two graded pages, portfolio.html and project.html -->
+            <article class="paper">
+                <h3>Automated Data Visualisation for Policymaking (PP434)</h3>
+                <dl class="fields">
+                    <dt>Type</dt>
+                    <dd>Data science portfolio and project, LSE MPA course</dd>
+                    <dt>Convenor</dt>
+                    <dd>Richard Davies (LSE)</dd>
+                    <dt>Period</dt>
+                    <dd>2026/27</dd>
+                    <dt>Description</dt>
+                    <dd>Ten charting challenges, and a project on whether Europe’s 2026 fuel-tax cuts reached drivers at the pump.</dd>
+                    <dt>Link</dt>
+                    <dd><a href="portfolio.html">Portfolio</a> | <a href="project.html">Project</a></dd>
+                </dl>
+            </article>
+
+            <article class="paper">
+                <h3>Paddy-Residue Burning in Punjab</h3>
+                <dl class="fields">
+                    <dt>Type</dt>
+                    <dd>Team policy project, Strategic Policymaking (PP425), LSE MPA</dd>
+                    <dt>Role</dt>
+                    <dd>Member of a seven-person team; co-drafted the Clean Field Contract</dd>
+                    <dt>Convenor</dt>
+                    <dd>Luis Garicano (LSE)</dd>
+                    <dt>Period</dt>
+                    <dd>Autumn 2026</dd>
+                    <dt>Description</dt>
+                    <dd>How Punjab can stop farmers burning paddy straw after the harvest, which left burn scars on about 60% of the state’s paddy area in 2024 and feeds north India’s post-monsoon air pollution. The team compares the Clean Field Contract, a payment for fields left unburnt and verified by satellite, with creating a market for the straw.</dd>
+                    <dt>Link</dt>
+                    <dd><a href="https://www.lse.ac.uk/resources/calendar2026-2027/courseGuides/PP/2026_PP425.htm">Course page</a></dd>
+                </dl>
+            </article>
+
+            <article class="paper">
                 <h3>Mobilising Domestic Institutional Capital for Development</h3>
                 <dl class="fields">
                     <dt>Type</dt>

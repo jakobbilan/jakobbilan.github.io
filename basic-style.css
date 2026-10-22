@@ -1,0 +1,54 @@
+/* Course example stylesheet: sans-serif text in a centred 800px column */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  background-color: #fff;
+  margin:0 auto;
+  max-width: 800px;
+  padding-top: 60px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* Heading sizes set by class */
+.big {
+  font-size: 2.5em;
+}
+
+h2 {
+  font-size: 1.75em;
+}
+
+.small {
+  font-size: 1.25em;
+}
+
+p {
+  margin-bottom: 1em;
+  font-weight: 300;
+}
+
+section {
+  margin-bottom: 2.5em;
+}
+
+a {
+  color: #065f46;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- The research page: the chart collection at the top, then a list of papers and reports -->
-<!-- The chart collection (pp434.html) is linked from this page only, not from the menu -->
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +9,7 @@
 </head>
 
 <body>
-    <!-- Same header as on every page; only aria-current moves to this page's link -->
+    <!-- Site header, same on every page; aria-current marks this page in the menu -->
     <header>
         <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
         <nav>
@@ -24,27 +21,10 @@
         </nav>
     </header>
 
-    <!-- class="research" gives this page its section headings, spacing and separator lines (style.css) -->
     <main class="research">
         <h1>Research</h1>
 
-        <!-- Charts: each title links to its own page (chart collection = PP434 portfolio, project = PP434 project) -->
-        <section>
-            <h2>Charts</h2>
-            <div class="item">
-                <h3><a href="pp434.html">Chart Collection for PP434 – Automated Data Visualisation for Policymaking</a></h3>
-                <p class="meta">LSE, 2026/27</p>
-            </div>
-            <div class="item">
-                <h3><a href="project.html">Data Science Project for PP434 – Automated Data Visualisation for Policymaking</a></h3>
-                <p class="meta">LSE, 2026/27 | in progress</p>
-            </div>
-        </section>
-
-        <!-- Papers and reports, newest first. To add one, copy an <article> ... </article> block -->
-        <!-- Each entry: the title (h3), then a description list (dl) of labels (dt) and details (dd) -->
-        <!-- Disclosure rule: work in preparation shows title, type, coauthors and a one-line topic only. -->
-        <!-- Add data, design and findings once a dated public version (working paper, preprint) exists. -->
+        <!-- Papers and reports, newest first: title, then label | detail fields -->
         <section>
             <h2>Papers and reports</h2>
 
@@ -91,7 +71,7 @@
                     <dd><a href="https://www.eib.org/files/documents/climate-hackathon-analytical-report-group-3.pdf">Report (PDF)</a> | <a href="https://www.eib.org/en/press/news/third-group-climate-survey-hackathon-2025">EIB news article</a></dd>
                 </dl>
             </article>
-            
+
             <article class="paper">
                 <h3>Determinants of Agricultural Productivity in Smallholder Rice Farming: Evidence from Cambodia</h3>
                 <dl class="fields">

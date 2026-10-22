@@ -1,41 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Richard Davies, Data Science -->
-
-<!-- Commenting you code is vital, vital, vital -->
-<!-- This is how you add comments to HTML -->
-
-<!-- You can also include
-multi - line comments
-if you find that useful -->
-
-<!-- To comment something out, use the short-cut CTRL & the "/" key (command + "/" on Mac)-->
-
-<!-- HTML files have two fundamental parts. (1) The head, (2) The body -->
-
-<!-- The head contains things that you do not see on the page -->
-
 <head>
-    <!-- charset: read special characters (ä, é) correctly -->
     <meta charset="utf-8">
-    <!-- viewport: scale properly on phones -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Jakob Kilian Bilan</title>
-    <!-- One stylesheet shared by every page, so the look is changed in one place -->
     <link rel="stylesheet" href="style.css">
 </head>
 
-<!-- The body contains thigs you see -->
-<!-- Most elements both open and close, with the content in the middle -->
-<!-- Indenting is optional, but helps with readability -->
 <body>
-    <!-- The header (name + menu) is repeated at the top of every page -->
+    <!-- Site header, same on every page; aria-current marks this page in the menu -->
     <header>
         <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
-
-        <!-- nav = the menu. Links are relative (no leading "/"), so they work at any GitHub Pages address -->
-        <!-- aria-current="page" marks the page you are on; style.css underlines it -->
         <nav>
             <a href="index.html" aria-current="page">Home</a>
             <a href="research.html">Research</a>
@@ -45,7 +21,6 @@ if you find that useful -->
         </nav>
     </header>
 
-    <!-- main holds the content specific to this page -->
     <main>
         <p>Good to see you! This is my personal page, currently in development. More coming soon.</p>
     </main>
