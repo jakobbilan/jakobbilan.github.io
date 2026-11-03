@@ -1,5 +1,5 @@
 {
-  "built": "2026-11-03T11:42Z",
+  "built": "2026-11-03T12:05Z",
   "price_month": "2026-08",
   "sales_window": [
     "2024-01-01",
@@ -183,7 +183,24 @@
       "top2_share": 0.4085643503799526,
       "top3_name": "Barnet",
       "top3_outside": 6817.042141975284,
-      "top3_share": 0.4460539254056981
+      "top3_share": 0.4460539254056981,
+      "miss1_name": "Kensington and Chelsea",
+      "miss1_share": 0.6730247848387207,
+      "miss1_outside": 5351.893089037508,
+      "miss2_name": "Westminster",
+      "miss2_share": 0.6013500950607368,
+      "miss2_outside": 6370.101556978385,
+      "miss3_name": "Richmond upon Thames",
+      "miss3_share": 0.5566219019165508,
+      "miss3_outside": 4043.3014955218255,
+      "miss4_name": "Elmbridge",
+      "miss4_share": 0.5555279670055108,
+      "miss4_outside": 2257.1101299433903,
+      "miss5_name": "Mole Valley",
+      "miss5_share": 0.5431690238745129,
+      "miss5_outside": 1651.777001602394,
+      "top10_outside_share": 0.15102550367280212,
+      "london_outside_share": 0.24021491814014462
     },
     "fig6": {
       "fs_rate": 0.0048,
