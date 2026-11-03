@@ -206,6 +206,42 @@ body.project-page > header {
     display: none;
 }
 
+/* Lead photographs under the opening: two homes side by side, cropped to one shape. The width cap keeps
+   Geograph's 640-pixel copies sharp on high-density screens */
+.lead-photos {
+    justify-self: center;
+    width: 100%;
+    max-width: 54rem;
+    margin: 2.25rem 0 0;
+}
+
+.lead-photos .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.lead-photos img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    background: var(--tint);
+}
+
+.lead-photos figcaption {
+    margin-top: 0.6rem;
+    font: 0.8125rem/1.5 var(--sans);
+    color: var(--ink-3);
+}
+
+@media (max-width: 40rem) {
+    .lead-photos .pair {
+        gap: 0.3rem;
+    }
+}
+
 /* Section links, pinned under the top edge once the reader passes the opening */
 .contents {
     position: sticky;
