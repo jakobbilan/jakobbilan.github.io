@@ -42,44 +42,13 @@
                 <a href="https://github.com/jakobbilan/jakobbilan.github.io/tree/main/pipeline">Code and data on GitHub</a></p>
         </div>
 
-        <!-- Headline numbers, filled from project/data/summary.json -->
-        <dl class="key-figures wide">
-            <div>
-                <dt>England: council tax as a share of home value</dt>
-                <dd data-stat="england.rate_mix" data-format="pct2">–</dd>
-            </div>
-            <div>
-                <dt>Highest council: <span data-stat="highest.name">–</span></dt>
-                <dd data-stat="highest.rate_mix" data-format="pct2">–</dd>
-            </div>
-            <div>
-                <dt>Lowest council: <span data-stat="lowest.name">–</span></dt>
-                <dd data-stat="lowest.rate_mix" data-format="pct2">–</dd>
-            </div>
-            <div>
-                <dt>Highest ÷ lowest council (Band D ÷ price: <span data-stat="gap_press" data-format="times">–</span>)</dt>
-                <dd data-stat="gap_mix" data-format="times">–</dd>
-            </div>
-        </dl>
-
-        <!-- Your council: found by name or by the reader's location; the location is matched in the browser and never sent -->
-        <section class="your-council" id="your-council" aria-label="Your council">
-            <p class="lead-in">Let’s dive into it! First: if you pay council tax in England, here’s the opportunity to see how your council taxes you compared to your neighbours (decide for yourself how fair your rate is).</p>
-            <div class="council-card wide">
-                <div class="council-find">
-                    <p class="council-label">Your council</p>
-                    <label class="field">
-                        <span class="visually-hidden">Find your council</span>
-                        <input type="search" list="council-list" placeholder="Type your council" autocomplete="off" data-your-council>
-                    </label>
-                    <button type="button" class="locate" data-locate>Use my location</button>
-                    <p class="council-privacy">This page does not store or send your location anywhere.</p>
-                </div>
-                <div class="council-result" data-council-result aria-live="polite">
-                    <p class="council-message">Choose a council, or use your location.</p>
-                </div>
-            </div>
-        </section>
+        <!-- The opening's numbers as one line of text, filled from project/data/summary.json -->
+        <p class="key-line"><span class="key-label">In numbers</span>
+            England <b data-stat="england.rate_mix" data-format="pct2">–</b> of home value a year ·
+            highest <span data-stat="highest.name">–</span> <b data-stat="highest.rate_mix" data-format="pct2">–</b> ·
+            lowest <span data-stat="lowest.name">–</span> <b data-stat="lowest.rate_mix" data-format="pct2">–</b> ·
+            <b data-stat="gap_mix" data-format="times">–</b> apart</p>
+        <hr class="opening-rule wide">
 
         <!-- Section links, pinned to the top while reading -->
         <nav class="contents full" aria-label="Sections">
@@ -94,6 +63,7 @@
                 <li><a href="#data">Data</a></li>
                 <li><a href="#tools">Tools</a></li>
                 <li><a href="#conclusions">Conclusions</a></li>
+                <li><a href="#your-council">Your council</a></li>
             </ol>
         </nav>
 
@@ -392,6 +362,23 @@ python -m pipeline.build</code></pre>
         <section id="conclusions" aria-labelledby="conclusions-title">
             <h2 id="conclusions-title">Conclusions</h2>
             <p class="draft">[Conclusions, up to 200 words: what the evidence shows about each claim, and what it does not]</p>
+        </section>
+
+        <!-- Closer: the reader's own council, found by name or location; the location is matched in the browser and never sent -->
+        <section id="your-council" class="your-council" aria-labelledby="your-council-title">
+            <h2 id="your-council-title">Your council</h2>
+            <p class="lead-in">If you pay council tax in England, here’s the opportunity to see how your council taxes you compared to your neighbours (decide for yourself how fair your rate is).</p>
+            <div class="council-card">
+                <div class="council-find">
+                    <label class="field">
+                        <span class="visually-hidden">Find your council</span>
+                        <input type="search" list="council-list" placeholder="Type your council" autocomplete="off" data-your-council>
+                    </label>
+                    <button type="button" class="locate" data-locate>Use my location</button>
+                </div>
+                <p class="council-privacy">This page does not store or send your location anywhere.</p>
+                <div class="council-result" data-council-result aria-live="polite" hidden></div>
+            </div>
         </section>
 
         <footer class="page-foot">

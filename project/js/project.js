@@ -467,6 +467,7 @@
 
     function showCouncilMessage(text) {
         const box = document.querySelector("[data-council-result]");
+        box.hidden = false;
         box.innerHTML = "";
         box.appendChild(element("p", "council-message", text));
     }
@@ -482,6 +483,7 @@
             .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
         const rank = ranked.findIndex(function (row) { return row.lad === code; }) + 1;
 
+        box.hidden = false;
         box.innerHTML = "";
         box.appendChild(element("p", "council-name", council.name));
         const rate = element("p", "council-rate");
@@ -497,11 +499,40 @@
         box.appendChild(element("p", "council-detail", "Average bill " + formatValue(council.bill, "gbp") +
             " before discounts, on an average home worth " + formatValue(council.value, "gbp")));
 
-        const nearby = (neighbourMap && neighbourMap[code]) || [];
-        const rows = [council].concat(nearby.map(function (lad) {
+        // The same council's average bill if every home in England paid the one flat rate on today's
+        // value that raises today's total: both bills before discounts, so like is compared with like
+        const neutral = summary.england.revenue_neutral_rate;
+        if (isFinite(neutral) && isFinite(council.value) && isFinite(council.bill) && council.bill > 0) {
+            const flat = neutral * council.value;
+            const ratio = flat / council.bill;
+            const change = ratio >= 2 ? "be " + ratio.toFixed(1) + " times today’s"
+                : ratio >= 1 ? "rise by " + formatValue(ratio - 1, "pct0")
+                : "fall by " + formatValue(1 - ratio, "pct0");
+            box.appendChild(element("p", "council-neighbours-title",
+                "If every home paid " + formatValue(neutral, "pct2") + " of today’s value"));
+            const compare = element("ul", "council-neighbours council-compare");
+            const top = Math.max(flat, council.bill);
+            [["Today", council.bill, "today"], ["At " + formatValue(neutral, "pct2"), Math.round(flat / 10) * 10, "flat"]]
+                .forEach(function (row) {
+                    const item = element("li", row[2]);
+                    item.appendChild(element("span", "name", row[0]));
+                    const bar = element("span", "bar");
+                    bar.style.setProperty("--w", (100 * row[1] / top).toFixed(1) + "%");
+                    item.appendChild(bar);
+                    item.appendChild(element("span", "rate", (row[2] === "flat" ? "≈ " : "") + formatValue(row[1], "gbp")));
+                    compare.appendChild(item);
+                });
+            box.appendChild(compare);
+            box.appendChild(element("p", "council-detail", "The average bill would " + change + ". " + formatValue(neutral, "pct2") +
+                " raises the same total for England as council tax does now; grants between councils would have to change."));
+        }
+
+        const nearby = ((neighbourMap && neighbourMap[code]) || []).map(function (lad) {
             return councils.find(function (row) { return row.lad === lad; });
-        }).filter(function (row) { return row && isFinite(row.rate_mix); }))
-            .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
+        }).filter(function (row) { return row && isFinite(row.rate_mix); })
+            .sort(function (x, y) { return y.dwellings - x.dwellings; })
+            .slice(0, 8);
+        const rows = [council].concat(nearby).sort(function (x, y) { return y.rate_mix - x.rate_mix; });
         if (rows.length > 1) {
             const top = rows[0].rate_mix;
             box.appendChild(element("p", "council-neighbours-title", "Next door"));
@@ -522,7 +553,11 @@
         const links = element("p", "council-links");
         const toMap = element("a", null, "See it on the map");
         toMap.href = "#figure-3";
+        const toFlat = element("a", null, "Try other rates");
+        toFlat.href = "#figure-6";
         links.appendChild(toMap);
+        links.appendChild(document.createTextNode(" · "));
+        links.appendChild(toFlat);
         box.appendChild(links);
     }
 
