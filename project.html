@@ -4,7 +4,128 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project | Jakob Kilian Bilan</title>
+    <title>England’s council tax is stuck in 1991 | Jakob Kilian Bilan</title>
+    <!-- Search and sharing -->
+    <meta name="description" content="Interactive data project: what every small area in England pays in council tax, still based on 1991 values, against what its homes are worth today.">
+    <meta name="author" content="Jakob Kilian Bilan">
+    <link rel="canonical" href="https://jakobbilan.github.io/project.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Jakob Kilian Bilan">
+    <meta property="og:title" content="England’s council tax is stuck in 1991">
+    <meta property="og:description" content="Interactive data project: what every small area in England pays in council tax, still based on 1991 values, against what its homes are worth today.">
+    <meta property="og:url" content="https://jakobbilan.github.io/project.html">
+    <meta property="og:image" content="https://jakobbilan.github.io/assets/social/project-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="England’s council tax is stuck in 1991: hexagon map of council tax as a share of home value">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="favicon.ico" sizes="48x48">
+    <link rel="icon" href="assets/icons/favicon-96.png" type="image/png" sizes="96x96">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <meta name="theme-color" content="#ffffff">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://jakobbilan.github.io/#person",
+          "name": "Jakob Kilian Bilan",
+          "url": "https://jakobbilan.github.io/",
+          "sameAs": [
+            "https://www.linkedin.com/in/jakob-kilian-bilan-1225412a6/",
+            "https://github.com/jakobbilan"
+          ]
+        },
+        {
+          "@type": "Article",
+          "@id": "https://jakobbilan.github.io/project.html#article",
+          "headline": "England’s council tax is stuck in 1991",
+          "description": "Interactive data project: what every small area in England pays in council tax, still based on 1991 values, against what its homes are worth today.",
+          "author": {
+            "@id": "https://jakobbilan.github.io/#person"
+          },
+          "datePublished": "2026-11-03",
+          "dateModified": "2026-11-03",
+          "inLanguage": "en-GB",
+          "image": "https://jakobbilan.github.io/assets/social/project-card.png",
+          "mainEntityOfPage": "https://jakobbilan.github.io/project.html",
+          "about": [
+            "Council tax",
+            "Property taxation",
+            "Public finance",
+            "England"
+          ],
+          "isPartOf": {
+            "@id": "https://jakobbilan.github.io/#website"
+          }
+        },
+        {
+          "@type": "Dataset",
+          "@id": "https://jakobbilan.github.io/project.html#dataset",
+          "name": "Council tax against home values in England, by small area and council, 2026-27",
+          "description": "Average council tax bill before discounts, average home value and the bill as a share of value for each of England’s 6,856 middle-layer super output areas and 296 councils, built from Valuation Office band counts, MHCLG Band D levels for 2026-27 and HM Land Registry sales from January 2024, indexed to current prices. Rebuilt automatically twice a month.",
+          "creator": {
+            "@id": "https://jakobbilan.github.io/#person"
+          },
+          "url": "https://jakobbilan.github.io/project.html",
+          "isAccessibleForFree": true,
+          "inLanguage": "en-GB",
+          "keywords": [
+            "council tax",
+            "property tax",
+            "house prices",
+            "England",
+            "MSOA",
+            "local government finance",
+            "revaluation"
+          ],
+          "spatialCoverage": {
+            "@type": "Place",
+            "name": "England"
+          },
+          "temporalCoverage": "2024-01/2026-08",
+          "variableMeasured": [
+            "Average council tax bill before discounts",
+            "Average home value",
+            "Council tax as a share of home value"
+          ],
+          "isBasedOn": [
+            "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2026",
+            "https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027",
+            "https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads"
+          ],
+          "distribution": [
+            {
+              "@type": "DataDownload",
+              "encodingFormat": "text/csv",
+              "name": "By council",
+              "contentUrl": "https://jakobbilan.github.io/project/data/councils.csv"
+            },
+            {
+              "@type": "DataDownload",
+              "encodingFormat": "text/csv",
+              "name": "By small area (MSOA)",
+              "contentUrl": "https://jakobbilan.github.io/project/data/msoa.csv"
+            },
+            {
+              "@type": "DataDownload",
+              "encodingFormat": "text/csv",
+              "name": "Regional house prices since 1995",
+              "contentUrl": "https://jakobbilan.github.io/project/data/regions.csv"
+            },
+            {
+              "@type": "DataDownload",
+              "encodingFormat": "text/csv",
+              "name": "Rate by home value",
+              "contentUrl": "https://jakobbilan.github.io/project/data/msoa_bins.csv"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
     <link rel="preload" href="project/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="project/css/project.css">

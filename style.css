@@ -282,3 +282,9 @@ a:focus-visible {
         margin-top: 0.6rem;
     }
 }
+
+/* Home page: name, then a short introduction */
+.home .lede {
+    font-size: 1.25rem;
+    line-height: 1.55;
+}

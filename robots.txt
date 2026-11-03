@@ -1,0 +1,5 @@
+# Every page may be crawled; the sitemap lists the pages that matter
+User-agent: *
+Allow: /
+
+Sitemap: https://jakobbilan.github.io/sitemap.xml
