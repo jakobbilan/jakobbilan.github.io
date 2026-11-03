@@ -366,6 +366,223 @@
         });
     }
 
+    // Your council: chosen by name or found from the reader's location ------------------------
+
+    const NEIGHBOURS = "project/geo/neighbours-2025.json";
+    const BOUNDARIES = "project/geo/lad-2025-map.geojson";
+    const MAP_CHARTS = ["chart-3", "chart-6"];
+    let neighbourMap = null;
+    let boundaries = null;
+
+    // Latitude and longitude (WGS84) to British National Grid metres, following the Ordnance
+    // Survey's guide: Helmert transformation to OSGB36, then the national Transverse Mercator.
+    // Accurate to a few metres, far finer than council boundaries need.
+    function toNationalGrid(lat, lon) {
+        const rad = Math.PI / 180;
+        let a = 6378137, b = 6356752.3142, e2 = 1 - (b * b) / (a * a);
+        let phi = lat * rad, lambda = lon * rad;
+        let nu = a / Math.sqrt(1 - e2 * Math.sin(phi) ** 2);
+        const x1 = nu * Math.cos(phi) * Math.cos(lambda);
+        const y1 = nu * Math.cos(phi) * Math.sin(lambda);
+        const z1 = (1 - e2) * nu * Math.sin(phi);
+
+        const tx = -446.448, ty = 125.157, tz = -542.060, s = 20.4894e-6;
+        const rx = -0.1502 / 3600 * rad, ry = -0.2470 / 3600 * rad, rz = -0.8421 / 3600 * rad;
+        const x2 = tx + (1 + s) * x1 - rz * y1 + ry * z1;
+        const y2 = ty + rz * x1 + (1 + s) * y1 - rx * z1;
+        const z2 = tz - ry * x1 + rx * y1 + (1 + s) * z1;
+
+        a = 6377563.396; b = 6356256.909; e2 = 1 - (b * b) / (a * a);
+        const p = Math.sqrt(x2 * x2 + y2 * y2);
+        phi = Math.atan2(z2, p * (1 - e2));
+        for (let i = 0; i < 10; i++) {
+            nu = a / Math.sqrt(1 - e2 * Math.sin(phi) ** 2);
+            phi = Math.atan2(z2 + e2 * nu * Math.sin(phi), p);
+        }
+        lambda = Math.atan2(y2, x2);
+
+        const F0 = 0.9996012717, phi0 = 49 * rad, lambda0 = -2 * rad;
+        const n = (a - b) / (a + b);
+        const sin = Math.sin(phi), cos = Math.cos(phi), tan2 = Math.tan(phi) ** 2;
+        nu = a * F0 / Math.sqrt(1 - e2 * sin * sin);
+        const rho = a * F0 * (1 - e2) / Math.pow(1 - e2 * sin * sin, 1.5);
+        const eta2 = nu / rho - 1;
+        const d = phi - phi0, t = phi + phi0;
+        const M = b * F0 * ((1 + n + 1.25 * n ** 2 + 1.25 * n ** 3) * d
+            - (3 * n + 3 * n ** 2 + 2.625 * n ** 3) * Math.sin(d) * Math.cos(t)
+            + (1.875 * n ** 2 + 1.875 * n ** 3) * Math.sin(2 * d) * Math.cos(2 * t)
+            - (35 / 24) * n ** 3 * Math.sin(3 * d) * Math.cos(3 * t));
+        const L = lambda - lambda0;
+        const north = M - 100000 + nu / 2 * sin * cos * L ** 2
+            + nu / 24 * sin * cos ** 3 * (5 - tan2 + 9 * eta2) * L ** 4
+            + nu / 720 * sin * cos ** 5 * (61 - 58 * tan2 + tan2 ** 2) * L ** 6;
+        const east = 400000 + nu * cos * L
+            + nu / 6 * cos ** 3 * (nu / rho - tan2) * L ** 3
+            + nu / 120 * cos ** 5 * (5 - 18 * tan2 + tan2 ** 2 + 14 * eta2 - 58 * tan2 * eta2) * L ** 5;
+        return [east, north];
+    }
+
+    function polygonsOf(geometry) {
+        return geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates;
+    }
+
+    function inRing(x, y, ring) {
+        let inside = false;
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+            const [xi, yi] = ring[i], [xj, yj] = ring[j];
+            if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+        }
+        return inside;
+    }
+
+    // The council containing a point; failing that, the nearest within 3 km, for readers on a
+    // riverbank or the coast, where generalised boundaries stop short of the water's edge
+    function councilAt(x, y) {
+        let nearest = null, best = 3000;
+        for (const feature of boundaries.features) {
+            for (const polygon of polygonsOf(feature.geometry)) {
+                if (inRing(x, y, polygon[0]) && !polygon.slice(1).some(function (hole) { return inRing(x, y, hole); })) {
+                    return feature.properties.lad;
+                }
+                for (const [px, py] of polygon[0]) {
+                    const distance = Math.hypot(px - x, py - y);
+                    if (distance < best) { best = distance; nearest = feature.properties.lad; }
+                }
+            }
+        }
+        return nearest;
+    }
+
+    function ordinal(n) {
+        const ends = ["th", "st", "nd", "rd"], v = n % 100;
+        return n + (ends[(v - 20) % 10] || ends[v] || ends[0]);
+    }
+
+    function element(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+    }
+
+    function showCouncilMessage(text) {
+        const box = document.querySelector("[data-council-result]");
+        box.innerHTML = "";
+        box.appendChild(element("p", "council-message", text));
+    }
+
+    function showCouncil(code) {
+        const box = document.querySelector("[data-council-result]");
+        const council = councils.find(function (row) { return row.lad === code; });
+        if (!box || !council || !isFinite(council.rate_mix)) {
+            showCouncilMessage("No rate is available for that council.");
+            return;
+        }
+        const ranked = councils.filter(function (row) { return isFinite(row.rate_mix); })
+            .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
+        const rank = ranked.findIndex(function (row) { return row.lad === code; }) + 1;
+
+        box.innerHTML = "";
+        box.appendChild(element("p", "council-name", council.name));
+        const rate = element("p", "council-rate");
+        rate.appendChild(element("strong", null, formatValue(council.rate_mix, "pct2")));
+        rate.appendChild(document.createTextNode(" of home value a year"));
+        box.appendChild(rate);
+        const fromBottom = ranked.length - rank + 1;
+        const place = rank <= fromBottom
+            ? (rank === 1 ? "Highest" : ordinal(rank) + " highest")
+            : (fromBottom === 1 ? "Lowest" : ordinal(fromBottom) + " lowest");
+        box.appendChild(element("p", "council-rank", place + " of " + ranked.length +
+            " councils · England " + formatValue(summary.england.rate_mix, "pct2")));
+        box.appendChild(element("p", "council-detail", "Average bill " + formatValue(council.bill, "gbp") +
+            " before discounts, on an average home worth " + formatValue(council.value, "gbp")));
+
+        const nearby = (neighbourMap && neighbourMap[code]) || [];
+        const rows = [council].concat(nearby.map(function (lad) {
+            return councils.find(function (row) { return row.lad === lad; });
+        }).filter(function (row) { return row && isFinite(row.rate_mix); }))
+            .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
+        if (rows.length > 1) {
+            const top = rows[0].rate_mix;
+            box.appendChild(element("p", "council-neighbours-title", "Next door"));
+            const list = element("ul", "council-neighbours");
+            rows.forEach(function (row) {
+                const item = element("li", row.lad === code ? "is-self" : null);
+                item.appendChild(element("span", "name", row.name));
+                const bar = element("span", "bar");
+                bar.style.setProperty("--w", (100 * row.rate_mix / top).toFixed(1) + "%");
+                item.appendChild(bar);
+                item.appendChild(element("span", "rate", formatValue(row.rate_mix, "pct2")));
+                list.appendChild(item);
+            });
+            box.appendChild(list);
+        } else if (neighbourMap) {
+            box.appendChild(element("p", "council-detail", "No council shares a border with it."));
+        }
+        const links = element("p", "council-links");
+        const toMap = element("a", null, "See it on the map");
+        toMap.href = "#figure-3";
+        links.appendChild(toMap);
+        box.appendChild(links);
+    }
+
+    function chooseCouncil(code) {
+        const council = councils.find(function (row) { return row.lad === code; });
+        if (!council) return;
+        const input = document.querySelector("input[data-your-council]");
+        if (input) input.value = council.name;
+        // pick the council out on both maps, and show it in their search boxes
+        MAP_CHARTS.forEach(function (id) { setSignal(id, "council", code); });
+        document.querySelectorAll("input[data-council-search]").forEach(function (search) {
+            if (targets(search).some(function (id) { return MAP_CHARTS.indexOf(id) >= 0; })) search.value = council.name;
+        });
+        const show = function () { showCouncil(code); };
+        if (neighbourMap) {
+            show();
+        } else {
+            fetchJSON(NEIGHBOURS).then(function (map) { neighbourMap = map; }).catch(function () { neighbourMap = {}; }).then(show);
+        }
+    }
+
+    function locate(button) {
+        if (!("geolocation" in navigator)) {
+            showCouncilMessage("This browser cannot share a location. Type your council instead.");
+            return;
+        }
+        button.setAttribute("aria-busy", "true");
+        showCouncilMessage("Finding your council…");
+        const loaded = boundaries ? Promise.resolve(boundaries)
+            : fetchJSON(BOUNDARIES).then(function (geo) { boundaries = geo; return geo; });
+        navigator.geolocation.getCurrentPosition(function (position) {
+            loaded.then(function () {
+                const [east, north] = toNationalGrid(position.coords.latitude, position.coords.longitude);
+                const code = councilAt(east, north);
+                if (code) chooseCouncil(code);
+                else showCouncilMessage("That location is outside England. Type your council instead.");
+            }).catch(function () {
+                showCouncilMessage("The council map could not be loaded. Type your council instead.");
+            }).then(function () { button.removeAttribute("aria-busy"); });
+        }, function (error) {
+            button.removeAttribute("aria-busy");
+            showCouncilMessage(error.code === 1 ? "Location access was declined. Type your council instead."
+                : "Your location could not be found. Type your council instead.");
+        }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 });
+    }
+
+    function wireYourCouncil() {
+        const input = document.querySelector("input[data-your-council]");
+        const button = document.querySelector("[data-locate]");
+        if (!input) return;
+        const byName = new Map(councils.map(function (row) { return [row.name.toLowerCase(), row.lad]; }));
+        const pick = function () {
+            const code = byName.get(input.value.trim().toLowerCase());
+            if (code) chooseCouncil(code);
+        };
+        input.addEventListener("input", pick);
+        input.addEventListener("change", pick);
+        if (button) button.addEventListener("click", function () { locate(button); });
+    }
+
     // Flat-tax slider -----------------------------------------------------------------------
 
     function wireSlider(slider) {
@@ -557,6 +774,7 @@
                 .then(function (rows) {
                     councils = rows;
                     wireCouncils();
+                    wireYourCouncil();
                 })
                 .catch(function (error) {
                     console.error(error);

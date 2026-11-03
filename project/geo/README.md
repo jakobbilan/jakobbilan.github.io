@@ -8,6 +8,7 @@ All files are GeoJSON in planar coordinates, drawn by Vega-Lite with an identity
 | `regions-2025-hex.geojson` | The nine regions, dissolved from the hexagons | mapshaper, once |
 | `lad-2025-map.geojson` | Council boundaries, British National Grid (EPSG:27700), metres | mapshaper, once |
 | `regions-2025-map.geojson` | The nine regions, dissolved from the boundaries | mapshaper, once |
+| `neighbours-2025.json` | For each council, the councils it borders or faces within 400 m (across a river) | shapely, once, from `lad-2025-map.geojson` |
 
 Boundaries: ONS local authority districts (December 2024), generalised, as split per council in
 [open-innovations/geography-bits](https://github.com/open-innovations/geography-bits) (`data/LAD24CD`, commit `b70d8fb`).

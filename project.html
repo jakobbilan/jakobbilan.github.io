@@ -37,7 +37,7 @@
             <p class="breadcrumb"><a href="projects.html">Projects</a> / Project</p>
             <p class="kicker">PP434 data project · 2026/27</p>
             <h1>England’s council tax is stuck in 1991</h1>
-            <p>England’s council tax still rests on what homes were worth in April 1991. Using <span data-stat="facts.data.sales" data-format="millions">1.8m</span> recent sales, this project compares what homes in <span data-stat="facts.data.areas" data-format="int">6,856</span> small areas pay with what they are worth today, and makes the case for revaluation.</p>
+            <p class="standfirst">England’s council tax still rests on what homes were worth in April 1991. Using <span data-stat="facts.data.sales" data-format="millions">1.8m</span> recent sales, this project compares what homes in <span data-stat="facts.data.areas" data-format="int">6,856</span> small areas pay with what they are worth today, and makes the case for revaluation.</p>
             <p class="byline">Jakob Kilian Bilan · Data updated <time data-stat="built" data-format="date">–</time> ·
                 <a href="https://github.com/jakobbilan/jakobbilan.github.io/tree/main/pipeline">Code and data on GitHub</a></p>
         </div>
@@ -61,6 +61,25 @@
                 <dd data-stat="gap_mix" data-format="times">–</dd>
             </div>
         </dl>
+
+        <!-- Your council: found by name or by the reader's location; the location is matched in the browser and never sent -->
+        <section class="your-council" id="your-council" aria-label="Your council">
+            <p class="lead-in">Let’s dive into it! First: if you pay council tax in England, here’s the opportunity to see how your council taxes you compared to your neighbours (decide for yourself how fair your rate is).</p>
+            <div class="council-card wide">
+                <div class="council-find">
+                    <p class="council-label">Your council</p>
+                    <label class="field">
+                        <span class="visually-hidden">Find your council</span>
+                        <input type="search" list="council-list" placeholder="Type your council" autocomplete="off" data-your-council>
+                    </label>
+                    <button type="button" class="locate" data-locate>Use my location</button>
+                    <p class="council-privacy">This page does not store or send your location anywhere.</p>
+                </div>
+                <div class="council-result" data-council-result aria-live="polite">
+                    <p class="council-message">Choose a council, or use your location.</p>
+                </div>
+            </div>
+        </section>
 
         <!-- Section links, pinned to the top while reading -->
         <nav class="contents full" aria-label="Sections">
