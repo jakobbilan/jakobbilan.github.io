@@ -1,5 +1,5 @@
 {
-  "built": "2026-11-03T01:26Z",
+  "built": "2026-11-03T11:42Z",
   "price_month": "2026-08",
   "sales_window": [
     "2024-01-01",
@@ -69,6 +69,133 @@
     },
     "hexjson": {
       "url": "https://raw.githubusercontent.com/odileeds/hexmaps/17982f91f7f21b84b6c876f952437c8986172811/maps/uk-local-authority-districts-2025.hexjson"
+    }
+  },
+  "facts": {
+    "data": {
+      "homes": 25937780.0,
+      "areas": 6856,
+      "councils": 296,
+      "sales": 1820354,
+      "sales_from": "2024-01-01",
+      "sales_to": "2026-07-31",
+      "price_month": "2026-08",
+      "fallback_share": 0.02588648926190606,
+      "bill": 2220.0732310488147,
+      "value": 345754.28692604386,
+      "rate": 0.00642041963739759,
+      "checks_passed": 7,
+      "checks": 8
+    },
+    "policy": {
+      "fairer_share_rate": 0.0048,
+      "surcharge_threshold": 2000000,
+      "surcharge_min": 2500,
+      "surcharge_max": 7500
+    },
+    "fig1": {
+      "cheap_value": 117761.71686684396,
+      "cheap_rate": 0.014850647018350698,
+      "dear_value": 946717.6247615974,
+      "dear_rate": 0.0025257573042096228,
+      "ratio": 5.879680915343473,
+      "group_share": 0.025
+    },
+    "pair": {
+      "a_name": "Burnley",
+      "a_band_d": 2549.42,
+      "a_bill": 1955.0722712456045,
+      "a_value": 157619.5743907407,
+      "a_price": 136703.0,
+      "a_rate": 0.012390280181312063,
+      "a_rate_press": 0.018649334689070467,
+      "a_share_ad": 0.957033957033957,
+      "b_name": "Westminster",
+      "b_band_d": 1049.55,
+      "b_bill": 1399.0553201970445,
+      "b_value": 974629.2764975814,
+      "b_price": 887206.0,
+      "b_rate": 0.0014357645382576266,
+      "b_rate_press": 0.0011829834333852566,
+      "b_share_ad": 0.35240621447518,
+      "gap_mix": 8.62974384110942,
+      "gap_press": 15.764662600306277
+    },
+    "fig2": {
+      "base": "1995-01",
+      "latest": "2026-08",
+      "london_start": 79687,
+      "london_end": 554430,
+      "london_x": 6.957596596684528,
+      "north_east_start": 39809,
+      "north_east_end": 165640,
+      "north_east_x": 4.160868145394257,
+      "england_start": 50231,
+      "england_end": 293525,
+      "england_x": 5.843503016065776,
+      "london_vs_north_east": 1.6721502228774112
+    },
+    "fig3": {
+      "high_mix_name": "Blackpool",
+      "high_mix_rate": 0.014271161455023032,
+      "low_mix_name": "Westminster",
+      "low_mix_rate": 0.0014357645382576266,
+      "gap_mix": 9.939764546867702,
+      "high_press_name": "Hartlepool",
+      "high_press_rate": 0.018738883806038425,
+      "low_press_name": "Westminster",
+      "low_press_rate": 0.0011829834333852566,
+      "gap_press": 15.840360293478279
+    },
+    "fig4": {
+      "council": "Westminster",
+      "band_h": 2099.1,
+      "compare": "Burnley",
+      "compare_rate": 0.012390280181312063,
+      "charge_2m": 2500.0,
+      "rate_2m_now": 0.00104955,
+      "rate_2m_with": 0.00229955,
+      "charge_5m": 7500.0,
+      "rate_5m_now": 0.00041982,
+      "rate_5m_with": 0.00191982,
+      "charge_10m": 7500.0,
+      "rate_10m_now": 0.00020991,
+      "rate_10m_with": 0.00095991,
+      "compare_vs_top": 12.907751957279393,
+      "sales_2m": 20117,
+      "london_share": 0.4865536610826664,
+      "top_name": "Westminster",
+      "top_sales": 1963,
+      "top_share": 0.09757916190286822
+    },
+    "fig5": {
+      "share_ad": 0.8078817847942268,
+      "fuel_poor": 2472012.0,
+      "fp_rate": 0.09949418400555039,
+      "outside_max": 398769.15386693855,
+      "outside_share_max": 0.16131359955653068,
+      "inside_share_min": 0.8386864004434693,
+      "top1_name": "North Yorkshire",
+      "top1_outside": 7939.190286607823,
+      "top1_share": 0.24648980988567862,
+      "top2_name": "Buckinghamshire",
+      "top2_outside": 7263.865585405177,
+      "top2_share": 0.4085643503799526,
+      "top3_name": "Barnet",
+      "top3_outside": 6817.042141975284,
+      "top3_share": 0.4460539254056981
+    },
+    "fig6": {
+      "fs_rate": 0.0048,
+      "fs_revenue": 0.7476146842553736,
+      "fs_less": 0.8663096494442267,
+      "fs_councils_more": 31,
+      "neutral_rate": 0.00642041963739759,
+      "neutral_less": 0.6663595840784036,
+      "neutral_councils_more": 99,
+      "local_less": 0.5575579497979689,
+      "local_councils_more": 75,
+      "councils": 296
     }
   },
   "checks": [
