@@ -1,19 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Project | Jakob Kilian Bilan</title>
+    <link rel="preload" href="project/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="project/css/project.css">
 
-    <!-- Vega, Vega-Lite and vega-embed: render the chart specs -->
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <!-- Vega, Vega-Lite and vega-embed, pinned and served from this repository -->
+    <script src="project/vendor/vega-5.33.1.min.js" defer></script>
+    <script src="project/vendor/vega-lite-5.23.0.min.js" defer></script>
+    <script src="project/vendor/vega-embed-6.29.0.min.js" defer></script>
+    <script src="project/js/project.js" defer></script>
 </head>
 
-<body>
+<body class="project-page">
+    <div class="progress" aria-hidden="true"></div>
+
     <!-- Site header, same on every page; aria-current marks Projects, the parent page -->
     <header>
         <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
@@ -26,50 +31,345 @@
         </nav>
     </header>
 
-    <main class="charts">
-        <p class="breadcrumb"><a href="projects.html">Projects</a> / Project</p>
+    <main class="project" id="top">
+        <!-- Opening: kicker, headline, standfirst, byline -->
+        <div class="hero">
+            <p class="breadcrumb"><a href="projects.html">Projects</a> / Project</p>
+            <p class="kicker">PP434 data project · 2026/27</p>
+            <h1 class="draft">[Headline: the finding, with its number]</h1>
+            <p class="standfirst draft">[Standfirst: one or two sentences that set up the question]</p>
+            <p class="byline">Jakob Kilian Bilan · Data updated <time data-stat="built" data-format="date">–</time> ·
+                <a href="https://github.com/jakobbilan/jakobbilan.github.io/tree/main/pipeline">Code and data on GitHub</a></p>
+        </div>
 
-        <hgroup>
-            <h1>Project</h1>
-            <p>PP434 – Automated Data Visualisation for Policymaking 2026/27</p>
-            <p>Code and data: <a href="https://github.com/jakobbilan/jakobbilan.github.io">github.com/jakobbilan/jakobbilan.github.io</a></p>
-        </hgroup>
+        <!-- Headline numbers, filled from project/data/summary.json -->
+        <dl class="key-figures wide">
+            <div>
+                <dt>England: council tax as a share of home value</dt>
+                <dd data-stat="england.rate_mix" data-format="pct2">–</dd>
+            </div>
+            <div>
+                <dt>Highest council: <span data-stat="highest.name">–</span></dt>
+                <dd data-stat="highest.rate_mix" data-format="pct2">–</dd>
+            </div>
+            <div>
+                <dt>Lowest council: <span data-stat="lowest.name">–</span></dt>
+                <dd data-stat="lowest.rate_mix" data-format="pct2">–</dd>
+            </div>
+            <div>
+                <dt>Flat rate raising today’s total</dt>
+                <dd data-stat="england.revenue_neutral_rate" data-format="pct2">–</dd>
+            </div>
+        </dl>
 
-        <section>
-            <h2>Aims</h2>
-            <p class="meta">To follow.</p>
+        <!-- Section links, pinned to the top while reading -->
+        <nav class="contents full" aria-label="Sections">
+            <ol>
+                <li><a href="#aims">Aims</a></li>
+                <li><a class="figure-link" href="#figure-1">Figure 1</a></li>
+                <li><a class="figure-link" href="#figure-2">2</a></li>
+                <li><a class="figure-link" href="#figure-3">3</a></li>
+                <li><a class="figure-link" href="#figure-4">4</a></li>
+                <li><a class="figure-link" href="#figure-5">5</a></li>
+                <li><a class="figure-link" href="#figure-6">6</a></li>
+                <li><a href="#data">Data</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#conclusions">Conclusions</a></li>
+            </ol>
+        </nav>
+
+        <section id="aims" aria-labelledby="aims-title">
+            <h2 id="aims-title">Aims</h2>
+            <p class="draft">[Aims, up to 200 words: the question, why it matters now, and the three claims the figures test]</p>
         </section>
 
-        <section>
-            <h2>Data</h2>
-            <p class="meta">To follow.</p>
+        <!-- Figure 1: the chart stays in view while three short notes scroll past and switch its layers -->
+        <section aria-label="Figure 1">
+            <figure class="chart scrolly wide" id="figure-1" data-scrolly="chart-1" aria-labelledby="title-1">
+                <div class="scrolly-graphic">
+                    <div class="chart-head">
+                        <p class="chart-number">Figure 1</p>
+                        <h3 class="chart-title draft" id="title-1">[Headline: the finding, with its number]</h3>
+                        <p class="chart-subtitle">Council tax bill before discounts as a share of the average home value, for each of
+                            <span data-stat="england.msoas" data-format="int">6,856</span> small areas (MSOAs) in England, 2026-27. Both scales are logarithmic.</p>
+                    </div>
+                    <div class="controls">
+                        <div class="segmented" role="group" aria-label="Layers" data-chart="chart-1" data-signal="step" data-type="number">
+                            <button type="button" data-value="0" aria-pressed="false">Every area</button>
+                            <button type="button" data-value="1" aria-pressed="false">Burnley and Westminster</button>
+                            <button type="button" data-value="2" aria-pressed="true">Flat-tax lines</button>
+                        </div>
+                        <label class="field">
+                            <span class="visually-hidden">Highlight a council</span>
+                            <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-1">
+                        </label>
+                    </div>
+                    <div class="chart-body" id="chart-1" data-spec="project/charts/01-staircase.vl.json" data-height="460 340" data-renderer="canvas"
+                        role="img" aria-label="Scatter plot of council tax as a share of home value against home value for every small area in England, with the median, which falls as values rise."></div>
+                </div>
+
+                <div class="steps">
+                    <div class="step" data-step="0"><div><p class="draft">[Note 1: what to see first]</p></div></div>
+                    <div class="step" data-step="1"><div><p class="draft">[Note 2: Burnley against Westminster]</p></div></div>
+                    <div class="step" data-step="2"><div><p class="draft">[Note 3: what a flat tax would charge]</p></div></div>
+                </div>
+
+                <footer class="chart-foot">
+                    <p>Sources: Valuation Office (Council Tax stock of properties, 2026); MHCLG (Council Tax levels 2026-27, Table 9); HM Land Registry (Price Paid Data, UK House Price Index); ONS (postcode lookup).</p>
+                    <p class="chart-actions">
+                        <a href="project/data/msoa.csv" download>Data (CSV)</a>
+                        <a href="project/charts/01-staircase.vl.json">Chart specification</a>
+                        <button type="button" data-save="chart-1">Save image</button>
+                    </p>
+                    <details class="chart-notes">
+                        <summary>Notes and method</summary>
+                        <p class="draft">[Notes: how bills and values are built; sales from <span data-stat="sales_window.0" data-format="month">–</span> to <span data-stat="sales_window.1" data-format="month">–</span>]</p>
+                    </details>
+                </footer>
+            </figure>
         </section>
 
-        <section>
-            <h2>Tools</h2>
-            <p class="meta">To follow.</p>
+        <!-- Figure 2: regional prices since the valuation date -->
+        <section aria-label="Figure 2">
+            <figure class="chart wide" id="figure-2" aria-labelledby="title-2">
+                <div class="chart-head">
+                    <p class="chart-number">Figure 2</p>
+                    <h3 class="chart-title draft" id="title-2">[Headline: the finding, with its number]</h3>
+                    <p class="chart-subtitle">Average house price by region in England since
+                        <span data-stat="regions_base" data-format="month">April 1991</span>, when council tax bands were fixed.</p>
+                </div>
+                <div class="controls">
+                    <div class="segmented" role="group" aria-label="Measure" data-chart="chart-2" data-signal="measure">
+                        <button type="button" data-value="multiple" aria-pressed="true">Multiple of 1991 price</button>
+                        <button type="button" data-value="price" aria-pressed="false">Average price</button>
+                    </div>
+                </div>
+                <div class="chart-body" id="chart-2" data-spec="project/charts/02-regions.vl.json" data-height="400 300"
+                    role="img" aria-label="Line chart of average house prices by English region since 1991, London highlighted against the North East."></div>
+                <footer class="chart-foot">
+                    <p>Source: HM Land Registry, UK House Price Index (to <span data-stat="price_month" data-format="month">–</span>).</p>
+                    <p class="chart-actions">
+                        <a href="project/data/regions.csv" download>Data (CSV)</a>
+                        <a href="project/charts/02-regions.vl.json">Chart specification</a>
+                        <button type="button" data-save="chart-2">Save image</button>
+                    </p>
+                </footer>
+            </figure>
         </section>
 
-        <!-- Each figure: a chart div that vegaEmbed fills by its id, and a caption -->
-        <section>
-            <h2>Figures</h2>
-            <figure><div id="figure1"></div><figcaption>Figure 1. To follow.</figcaption></figure>
-            <figure><div id="figure2"></div><figcaption>Figure 2. To follow.</figcaption></figure>
-            <figure><div id="figure3"></div><figcaption>Figure 3. To follow.</figcaption></figure>
-            <figure><div id="figure4"></div><figcaption>Figure 4. To follow.</figcaption></figure>
-            <figure><div id="figure5"></div><figcaption>Figure 5. To follow.</figcaption></figure>
-            <figure><div id="figure6"></div><figcaption>Figure 6. To follow.</figcaption></figure>
+        <!-- Figure 3: hexagon map, switching between two ways of measuring the burden -->
+        <section aria-label="Figure 3">
+            <figure class="chart wide" id="figure-3" aria-labelledby="title-3">
+                <div class="chart-head">
+                    <p class="chart-number">Figure 3</p>
+                    <h3 class="chart-title draft" id="title-3">[Headline: the finding, with its number]</h3>
+                    <p class="chart-subtitle">Council tax as a share of home value by council, 2026-27. One hexagon per council.</p>
+                </div>
+                <div class="controls">
+                    <div class="segmented" role="group" aria-label="Measure" data-chart="chart-3" data-signal="method">
+                        <button type="button" data-value="mix" aria-pressed="true">Average bill ÷ average value</button>
+                        <button type="button" data-value="press" aria-pressed="false">Band D ÷ average price</button>
+                    </div>
+                    <label class="field">
+                        <span class="visually-hidden">Highlight a council</span>
+                        <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-3">
+                    </label>
+                </div>
+                <div class="chart-body" id="chart-3" data-spec="project/charts/03-map-rates.vl.json" data-height="640 420"
+                    role="img" aria-label="Hexagon map of English councils shaded by council tax as a share of home value."></div>
+                <footer class="chart-foot">
+                    <p>Sources: as figure 1. Hexagon layout: Open Innovations.</p>
+                    <p class="chart-actions">
+                        <a href="project/data/councils.csv" download>Data (CSV)</a>
+                        <a href="project/charts/03-map-rates.vl.json">Chart specification</a>
+                        <button type="button" data-save="chart-3">Save image</button>
+                    </p>
+                    <details class="chart-notes">
+                        <summary>Notes and method</summary>
+                        <p class="draft">[Notes: why the two measures differ]</p>
+                    </details>
+                </footer>
+            </figure>
         </section>
 
-        <section>
-            <h2>Conclusions</h2>
-            <p class="meta">To follow.</p>
+        <!-- Figure 4: the 2028 surcharge, and where the homes it reaches are sold -->
+        <section aria-label="Figure 4">
+            <figure class="chart wide" id="figure-4" aria-labelledby="title-4">
+                <div class="chart-head">
+                    <p class="chart-number">Figure 4</p>
+                    <h3 class="chart-title draft" id="title-4">[Headline: the finding, with its number]</h3>
+                    <p class="chart-subtitle">Council tax and the surcharge due from April 2028, as a share of the value of a Band H home.</p>
+                </div>
+                <div class="controls">
+                    <label class="field">Band H home in
+                        <select data-councils data-default="E09000033" data-chart="chart-4a chart-4b" data-signal="council"></select>
+                    </label>
+                    <label class="field">against the average home in
+                        <select data-councils data-default="E07000117" data-chart="chart-4a" data-signal="compare"></select>
+                    </label>
+                </div>
+                <div class="chart-pair">
+                    <div>
+                        <p class="panel-title">Bill as a share of value</p>
+                        <div class="chart-body" id="chart-4a" data-spec="project/charts/04a-surcharge.vl.json" data-height="380 300"
+                            role="img" aria-label="Line chart: council tax on a Band H home falls as a share of value as the value rises, with and without the 2028 surcharge."></div>
+                    </div>
+                    <div>
+                        <p class="panel-title">Sales at £2 million or more since <span data-stat="sales_window.0" data-format="month">January 2024</span></p>
+                        <div class="chart-body" id="chart-4b" data-spec="project/charts/04b-high-value.vl.json"
+                            role="img" aria-label="Bar chart of the fifteen councils with the most sales at two million pounds or more."></div>
+                    </div>
+                </div>
+                <footer class="chart-foot">
+                    <p>Sources: HM Treasury (High Value Council Tax Surcharge, 28 October 2026); MHCLG (Table 9); HM Land Registry (Price Paid Data).</p>
+                    <p class="chart-actions">
+                        <a href="project/data/councils.csv" download>Data (CSV)</a>
+                        <a href="project/charts/04a-surcharge.vl.json">Chart specification</a>
+                        <button type="button" data-save="chart-4a">Save image</button>
+                    </p>
+                </footer>
+            </figure>
         </section>
+
+        <!-- Figure 5: the £100 energy payment by band against fuel poverty -->
+        <section aria-label="Figure 5">
+            <figure class="chart wide" id="figure-5" aria-labelledby="title-5">
+                <div class="chart-head">
+                    <p class="chart-number">Figure 5</p>
+                    <h3 class="chart-title draft" id="title-5">[Headline: the finding, with its number]</h3>
+                    <p class="chart-subtitle">Share of homes in Bands A–D, which receive the £100 Household Energy Payment, against the share of households in fuel poverty (2024), by council. Circles sized by households; dashed lines show England.</p>
+                </div>
+                <div class="controls">
+                    <label class="field">Highlight
+                        <select data-chart="chart-5" data-signal="region">
+                            <option>North East</option>
+                            <option>North West</option>
+                            <option>Yorkshire and The Humber</option>
+                            <option>East Midlands</option>
+                            <option>West Midlands</option>
+                            <option>East of England</option>
+                            <option selected>London</option>
+                            <option>South East</option>
+                            <option>South West</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="chart-body" id="chart-5" data-spec="project/charts/05-energy-payment.vl.json" data-height="440 340"
+                    role="img" aria-label="Scatter plot of councils: share of homes in Bands A to D against the fuel poverty rate."></div>
+                <footer class="chart-foot">
+                    <p>Sources: DESNZ (Sub-regional fuel poverty, 2026, 2024 data); Valuation Office (Council Tax stock of properties, 2026); HM Treasury (Budget, 28 October 2026).</p>
+                    <p class="chart-actions">
+                        <a href="project/data/councils.csv" download>Data (CSV)</a>
+                        <a href="project/charts/05-energy-payment.vl.json">Chart specification</a>
+                        <button type="button" data-save="chart-5">Save image</button>
+                    </p>
+                    <details class="chart-notes">
+                        <summary>Notes and method</summary>
+                        <p class="draft">[Notes: the upper-bound estimate of fuel-poor homes outside Bands A–D]</p>
+                    </details>
+                </footer>
+            </figure>
+        </section>
+
+        <!-- Figure 6: what a flat tax on current values would do, at a rate the reader picks -->
+        <section aria-label="Figure 6">
+            <figure class="chart wide" id="figure-6" aria-labelledby="title-6">
+                <div class="chart-head">
+                    <p class="chart-number">Figure 6</p>
+                    <h3 class="chart-title draft" id="title-6">[Headline: the finding, with its number]</h3>
+                    <p class="chart-subtitle">Share of homes in each council that would pay less if council tax were replaced by a flat tax on current value.</p>
+                </div>
+                <div class="controls">
+                    <div class="slider">
+                        <div class="slider-readout">
+                            <output for="rate">0.48%</output>
+                            <small data-revenue>–</small>
+                        </div>
+                        <div class="slider-track">
+                            <label class="visually-hidden" for="rate">Flat tax rate</label>
+                            <input id="rate" type="range" min="0.002" max="0.012" step="0.00001" value="0.0048" data-chart="chart-6">
+                            <div class="slider-marks">
+                                <button type="button" data-rate="0.0048">0.48%</button>
+                                <button type="button" data-rate="neutral">–</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="segmented" role="group" aria-label="Revenue" data-chart="chart-6" data-signal="mode">
+                        <button type="button" data-value="national" aria-pressed="true">One rate for England</button>
+                        <button type="button" data-value="local" aria-pressed="false">Each council keeps its revenue</button>
+                    </div>
+                    <label class="field">
+                        <span class="visually-hidden">Highlight a council</span>
+                        <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-6">
+                    </label>
+                </div>
+                <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420"
+                    role="img" aria-label="Hexagon map of English councils shaded by the share of homes that would pay less under a flat tax on current value."></div>
+                <footer class="chart-foot">
+                    <p>Sources: as figure 1. Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>
+                    <p class="chart-actions">
+                        <a href="project/data/msoa.csv" download>Data (CSV)</a>
+                        <a href="project/charts/06-flat-tax.vl.json">Chart specification</a>
+                        <button type="button" data-save="chart-6">Save image</button>
+                    </p>
+                    <details class="chart-notes">
+                        <summary>Notes and method</summary>
+                        <p class="draft">[Notes: area averages, grants and what the simulator leaves out]</p>
+                    </details>
+                </footer>
+            </figure>
+        </section>
+
+        <section id="data" aria-labelledby="data-title">
+            <h2 id="data-title">Data</h2>
+            <p class="draft">[Data, up to 200 words: sources, how they are accessed, how the page updates itself]</p>
+
+            <details class="reference">
+                <summary>Sources, licences and downloads</summary>
+                <div class="table-scroll">
+                    <table class="source-list">
+                        <thead>
+                            <tr><th>Source</th><th>Publisher</th><th>Used for</th><th>Licence</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><a href="https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2026">Council Tax: stock of properties</a> (CTSOP1.1, CTSOP3.1)</td><td>Valuation Office, HMRC</td><td>Homes by band and type, every small area</td><td>OGL v3.0</td></tr>
+                            <tr><td><a href="https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027">Council Tax levels set by local authorities</a> (Table 9)</td><td>MHCLG</td><td>Area Band D by council</td><td>OGL v3.0</td></tr>
+                            <tr><td><a href="https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads">Price Paid Data</a></td><td>HM Land Registry</td><td>Sale prices since January 2024</td><td>OGL v3.0</td></tr>
+                            <tr><td><a href="https://www.gov.uk/government/collections/uk-house-price-index-reports">UK House Price Index</a></td><td>HM Land Registry, ONS</td><td>Bringing sales to one month; regional prices</td><td>OGL v3.0</td></tr>
+                            <tr><td><a href="https://geoportal.statistics.gov.uk/">Postcode to OA, LSOA, MSOA and LAD lookup</a></td><td>ONS</td><td>Placing sales in small areas</td><td>OGL v3.0; OS and Royal Mail rights</td></tr>
+                            <tr><td><a href="https://www.gov.uk/government/collections/fuel-poverty-sub-regional-statistics">Sub-regional fuel poverty</a></td><td>DESNZ</td><td>Fuel poverty by council and small area</td><td>OGL v3.0</td></tr>
+                            <tr><td><a href="https://github.com/odileeds/hexmaps">Hexmaps: local authority districts 2025</a></td><td>Open Innovations</td><td>Hexagon map layout</td><td>MIT</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Built files: <a href="project/data/msoa.csv" download>msoa.csv</a> · <a href="project/data/councils.csv" download>councils.csv</a> ·
+                    <a href="project/data/regions.csv" download>regions.csv</a> · <a href="project/data/summary.json">summary.json</a> ·
+                    <a href="project/geo/hex-lad-2025.geojson">hex-lad-2025.geojson</a></p>
+                <pre><code>git clone https://github.com/jakobbilan/jakobbilan.github.io
+cd jakobbilan.github.io
+pip install -r requirements.txt
+python -m pipeline.build</code></pre>
+            </details>
+        </section>
+
+        <section id="tools" aria-labelledby="tools-title">
+            <h2 id="tools-title">Tools</h2>
+            <p class="draft">[Tools, up to 200 words: cleaning and matching, the method correction, challenges and how they were solved]</p>
+        </section>
+
+        <section id="conclusions" aria-labelledby="conclusions-title">
+            <h2 id="conclusions-title">Conclusions</h2>
+            <p class="draft">[Conclusions, up to 200 words: what the evidence shows about each claim, and what it does not]</p>
+        </section>
+
+        <footer class="page-foot">
+            <p>Contains HM Land Registry data © Crown copyright and database right 2026. This data is licensed under the Open Government Licence v3.0.</p>
+            <p>Contains Valuation Office, MHCLG, DESNZ and ONS data © Crown copyright and database right 2026, licensed under the Open Government Licence v3.0.
+                Contains OS data © Crown copyright and database right 2026. Contains Royal Mail data © Royal Mail copyright and database right 2026.</p>
+            <p>Hexagon layout © Open Innovations (MIT licence). Charts drawn with Vega-Lite (BSD-3-Clause). Typeface Inter (SIL Open Font Licence).</p>
+        </footer>
+
+        <datalist id="council-list"></datalist>
     </main>
-
-    <script>
-        // Chart text in the page typeface, unless a spec sets its own font
-        let options = { config: { font: 'Charter, "Bitstream Charter", "Sitka Text", Cambria, serif' } };
-    </script>
 </body>
 </html>
