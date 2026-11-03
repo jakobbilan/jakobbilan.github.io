@@ -42,13 +42,6 @@
                 <a href="https://github.com/jakobbilan/jakobbilan.github.io/tree/main/pipeline">Code and data on GitHub</a></p>
         </div>
 
-        <!-- The opening's numbers as one line of text, filled from project/data/summary.json -->
-        <p class="key-line"><span class="key-label">In numbers</span>
-            England <b data-stat="england.rate_mix" data-format="pct2">–</b> of home value a year ·
-            highest <span data-stat="highest.name">–</span> <b data-stat="highest.rate_mix" data-format="pct2">–</b> ·
-            lowest <span data-stat="lowest.name">–</span> <b data-stat="lowest.rate_mix" data-format="pct2">–</b> ·
-            <b data-stat="gap_mix" data-format="times">–</b> apart</p>
-        <hr class="opening-rule wide">
 
         <!-- Section links, pinned to the top while reading -->
         <nav class="contents full" aria-label="Sections">
@@ -81,8 +74,7 @@
                         <div class="chart-head">
                             <p class="chart-number">Figure 1</p>
                             <h3 class="chart-title draft" id="title-1">[Headline: finding with a number]</h3>
-                            <p class="chart-subtitle">Council tax bill before discounts as a share of the average home value, for each of
-                                <span data-stat="england.msoas" data-format="int">6,856</span> small areas (MSOAs) in England, 2026-27. Line: median by home value; shading: middle half of areas. Both scales are logarithmic.</p>
+                            <p class="chart-subtitle">Bill as % of home value, <span data-stat="england.msoas" data-format="int">6,856</span> small areas, 2026-27; log scales</p>
                         </div>
                         <div class="controls">
                             <div class="segmented" role="group" aria-label="Layers" data-chart="chart-1" data-signal="step" data-type="number">
@@ -107,6 +99,7 @@
                 </div>
 
                 <footer class="chart-foot">
+                    <p class="chart-key">Dots: small areas. Line: median by home value; shading: middle half of areas. Bills before discounts.</p>
                     <p>Sources: Valuation Office (Council Tax stock of properties, 2026); MHCLG (Council Tax levels 2026-27, Table 9); HM Land Registry (Price Paid Data, UK House Price Index); ONS (postcode lookup).</p>
                     <p class="chart-actions">
                         <a href="project/data/msoa.csv" download>Data (CSV)</a>
@@ -127,8 +120,7 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 2</p>
                     <h3 class="chart-title draft" id="title-2">[Headline: finding and number]</h3>
-                    <p class="chart-subtitle">Average house price by region in England since
-                        <span data-stat="regions_base" data-format="month">January 1995</span>, the first month of the official index. Council tax bands date from April 1991.</p>
+                    <p class="chart-subtitle">Average house price by region, as a multiple of <span data-stat="regions_base" data-format="month">January 1995</span></p>
                 </div>
                 <div class="controls">
                     <div class="segmented" role="group" aria-label="Measure" data-chart="chart-2" data-signal="measure">
@@ -139,6 +131,7 @@
                 <div class="chart-body" id="chart-2" data-spec="project/charts/02-regions.vl.json" data-height="400 300"
                     role="img" aria-label="Line chart of average house prices by English region since 1991, London highlighted against the North East."></div>
                 <footer class="chart-foot">
+                    <p class="chart-key">The series starts in <span data-stat="regions_base" data-format="month">January 1995</span>, the first month every region covers; council tax bands date from April 1991.</p>
                     <p>Source: HM Land Registry, UK House Price Index (to <span data-stat="price_month" data-format="month">–</span>).</p>
                     <p class="chart-actions">
                         <a href="project/data/regions.csv" download>Data (CSV)</a>
@@ -155,7 +148,7 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 3</p>
                     <h3 class="chart-title draft" id="title-3">[Headline]</h3>
-                    <p class="chart-subtitle">Council tax as a share of home value by council, 2026-27.</p>
+                    <p class="chart-subtitle">Bill as % of home value, by council, 2026-27</p>
                 </div>
                 <div class="controls">
                     <div class="segmented" role="group" aria-label="Measure" data-chart="chart-3" data-signal="method">
@@ -168,7 +161,7 @@
                     </div>
                     <label class="field">
                         <span class="visually-hidden">Highlight a council</span>
-                        <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-3">
+                        <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-3 chart-6">
                     </label>
                 </div>
                 <div class="chart-body" id="chart-3" data-spec="project/charts/03-map-rates.vl.json" data-height="640 420" data-fit="screen"
@@ -194,7 +187,7 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 4</p>
                     <h3 class="chart-title draft" id="title-4">[Headline]</h3>
-                    <p class="chart-subtitle">Council tax and the surcharge due from April 2028, as a share of the value of a Band H home.</p>
+                    <p class="chart-subtitle">Band H bill as % of value, with the 2028 surcharge</p>
                 </div>
                 <div class="controls">
                     <label class="field">Band H home in
@@ -233,7 +226,7 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 5</p>
                     <h3 class="chart-title draft" id="title-5">[Headline]</h3>
-                    <p class="chart-subtitle">Share of homes in Bands A–D, which receive the £100 Household Energy Payment, against the share of households in fuel poverty (2024), by council. Circles sized by fuel-poor households; dashed lines show England. Labels mark the five councils with the fewest homes in Bands A–D (among those with at least 1,000 fuel-poor households).</p>
+                    <p class="chart-subtitle">Homes in Bands A–D against fuel poverty, by council</p>
                 </div>
                 <div class="controls">
                     <label class="field">Highlight
@@ -253,6 +246,7 @@
                 <div class="chart-body" id="chart-5" data-spec="project/charts/05-energy-payment.vl.json" data-height="440 340"
                     role="img" aria-label="Scatter plot of councils: share of homes in Bands A to D against the fuel poverty rate."></div>
                 <footer class="chart-foot">
+                    <p class="chart-key">Circles sized by fuel-poor households; dashed lines: England. Labelled: the five councils with the fewest homes in Bands A–D, among those with at least 1,000 fuel-poor households.</p>
                     <p>Sources: DESNZ (Sub-regional fuel poverty, 2026, 2024 data); Valuation Office (Council Tax stock of properties, 2026); HM Treasury (Budget, 28 October 2026).</p>
                     <p class="chart-actions">
                         <a href="project/data/councils.csv" download>Data (CSV)</a>
@@ -273,7 +267,7 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 6</p>
                     <h3 class="chart-title draft" id="title-6">[Headline]</h3>
-                    <p class="chart-subtitle">Share of homes in each council that would pay less if council tax were replaced by a flat tax on current value.</p>
+                    <p class="chart-subtitle">Homes in areas that would pay less under a flat tax</p>
                 </div>
                 <div class="controls">
                     <div class="slider">
@@ -294,17 +288,9 @@
                         <button type="button" data-value="national" aria-pressed="true">One rate for England</button>
                         <button type="button" data-value="local" aria-pressed="false">Each council keeps its revenue</button>
                     </div>
-                    <div class="segmented" role="group" aria-label="View" data-chart="chart-6" data-signal="shape">
-                        <button type="button" data-value="hex" aria-pressed="true">Hexagons</button>
-                        <button type="button" data-value="map" aria-pressed="false">Map</button>
-                    </div>
-                    <label class="field">
-                        <span class="visually-hidden">Highlight a council</span>
-                        <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-6">
-                    </label>
                 </div>
                 <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420" data-fit="screen"
-                    role="img" aria-label="Map of English councils, as equal hexagons or real boundaries, shaded by the share of homes that would pay less under a flat tax on current value."></div>
+                    role="img" aria-label="Hexagon map of English councils shaded by the share of homes that would pay less under a flat tax on current value."></div>
                 <footer class="chart-foot">
                     <p>Sources: as figures 1 and 3. Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>
                     <p class="chart-actions">
@@ -339,7 +325,7 @@
                             <tr><td><a href="https://geoportal.statistics.gov.uk/">Postcode to OA, LSOA, MSOA and LAD lookup</a></td><td>ONS</td><td>Placing sales in small areas</td><td>OGL v3.0; OS and Royal Mail rights</td></tr>
                             <tr><td><a href="https://www.gov.uk/government/collections/fuel-poverty-sub-regional-statistics">Sub-regional fuel poverty</a></td><td>DESNZ</td><td>Fuel poverty by council and small area</td><td>OGL v3.0</td></tr>
                             <tr><td><a href="https://github.com/odileeds/hexmaps">Hexmaps: local authority districts 2025</a></td><td>Open Innovations</td><td>Hexagon map layout</td><td>MIT</td></tr>
-                            <tr><td><a href="https://geoportal.statistics.gov.uk/">Local authority district boundaries</a> (December 2024), generalised</td><td>ONS, via Open Innovations</td><td>Real map in figures 3 and 6</td><td>OGL v3.0; OS rights</td></tr>
+                            <tr><td><a href="https://geoportal.statistics.gov.uk/">Local authority district boundaries</a> (December 2024), generalised</td><td>ONS, via Open Innovations</td><td>Real map in figure 3</td><td>OGL v3.0; OS rights</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -367,7 +353,7 @@ python -m pipeline.build</code></pre>
         <!-- Closer: the reader's own council, found by name or location; the location is matched in the browser and never sent -->
         <section id="your-council" class="your-council" aria-labelledby="your-council-title">
             <h2 id="your-council-title">Your council</h2>
-            <p class="lead-in">If you pay council tax in England, here’s the opportunity to see how your council taxes you compared to your neighbours (decide for yourself how fair your rate is).</p>
+            <p class="lead-in">If you pay council tax in England, see how your council taxes you compared to your neighbours.</p>
             <div class="council-card">
                 <div class="council-find">
                     <label class="field">

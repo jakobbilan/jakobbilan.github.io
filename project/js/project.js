@@ -482,51 +482,25 @@
         const ranked = councils.filter(function (row) { return isFinite(row.rate_mix); })
             .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
         const rank = ranked.findIndex(function (row) { return row.lad === code; }) + 1;
+        const fromBottom = ranked.length - rank + 1;
+        const place = rank <= fromBottom
+            ? (rank === 1 ? "highest" : ordinal(rank) + " highest")
+            : (fromBottom === 1 ? "lowest" : ordinal(fromBottom) + " lowest");
 
         box.hidden = false;
         box.innerHTML = "";
+
+        // 1. The council's rate, its rank and England's rate in one line; its bill and value below
         box.appendChild(element("p", "council-name", council.name));
         const rate = element("p", "council-rate");
         rate.appendChild(element("strong", null, formatValue(council.rate_mix, "pct2")));
-        rate.appendChild(document.createTextNode(" of home value a year"));
+        rate.appendChild(document.createTextNode(" of home value a year · " + place + " of " + ranked.length +
+            " councils (England " + formatValue(summary.england.rate_mix, "pct2") + ")"));
         box.appendChild(rate);
-        const fromBottom = ranked.length - rank + 1;
-        const place = rank <= fromBottom
-            ? (rank === 1 ? "Highest" : ordinal(rank) + " highest")
-            : (fromBottom === 1 ? "Lowest" : ordinal(fromBottom) + " lowest");
-        box.appendChild(element("p", "council-rank", place + " of " + ranked.length +
-            " councils · England " + formatValue(summary.england.rate_mix, "pct2")));
         box.appendChild(element("p", "council-detail", "Average bill " + formatValue(council.bill, "gbp") +
             " before discounts, on an average home worth " + formatValue(council.value, "gbp")));
 
-        // The same council's average bill if every home in England paid the one flat rate on today's
-        // value that raises today's total: both bills before discounts, so like is compared with like
-        const neutral = summary.england.revenue_neutral_rate;
-        if (isFinite(neutral) && isFinite(council.value) && isFinite(council.bill) && council.bill > 0) {
-            const flat = neutral * council.value;
-            const ratio = flat / council.bill;
-            const change = ratio >= 2 ? "be " + ratio.toFixed(1) + " times today’s"
-                : ratio >= 1 ? "rise by " + formatValue(ratio - 1, "pct0")
-                : "fall by " + formatValue(1 - ratio, "pct0");
-            box.appendChild(element("p", "council-neighbours-title",
-                "If every home paid " + formatValue(neutral, "pct2") + " of today’s value"));
-            const compare = element("ul", "council-neighbours council-compare");
-            const top = Math.max(flat, council.bill);
-            [["Today", council.bill, "today"], ["At " + formatValue(neutral, "pct2"), Math.round(flat / 10) * 10, "flat"]]
-                .forEach(function (row) {
-                    const item = element("li", row[2]);
-                    item.appendChild(element("span", "name", row[0]));
-                    const bar = element("span", "bar");
-                    bar.style.setProperty("--w", (100 * row[1] / top).toFixed(1) + "%");
-                    item.appendChild(bar);
-                    item.appendChild(element("span", "rate", (row[2] === "flat" ? "≈ " : "") + formatValue(row[1], "gbp")));
-                    compare.appendChild(item);
-                });
-            box.appendChild(compare);
-            box.appendChild(element("p", "council-detail", "The average bill would " + change + ". " + formatValue(neutral, "pct2") +
-                " raises the same total for England as council tax does now; grants between councils would have to change."));
-        }
-
+        // 2. Next door: the council and its eight largest neighbours, by rate
         const nearby = ((neighbourMap && neighbourMap[code]) || []).map(function (lad) {
             return councils.find(function (row) { return row.lad === lad; });
         }).filter(function (row) { return row && isFinite(row.rate_mix); })
@@ -550,6 +524,24 @@
         } else if (neighbourMap) {
             box.appendChild(element("p", "council-detail", "No council shares a border with it."));
         }
+
+        // 3. The same council at the one flat rate on today's value that raises today's total for England;
+        //    both bills before discounts, so like is compared with like
+        const neutral = summary.england.revenue_neutral_rate;
+        if (isFinite(neutral) && isFinite(council.value) && isFinite(council.bill) && council.bill > 0) {
+            const flat = neutral * council.value;
+            const ratio = flat / council.bill;
+            const change = ratio >= 2 ? ratio.toFixed(1) + " times today’s"
+                : ratio >= 1 ? formatValue(ratio - 1, "pct0") + " more than today"
+                : formatValue(1 - ratio, "pct0") + " less than today";
+            const line = element("p", "council-flat");
+            line.appendChild(document.createTextNode("At a flat " + formatValue(neutral, "pct2") +
+                " of value, which raises the same total for England, the average bill here would be about "));
+            line.appendChild(element("b", null, formatValue(Math.round(flat / 10) * 10, "gbp")));
+            line.appendChild(document.createTextNode(": " + change + "."));
+            box.appendChild(line);
+        }
+
         const links = element("p", "council-links");
         const toMap = element("a", null, "See it on the map");
         toMap.href = "#figure-3";

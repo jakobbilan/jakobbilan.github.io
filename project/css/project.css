@@ -150,33 +150,6 @@ body.project-page > header {
     color: inherit;
 }
 
-/* The opening's numbers, as one line of text under the standfirst */
-.key-line {
-    font: 0.9375rem/1.6 var(--sans);
-    color: var(--ink-3);
-    font-variant-numeric: tabular-nums;
-}
-
-.key-line b {
-    font-weight: 600;
-    color: var(--ink);
-}
-
-.key-label {
-    margin-right: 0.6rem;
-    font: 600 0.75rem/1 var(--sans);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--red);
-}
-
-/* A firm rule closes the opening off from the project */
-.opening-rule {
-    margin: 2rem 0 0;
-    border: 0;
-    border-top: 2px solid var(--ink);
-}
-
 /* Your council, the closer: a council found by name or location, its rate, today's bill
    against a flat rate, and its neighbours */
 .lead-in {
@@ -252,7 +225,6 @@ body.project-page > header {
     display: none;
 }
 
-
 .council-message {
     font: 0.875rem/1.5 var(--sans);
     color: var(--ink-3);
@@ -322,24 +294,25 @@ body.project-page > header {
     color: var(--ink);
 }
 
-.council-neighbours .is-self .bar,
-.council-compare .today .bar {
+.council-neighbours .is-self .bar {
     background: var(--blue);
 }
 
-.council-compare .flat .bar {
-    background: var(--ink-3);
+.council-flat {
+    font: 0.875rem/1.5 var(--sans);
+    color: var(--ink-2);
+}
+
+.council-flat b {
+    font-weight: 600;
+    color: var(--ink);
 }
 
 .council-links {
     font: 500 0.8125rem/1.4 var(--sans);
 }
 
-/* Paragraph spacing in the card and the numbers line; these selectors outrank the page's `.project p` */
-.project .key-line {
-    margin: 1.1rem 0 0;
-}
-
+/* Paragraph spacing in the card; these selectors outrank the page's `.project p` */
 .project .council-card p {
     margin: 0;
 }
@@ -357,6 +330,10 @@ body.project-page > header {
     margin-top: 0.25rem;
 }
 
+.project .council-card .council-flat {
+    margin-top: 0.9rem;
+}
+
 .project .council-card .council-neighbours-title {
     margin-top: 0.9rem;
 }
@@ -370,8 +347,9 @@ body.project-page > header {
     position: sticky;
     top: 0;
     z-index: 20;
-    margin-bottom: 1rem;
+    margin: 2.75rem 0 1rem;
     background: rgba(255, 255, 255, 0.94);
+    border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
     -webkit-backdrop-filter: saturate(1.4) blur(8px);
     backdrop-filter: saturate(1.4) blur(8px);
@@ -425,6 +403,10 @@ body.project-page > header {
     border-top: 1px solid var(--ink);
     font: 700 1.7rem/1.2 var(--serif);
     letter-spacing: -0.005em;
+}
+
+#aims-title {
+    margin-top: 2.5rem;
 }
 
 .project p {
@@ -541,6 +523,10 @@ body.project-page > header {
 
 .chart-foot p {
     margin: 0 0 0.4rem;
+}
+
+.chart-key {
+    color: var(--ink-2);
 }
 
 .chart-actions {
