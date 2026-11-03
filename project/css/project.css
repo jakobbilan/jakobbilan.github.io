@@ -317,7 +317,6 @@ body.project-page > header {
 .chart-body {
     position: relative;
     width: 100%;
-    min-height: var(--chart-min, 22rem);
 }
 
 .chart-body .vega-embed {
@@ -333,7 +332,7 @@ body.project-page > header {
 .chart-status {
     display: grid;
     place-items: center;
-    min-height: inherit;
+    min-height: 16rem;
     border-radius: 6px;
     background: var(--tint);
     font: 0.875rem/1.5 var(--sans);
@@ -637,62 +636,66 @@ body.project-page > header {
     color: var(--ink);
 }
 
-/* Scrollytelling: the chart stays in view while short notes scroll past it */
-.scrolly {
+/* Scrollytelling: the chart stays in view while short notes scroll past it.
+   project.js sizes the chart to the window and sets --head-h when the title has to scroll away first;
+   the chart is pinned inside .scrolly-body only, so the footer never slides over it. */
+.scrolly-body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, 19rem);
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
     column-gap: 2.5rem;
     align-items: start;
 }
 
-.scrolly::before {
-    grid-column: 1 / -1;
-}
-
 .scrolly-graphic {
-    grid-column: 1;
-    grid-row: 2;
     position: sticky;
-    top: calc(var(--nav-h) + 1rem);
+    top: calc(var(--nav-h) + 0.75rem - var(--head-h, 0px));
+    z-index: 2;
+    background: var(--paper);
 }
 
 .steps {
-    grid-column: 2;
-    grid-row: 2;
-    padding: 30vh 0 20vh;
+    padding: 2rem 0 35vh;
 }
 
 .step {
     display: flex;
     align-items: center;
-    min-height: 72vh;
+    min-height: 62vh;
 }
 
 .step > div {
+    width: 100%;
     padding: 1rem 1.15rem;
     border: 1px solid var(--rule);
-    border-left: 3px solid var(--grid);
+    border-left: 3px solid var(--rule);
     border-radius: 2px 8px 8px 2px;
     background: var(--paper);
     font-size: 1.0625rem;
     line-height: 1.5;
-    opacity: 0.45;
-    transition: opacity 0.25s, border-color 0.25s, box-shadow 0.25s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .step.is-active > div {
     border-left-color: var(--red);
-    opacity: 1;
-    box-shadow: 0 6px 24px rgba(22, 25, 29, 0.07);
+    box-shadow: 0 6px 24px rgba(22, 25, 29, 0.08);
 }
 
 .step p {
     margin: 0;
 }
 
-.scrolly > .chart-foot {
-    grid-column: 1 / -1;
-    grid-row: 3;
+/* Windows too short to pin anything: chart first, notes after it */
+.scrolly.is-static .scrolly-graphic {
+    position: static;
+}
+
+.scrolly.is-static .steps {
+    padding: 1rem 0 0;
+}
+
+.scrolly.is-static .step {
+    min-height: 0;
+    margin-bottom: 0.75rem;
 }
 
 /* Sources and licences */
@@ -794,40 +797,25 @@ body.project-page > header {
 
 /* Tablets and phones */
 @media (max-width: 62rem) {
-    .scrolly {
+    /* Split screen: the chart stays at the top, notes scroll up beneath it and pass under it */
+    .scrolly-body {
         grid-template-columns: minmax(0, 1fr);
     }
 
     .scrolly-graphic {
-        z-index: 1;
-        background: var(--paper);
-        padding-bottom: 0.25rem;
+        padding-bottom: 0.5rem;
+        box-shadow: 0 1px 0 var(--grid);
     }
 
     .steps {
         position: relative;
-        z-index: 2;
-        grid-column: 1;
-        grid-row: 3;
-        margin-top: -30vh;
-        padding: 0 0 10vh;
-        pointer-events: none;
+        z-index: 1;
+        padding: 1.5rem 0 30vh;
     }
 
     .step {
-        min-height: 85vh;
-        align-items: flex-end;
-    }
-
-    .step > div {
-        width: 100%;
-        opacity: 1;
-        pointer-events: auto;
-        box-shadow: 0 8px 30px rgba(22, 25, 29, 0.12);
-    }
-
-    .scrolly > .chart-foot {
-        grid-row: 4;
+        min-height: 50vh;
+        align-items: flex-start;
     }
 
     .chart-pair {

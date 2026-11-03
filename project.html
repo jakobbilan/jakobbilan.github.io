@@ -83,35 +83,38 @@
             <p class="draft">[Aims, up to 200 words: the question, why it matters now, and the three claims the figures test]</p>
         </section>
 
-        <!-- Figure 1: the chart stays in view while three short notes scroll past and switch its layers -->
+        <!-- Figure 1: the chart stays in view while three short notes scroll past and switch its layers.
+             Only .scrolly-body pins the chart, so the footer below never slides over it. -->
         <section aria-label="Figure 1">
             <figure class="chart scrolly wide" id="figure-1" data-scrolly="chart-1" aria-labelledby="title-1">
-                <div class="scrolly-graphic">
-                    <div class="chart-head">
-                        <p class="chart-number">Figure 1</p>
-                        <h3 class="chart-title draft" id="title-1">[Headline: the finding, with its number]</h3>
-                        <p class="chart-subtitle">Council tax bill before discounts as a share of the average home value, for each of
-                            <span data-stat="england.msoas" data-format="int">6,856</span> small areas (MSOAs) in England, 2026-27. Both scales are logarithmic.</p>
-                    </div>
-                    <div class="controls">
-                        <div class="segmented" role="group" aria-label="Layers" data-chart="chart-1" data-signal="step" data-type="number">
-                            <button type="button" data-value="0" aria-pressed="false">Every area</button>
-                            <button type="button" data-value="1" aria-pressed="false">Burnley and Westminster</button>
-                            <button type="button" data-value="2" aria-pressed="true">Flat-tax lines</button>
+                <div class="scrolly-body">
+                    <div class="scrolly-graphic">
+                        <div class="chart-head">
+                            <p class="chart-number">Figure 1</p>
+                            <h3 class="chart-title draft" id="title-1">[Headline: the finding, with its number]</h3>
+                            <p class="chart-subtitle">Council tax bill before discounts as a share of the average home value, for each of
+                                <span data-stat="england.msoas" data-format="int">6,856</span> small areas (MSOAs) in England, 2026-27. Both scales are logarithmic.</p>
                         </div>
-                        <label class="field">
-                            <span class="visually-hidden">Highlight a council</span>
-                            <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-1">
-                        </label>
+                        <div class="controls">
+                            <div class="segmented" role="group" aria-label="Layers" data-chart="chart-1" data-signal="step" data-type="number">
+                                <button type="button" data-value="0" aria-pressed="false">Every area</button>
+                                <button type="button" data-value="1" aria-pressed="false">Burnley and Westminster</button>
+                                <button type="button" data-value="2" aria-pressed="true">Flat-tax lines</button>
+                            </div>
+                            <label class="field">
+                                <span class="visually-hidden">Highlight a council</span>
+                                <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-1">
+                            </label>
+                        </div>
+                        <div class="chart-body" id="chart-1" data-spec="project/charts/01-staircase.vl.json" data-height="460 340" data-fit="scrolly" data-renderer="canvas"
+                            role="img" aria-label="Scatter plot of council tax as a share of home value against home value for every small area in England, with the median, which falls as values rise."></div>
                     </div>
-                    <div class="chart-body" id="chart-1" data-spec="project/charts/01-staircase.vl.json" data-height="460 340" data-renderer="canvas"
-                        role="img" aria-label="Scatter plot of council tax as a share of home value against home value for every small area in England, with the median, which falls as values rise."></div>
-                </div>
 
-                <div class="steps">
-                    <div class="step" data-step="0"><div><p class="draft">[Note 1: what to see first]</p></div></div>
-                    <div class="step" data-step="1"><div><p class="draft">[Note 2: Burnley against Westminster]</p></div></div>
-                    <div class="step" data-step="2"><div><p class="draft">[Note 3: what a flat tax would charge]</p></div></div>
+                    <div class="steps">
+                        <div class="step" data-step="0"><div><p class="draft">[Note 1: what to see first]</p></div></div>
+                        <div class="step" data-step="1"><div><p class="draft">[Note 2: Burnley against Westminster]</p></div></div>
+                        <div class="step" data-step="2"><div><p class="draft">[Note 3: what a flat tax would charge]</p></div></div>
+                    </div>
                 </div>
 
                 <footer class="chart-foot">
@@ -175,7 +178,7 @@
                         <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-3">
                     </label>
                 </div>
-                <div class="chart-body" id="chart-3" data-spec="project/charts/03-map-rates.vl.json" data-height="640 420"
+                <div class="chart-body" id="chart-3" data-spec="project/charts/03-map-rates.vl.json" data-height="640 420" data-fit="screen"
                     role="img" aria-label="Hexagon map of English councils shaded by council tax as a share of home value."></div>
                 <footer class="chart-foot">
                     <p>Sources: as figure 1. Hexagon layout: Open Innovations.</p>
@@ -303,7 +306,7 @@
                         <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-6">
                     </label>
                 </div>
-                <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420"
+                <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420" data-fit="screen"
                     role="img" aria-label="Hexagon map of English councils shaded by the share of homes that would pay less under a flat tax on current value."></div>
                 <footer class="chart-foot">
                     <p>Sources: as figure 1. Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>

@@ -275,6 +275,75 @@
         "dy": -9,
         "fontWeight": 600,
         "fontSize": 11.5,
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "x": {
+          "field": "share_ad"
+        },
+        "y": {
+          "field": "fp_rate"
+        },
+        "text": {
+          "field": "name"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad)"
+        },
+        {
+          "window": [
+            {
+              "op": "row_number",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "fp_outside_ad",
+              "order": "descending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.rank <= 4"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 9,
+        "dy": -9,
+        "fontWeight": 600,
+        "fontSize": 11.5,
         "color": "#16191d"
       },
       "encoding": {

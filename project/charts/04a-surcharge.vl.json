@@ -211,15 +211,42 @@
         {
           "transform": [
             {
-              "filter": "datum.lv >= 7.3"
+              "filter": "abs(datum.lv - 6.845) < 0.00075"
             }
           ],
           "mark": {
             "type": "text",
-            "align": "right",
+            "align": "left",
             "baseline": "bottom",
-            "dx": -2,
-            "dy": -6,
+            "dx": 4,
+            "dy": -7,
+            "fontWeight": 600,
+            "fill": "#ffffff",
+            "stroke": "#ffffff",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "y": {
+              "field": "rate"
+            },
+            "text": {
+              "field": "series"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "abs(datum.lv - 6.845) < 0.00075"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "bottom",
+            "dx": 4,
+            "dy": -7,
             "fontWeight": 600
           },
           "encoding": {
@@ -296,6 +323,31 @@
               "field": "rate_mix"
             },
             "x": null
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "bottom",
+            "dx": 2,
+            "dy": -5,
+            "fontWeight": 600,
+            "fill": "#ffffff",
+            "stroke": "#ffffff",
+            "strokeWidth": 4,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "y": {
+              "field": "rate_mix"
+            },
+            "x": {
+              "value": 0
+            },
+            "text": {
+              "field": "label"
+            }
           }
         },
         {

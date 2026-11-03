@@ -304,18 +304,226 @@
             {
               "op": "max",
               "field": "rate",
-              "as": "rate"
+              "as": "top"
+            },
+            {
+              "op": "min",
+              "field": "rate",
+              "as": "bottom"
             }
           ],
           "groupby": [
             "lad",
             "council"
           ]
+        },
+        {
+          "filter": "datum.value < 400000"
+        },
+        {
+          "calculate": "datum.top",
+          "as": "rate"
         }
       ],
       "mark": {
         "type": "text",
-        "dy": -14,
+        "baseline": "bottom",
+        "dy": -8,
+        "fontWeight": 600,
+        "fontSize": 13,
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "field": "council"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "council != '' ? datum.lad == council : step >= 1 && indexof(pair, datum.lad) >= 0"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "median",
+              "field": "value",
+              "as": "value"
+            },
+            {
+              "op": "max",
+              "field": "rate",
+              "as": "top"
+            },
+            {
+              "op": "min",
+              "field": "rate",
+              "as": "bottom"
+            }
+          ],
+          "groupby": [
+            "lad",
+            "council"
+          ]
+        },
+        {
+          "filter": "datum.value < 400000"
+        },
+        {
+          "calculate": "datum.top",
+          "as": "rate"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "baseline": "bottom",
+        "dy": -8,
+        "fontWeight": 600,
+        "fontSize": 13,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "text": {
+          "field": "council"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "council != '' ? datum.lad == council : step >= 1 && indexof(pair, datum.lad) >= 0"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "median",
+              "field": "value",
+              "as": "value"
+            },
+            {
+              "op": "max",
+              "field": "rate",
+              "as": "top"
+            },
+            {
+              "op": "min",
+              "field": "rate",
+              "as": "bottom"
+            }
+          ],
+          "groupby": [
+            "lad",
+            "council"
+          ]
+        },
+        {
+          "filter": "datum.value >= 400000"
+        },
+        {
+          "calculate": "datum.bottom",
+          "as": "rate"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "baseline": "top",
+        "dy": 8,
+        "fontWeight": 600,
+        "fontSize": 13,
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "field": "council"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "council != '' ? datum.lad == council : step >= 1 && indexof(pair, datum.lad) >= 0"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "median",
+              "field": "value",
+              "as": "value"
+            },
+            {
+              "op": "max",
+              "field": "rate",
+              "as": "top"
+            },
+            {
+              "op": "min",
+              "field": "rate",
+              "as": "bottom"
+            }
+          ],
+          "groupby": [
+            "lad",
+            "council"
+          ]
+        },
+        {
+          "filter": "datum.value >= 400000"
+        },
+        {
+          "calculate": "datum.bottom",
+          "as": "rate"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "baseline": "top",
+        "dy": 8,
         "fontWeight": 600,
         "fontSize": 13,
         "color": "#16191d"
@@ -357,6 +565,52 @@
           "field": "rate"
         },
         "x": null
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/reference_rates.csv",
+        "format": {
+          "parse": {
+            "rate": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "indexof(['fairer_share', 'neutral'], datum.key) >= 0"
+        },
+        {
+          "calculate": "datum.label + ': ' + format(datum.rate, '.2%')",
+          "as": "text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "bottom",
+        "dy": -4,
+        "fontWeight": 500,
+        "opacity": {
+          "expr": "step >= 2 ? 1 : 0"
+        },
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "y": {
+          "field": "rate"
+        },
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "text": {
+          "field": "text"
+        }
       }
     },
     {

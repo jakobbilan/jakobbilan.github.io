@@ -73,9 +73,54 @@
 
     // Charts ------------------------------------------------------------------------------
 
-    function heightFor(element) {
+    // Space a chart needs beyond its plot (axes, axis titles, padding): estimated until it is drawn, then measured
+    const AXIS = 56;
+
+    function extraFor(element) {
+        return Number(element.dataset.extra) || AXIS;
+    }
+
+    function baseHeight(element) {
         const heights = (element.dataset.height || "").split(/\s+/).map(Number).filter(Boolean);
         return narrow.matches && heights[1] ? heights[1] : heights[0];
+    }
+
+    function navHeight() {
+        const nav = document.querySelector(".contents");
+        return nav ? nav.getBoundingClientRect().height : 0;
+    }
+
+    function outerHeight(element) {
+        if (!element) return 0;
+        const style = getComputedStyle(element);
+        return element.getBoundingClientRect().height + parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+    }
+
+    // Figure 1: chart, controls and, where there is room, the title must fit in the window together.
+    // On short windows and phones the title scrolls away first (--head-h), so the chart keeps its size.
+    function layoutScrolly(section) {
+        const graphic = section.querySelector(".scrolly-graphic");
+        const head = graphic.querySelector(".chart-head");
+        const chart = graphic.querySelector(".chart-body");
+        const room = window.innerHeight - navHeight() - 28;
+        const fixed = outerHeight(graphic.querySelector(".controls")) + extraFor(chart);
+        let height = room - outerHeight(head) - fixed;
+        const titleScrolls = narrow.matches || height < 320;
+        if (titleScrolls) height = room - fixed;
+        if (narrow.matches) height = Math.min(height, Math.round(0.45 * window.innerHeight));
+        height = Math.round(Math.max(220, Math.min(baseHeight(chart), height)));
+        section.classList.toggle("is-static", window.innerHeight < 480);
+        graphic.style.setProperty("--head-h", titleScrolls ? outerHeight(head) + "px" : "0px");
+        return height;
+    }
+
+    function heightFor(element) {
+        if (element.dataset.fit === "scrolly") return layoutScrolly(element.closest("[data-scrolly]"));
+        let height = baseHeight(element);
+        if (element.dataset.fit === "screen") {
+            height = Math.max(300, Math.min(height, window.innerHeight - navHeight() - 90));
+        }
+        return height;
     }
 
     function showStatus(element, text) {
@@ -88,6 +133,8 @@
 
     function embed(element) {
         const id = element.id;
+        const reserve = heightFor(element);
+        if (reserve) element.style.minHeight = reserve + extraFor(element) + "px";
         showStatus(element, "Loading chart…");
         return fetchJSON(element.dataset.spec)
             .then(function (spec) {
@@ -103,7 +150,20 @@
                 });
             })
             .then(function (result) {
+                element.style.minHeight = "";
                 views.set(id, result.view);
+                element.dataset.extra = Math.ceil(element.getBoundingClientRect().height - result.view.height());
+                if (element.dataset.fit) {
+                    const height = heightFor(element);
+                    if (height !== result.view.height()) return result.view.height(height).runAsync().then(function () {
+                        return result;
+                    });
+                }
+                return result;
+            })
+            .then(function () {
+                const section = element.closest("[data-scrolly]");
+                if (section) section.dispatchEvent(new CustomEvent("relayout"));
                 const waiting = queued.get(id) || {};
                 Object.keys(waiting).forEach(function (name) {
                     setSignal(id, name, waiting[name]);
@@ -147,14 +207,24 @@
         });
     }
 
-    function resizeOnBreakpoint() {
-        narrow.addEventListener("change", function () {
-            views.forEach(function (view, id) {
-                const element = document.getElementById(id);
-                const height = heightFor(element);
-                if (height) view.height(height).runAsync();
-            });
+    function refit() {
+        document.querySelectorAll("[data-scrolly]").forEach(function (section) {
+            layoutScrolly(section);
+            section.dispatchEvent(new CustomEvent("relayout"));
         });
+        views.forEach(function (view, id) {
+            const height = heightFor(document.getElementById(id));
+            if (height && height !== view.height()) view.height(height).runAsync();
+        });
+    }
+
+    function refitOnResize() {
+        let timer = 0;
+        window.addEventListener("resize", function () {
+            clearTimeout(timer);
+            timer = setTimeout(refit, 150);
+        });
+        narrow.addEventListener("change", refit);
     }
 
     // Controls ------------------------------------------------------------------------
@@ -196,6 +266,22 @@
                     setSignal(id, select.dataset.signal, parse(select.value, select.dataset.type));
                 });
             });
+        });
+    }
+
+    function wireJumps() {
+        document.addEventListener("click", function (event) {
+            const link = event.target.closest('a[href^="#"]');
+            const target = link && document.getElementById(link.hash.slice(1));
+            const body = target && target.querySelector(".scrolly-body");
+            if (!body) return;
+            const graphic = body.querySelector(".scrolly-graphic");
+            const titleHeight = parseFloat(getComputedStyle(graphic).getPropertyValue("--head-h")) || 0;
+            if (!titleHeight || target.classList.contains("is-static")) return;
+            event.preventDefault();
+            const top = body.getBoundingClientRect().top + window.scrollY + titleHeight - navHeight() - 12;
+            window.scrollTo(0, Math.max(0, Math.round(top)));
+            history.pushState(null, "", link.hash);
         });
     }
 
@@ -327,6 +413,21 @@
 
     // Scroll-driven steps -----------------------------------------------------------------
 
+    // Where a note switches the chart: mid-window beside the chart; on phones, in the strip
+    // left visible below the pinned chart, so a note is never read out of sight
+    function stepBand(section) {
+        const height = window.innerHeight;
+        if (!narrow.matches || section.classList.contains("is-static")) {
+            return "-50% 0px -40% 0px";
+        }
+        const pinned = section.querySelector(".scrolly-graphic").getBoundingClientRect();
+        const below = Math.min(height - 40, navHeight() + 12 + pinned.height - outerHeight(section.querySelector(".chart-head")));
+        const top = Math.round(below + 0.2 * (height - below));
+        const bottom = Math.round(below + 0.6 * (height - below));
+        section.dataset.band = top + " " + bottom;
+        return -top + "px 0px " + -(height - bottom) + "px 0px";
+    }
+
     function wireScrolly(section) {
         const id = section.dataset.scrolly;
         const steps = Array.from(section.querySelectorAll(".step"));
@@ -340,16 +441,26 @@
             press(group, step.dataset.step);
         }
 
+        let observer = null;
+        function observe() {
+            if (observer) observer.disconnect();
+            delete section.dataset.band;
+            // watch the cards, not their tall slots: neighbouring slots overlap the band at the same time
+            observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) activate(entry.target.closest(".step"));
+                });
+            }, { rootMargin: stepBand(section) });
+            steps.forEach(function (step) {
+                observer.observe(step.firstElementChild || step);
+            });
+        }
+
+        layoutScrolly(section);
         if (!steps.length || !("IntersectionObserver" in window)) return;
         activate(steps[0]);
-        const observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) activate(entry.target);
-            });
-        }, { rootMargin: "-48% 0px -48% 0px" });
-        steps.forEach(function (step) {
-            observer.observe(step);
-        });
+        observe();
+        section.addEventListener("relayout", observe);
     }
 
     // Reading progress and current section -------------------------------------------------
@@ -369,6 +480,18 @@
         update();
     }
 
+    // Bring the current link into view inside the bar, which scrolls sideways on phones.
+    // Only the bar is scrolled: asking the browser to reveal the link would, in Firefox,
+    // also scroll the page back to where the pinned bar started.
+    function centreInBar(link) {
+        const list = link.closest("ol");
+        if (!list || list.scrollWidth <= list.clientWidth) return;
+        const bar = list.getBoundingClientRect();
+        const box = link.getBoundingClientRect();
+        const left = list.scrollLeft + box.left - bar.left - (bar.width - box.width) / 2;
+        list.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+    }
+
     function trackSections() {
         const links = Array.from(document.querySelectorAll(".contents a[href^='#']"));
         const sections = links.map(function (link) {
@@ -382,7 +505,7 @@
                     const current = link.hash === "#" + entry.target.id;
                     if (current) {
                         link.setAttribute("aria-current", "true");
-                        link.scrollIntoView({ block: "nearest", inline: "nearest" });
+                        centreInBar(link);
                     } else {
                         link.removeAttribute("aria-current");
                     }
@@ -400,7 +523,8 @@
         trackProgress();
         trackSections();
         wireControls();
-        resizeOnBreakpoint();
+        wireJumps();
+        refitOnResize();
 
         Promise.all([
             fetchJSON(THEME).catch(function () { return {}; }),
