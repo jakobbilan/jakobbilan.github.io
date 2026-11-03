@@ -1,0 +1,116 @@
+{
+  "built": "2026-11-03T00:39Z",
+  "price_month": "2026-08",
+  "sales_window": [
+    "2024-01-01",
+    "2026-07-31"
+  ],
+  "regions_base": "1995-01",
+  "england": {
+    "dwellings": 25937780.0,
+    "bill_per_dwelling": 2220.0732310488147,
+    "value_per_dwelling": 345754.28692604386,
+    "rate_mix": 0.00642041963739759,
+    "revenue_neutral_rate": 0.00642041963739759,
+    "share_ad": 0.8078817847942268,
+    "fuel_poor": 2472012.0,
+    "fp_rate": 0.09949418400555039,
+    "fp_outside_ad": 398769.15386693855,
+    "msoas": 6856,
+    "sales_used": 1820354,
+    "msoa_fallback_share": 0.02588648926190606
+  },
+  "highest": {
+    "lad": "E06000009",
+    "name": "Blackpool",
+    "rate_mix": 0.014271161455023032,
+    "rate_press": 0.01820316517582298
+  },
+  "lowest": {
+    "lad": "E09000033",
+    "name": "Westminster",
+    "rate_mix": 0.0014357645382576266,
+    "rate_press": 0.0011829834333852566
+  },
+  "gap_mix": 9.939764546867702,
+  "gap_press": 15.840360293478279,
+  "sources": {
+    "ctsop_bands": {
+      "url": "https://assets.publishing.service.gov.uk/media/6ab25147a9c3d267bcccecc1/CTSOP_1_1.zip",
+      "page": "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2026"
+    },
+    "ctsop_types": {
+      "url": "https://assets.publishing.service.gov.uk/media/6ab2566afe72ed1e2b02ee4c/CTSOP_3_1__1_.zip",
+      "page": "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2026"
+    },
+    "levels": {
+      "url": "https://assets.publishing.service.gov.uk/media/69de1fa63e81003ae0422508/Tables_1-9_2026-27.ods",
+      "page": "https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027",
+      "year": "2026-27"
+    },
+    "fuel_poverty": {
+      "url": "https://assets.publishing.service.gov.uk/media/6a02febf81a251700a20b42a/fuel-poverty-sub-regional-2026-2024-data-tables.xlsx",
+      "page": "https://www.gov.uk/government/statistics/sub-regional-fuel-poverty-data-2026-2024-data"
+    },
+    "hpi": {
+      "url": "https://publicdata.landregistry.gov.uk/market-trend-data/house-price-index-data/UK-HPI-full-file-2026-08.csv",
+      "month": "2026-08"
+    },
+    "ppd": {
+      "files": [
+        "pp-2024.csv",
+        "pp-2025.csv",
+        "pp-2026.csv"
+      ]
+    },
+    "lookup": {
+      "url": "https://www.arcgis.com/sharing/rest/content/items/bb61aafc3f0346e79f621c32fb2559d5/data",
+      "title": "Postcode to OA (2021) to LSOA to MSOA to LAD with Classifications (August 2026) Best Fit Lookup in the UK"
+    },
+    "hexjson": {
+      "url": "https://raw.githubusercontent.com/odileeds/hexmaps/17982f91f7f21b84b6c876f952437c8986172811/maps/uk-local-authority-districts-2025.hexjson"
+    }
+  },
+  "checks": [
+    {
+      "check": "band_d_councils",
+      "status": "pass",
+      "detail": "296 councils with an area Band D"
+    },
+    {
+      "check": "band_d_matches_published",
+      "status": "pass",
+      "detail": "295 councils compared; median gap £0.00, largest £0.00"
+    },
+    {
+      "check": "replicates_july_2026_ranking",
+      "status": "warn",
+      "detail": "86% of 295 councils within 0.015 points of the published Band D / price ratio"
+    },
+    {
+      "check": "dwellings_total",
+      "status": "pass",
+      "detail": "25.94m homes in England"
+    },
+    {
+      "check": "gross_bill_vs_mhclg",
+      "status": "pass",
+      "detail": "gross £2,220 per home vs MHCLG net £1,868 (1.19x)"
+    },
+    {
+      "check": "postcode_match",
+      "status": "pass",
+      "detail": "100.00% of sales matched to an area"
+    },
+    {
+      "check": "msoa_coverage",
+      "status": "pass",
+      "detail": "6,856 MSOAs with a value"
+    },
+    {
+      "check": "revenue_neutral_rate",
+      "status": "pass",
+      "detail": "0.642%"
+    }
+  ]
+}

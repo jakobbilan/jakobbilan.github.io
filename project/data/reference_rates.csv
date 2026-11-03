@@ -1,0 +1,6 @@
+key,label,rate
+fairer_share,Fairer Share proposal,0.0048
+neutral,Flat rate raising today's total,0.00642
+england,England average,0.00642
+england_share_ad,"England, homes in Bands A-D",0.807882
+england_fp,"England, fuel-poor households",0.099494
