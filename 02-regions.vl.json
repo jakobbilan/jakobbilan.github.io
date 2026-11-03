@@ -1,0 +1,246 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Average house price by English region since the council tax valuation date, as a multiple of its level then or in pounds.",
+  "width": "container",
+  "height": 400,
+  "padding": {
+    "top": 8,
+    "right": 8,
+    "bottom": 4,
+    "left": 4
+  },
+  "data": {
+    "url": "project/data/regions.csv",
+    "format": {
+      "parse": {
+        "date": "date",
+        "price": "number",
+        "multiple": "number"
+      }
+    }
+  },
+  "params": [
+    {
+      "name": "measure",
+      "value": "multiple"
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "measure == 'price' ? datum.price : datum.multiple",
+      "as": "y"
+    },
+    {
+      "calculate": "datum.code == 'E12000007' ? 'London' : datum.code == 'E12000001' ? 'North East' : datum.code == 'E92000001' ? 'England' : 'Other'",
+      "as": "group"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "date",
+      "type": "temporal",
+      "title": null,
+      "axis": {
+        "format": "%Y",
+        "tickCount": 8
+      }
+    },
+    "y": {
+      "field": "y",
+      "type": "quantitative",
+      "scale": {
+        "zero": true
+      },
+      "axis": {
+        "labelExpr": "measure == 'price' ? (datum.value == 0 ? '£0' : '£' + format(datum.value / 1000, ',.0f') + 'k') : format(datum.value, '.0f') + '×'",
+        "tickCount": 6
+      }
+    }
+  },
+  "layer": [
+    {
+      "transform": [
+        {
+          "filter": "datum.group == 'Other'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#c9ced4",
+        "strokeWidth": 1.3
+      },
+      "encoding": {
+        "detail": {
+          "field": "region"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group == 'England'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#5b636d",
+        "strokeWidth": 1.6,
+        "strokeDash": [
+          5,
+          3
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group == 'London' || datum.group == 'North East'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.6
+      },
+      "encoding": {
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "London",
+              "North East",
+              "England"
+            ],
+            "range": [
+              "#1f4e8c",
+              "#16191d",
+              "#5b636d"
+            ]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group != 'Other'"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "date",
+              "as": "last"
+            }
+          ],
+          "groupby": [
+            "region"
+          ]
+        },
+        {
+          "filter": "datum.date == datum.last"
+        },
+        {
+          "calculate": "datum.region + '  ' + (measure == 'price' ? '£' + format(datum.price / 1000, ',.0f') + 'k' : format(datum.multiple, '.1f') + '×')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "London",
+              "North East",
+              "England"
+            ],
+            "range": [
+              "#1f4e8c",
+              "#16191d",
+              "#5b636d"
+            ]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "on": "pointermove",
+            "nearest": true,
+            "fields": [
+              "date"
+            ],
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "transform": [
+        {
+          "filter": "datum.group != 'Other'"
+        },
+        {
+          "pivot": "region",
+          "value": "y",
+          "groupby": [
+            "date"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#16191d",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "y": null,
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.45
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "date",
+            "type": "temporal",
+            "title": "Month",
+            "format": "%B %Y"
+          },
+          {
+            "field": "London",
+            "type": "quantitative",
+            "format": ",.3~r"
+          },
+          {
+            "field": "North East",
+            "type": "quantitative",
+            "format": ",.3~r"
+          },
+          {
+            "field": "England",
+            "type": "quantitative",
+            "format": ",.3~r"
+          }
+        ]
+      }
+    }
+  ]
+}

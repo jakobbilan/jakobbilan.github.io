@@ -1,0 +1,208 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Councils with the most home sales at £2 million or more since January 2024.",
+  "width": "container",
+  "height": 360,
+  "padding": {
+    "top": 4,
+    "right": 8,
+    "bottom": 4,
+    "left": 4
+  },
+  "data": {
+    "url": "project/data/councils.csv",
+    "format": {
+      "parse": {
+        "dwellings": "number",
+        "band_d": "number",
+        "bill": "number",
+        "value": "number",
+        "price": "number",
+        "rate_mix": "number",
+        "rate_press": "number",
+        "share_ad": "number",
+        "households": "number",
+        "fuel_poor": "number",
+        "fp_rate": "number",
+        "fp_outside_ad": "number",
+        "sales_2m": "number",
+        "sales_all": "number",
+        "r_local": "number"
+      }
+    }
+  },
+  "params": [
+    {
+      "name": "council",
+      "value": ""
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.sales_2m > 0"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "sales_2m",
+          "as": "total"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.sales_2m / datum.total",
+      "as": "share"
+    },
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "sales_2m",
+          "order": "descending"
+        }
+      ]
+    },
+    {
+      "filter": "datum.rank <= 15"
+    },
+    {
+      "calculate": "pad(datum.rank, 2, '0', 'left') + '|' + datum.lad + '|' + datum.name",
+      "as": "order"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "order",
+      "type": "nominal",
+      "sort": "ascending",
+      "title": null,
+      "axis": {
+        "grid": false,
+        "labelLimit": 180,
+        "labelExpr": "split(datum.label, '|')[2]",
+        "labelColor": {
+          "condition": {
+            "test": "split(datum.value, '|')[1] == council",
+            "value": "#16191d"
+          },
+          "value": "#5b636d"
+        },
+        "labelFontWeight": {
+          "condition": {
+            "test": "split(datum.value, '|')[1] == council",
+            "value": 600
+          },
+          "value": 400
+        }
+      }
+    },
+    "x": {
+      "field": "sales_2m",
+      "type": "quantitative",
+      "title": null,
+      "axis": {
+        "grid": true,
+        "labels": false,
+        "ticks": false,
+        "domain": false
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "height": {
+          "band": 0.72
+        },
+        "cornerRadiusEnd": 1
+      },
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.lad == council",
+            "value": "#1f4e8c"
+          },
+          "value": "#bccbe0"
+        },
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Council"
+          },
+          {
+            "field": "sales_2m",
+            "title": "Sales at £2m or more",
+            "type": "quantitative",
+            "format": ","
+          },
+          {
+            "field": "share",
+            "title": "Share of England's £2m+ sales",
+            "type": "quantitative",
+            "format": ".1%"
+          },
+          {
+            "field": "sales_all",
+            "title": "All sales",
+            "type": "quantitative",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "color": "#5b636d",
+        "fontSize": 11.5
+      },
+      "encoding": {
+        "text": {
+          "field": "sales_2m",
+          "type": "quantitative",
+          "format": ","
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.lad == council",
+            "value": 0
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "color": "#16191d",
+        "fontSize": 11.5,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "sales_2m",
+          "type": "quantitative",
+          "format": ","
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.lad == council",
+            "value": 1
+          },
+          "value": 0
+        }
+      }
+    }
+  ]
+}
