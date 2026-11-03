@@ -114,3 +114,22 @@ def test_bills_use_band_d_and_band_mix(built):
     shown = counts.where(counts >= 5, 0).round(-1)
     expected = band_d * sum(shown[b] * config.BAND_RATIO[b] for b in config.BANDS) / shown.sum()
     assert row.bill == pytest.approx(expected, rel=1e-6)
+
+
+def _hpi(codes, start):
+    months = pd.date_range(start, "1996-12-01", freq="MS")
+    return pd.DataFrame([{"code": c, "date": m, "price": 50_000.0 + i} for c in codes for i, m in enumerate(months)])
+
+
+def test_regions_start_in_1991_when_every_region_reaches_back():
+    hpi = pd.concat([_hpi(list(config.REGIONS), "1991-01-01"), _hpi([config.ENGLAND], "1995-01-01")])
+    frame, base = compute.regional_prices(hpi)
+    assert base == pd.Timestamp("1991-04-01")
+    assert config.ENGLAND not in set(frame.code)
+    assert (frame[frame.date == base].multiple == 1).all()
+
+
+def test_regions_fall_back_to_1995():
+    hpi = _hpi(list(config.REGIONS) + [config.ENGLAND], "1995-01-01")
+    frame, base = compute.regional_prices(hpi)
+    assert base == pd.Timestamp("1995-01-01") and frame.code.nunique() == 10

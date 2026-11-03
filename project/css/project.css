@@ -518,7 +518,8 @@ body.project-page > header {
 
 /* Rate slider for the flat-tax figure */
 .slider {
-    flex: 1 1 22rem;
+    flex: 1 1 100%;
+    max-width: 44rem;
     display: grid;
     grid-template-columns: auto minmax(10rem, 1fr);
     gap: 0.35rem 1.25rem;

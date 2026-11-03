@@ -43,6 +43,7 @@
             case "int": return Math.round(number).toLocaleString("en-GB");
             case "millions": return (number / 1e6).toFixed(1) + "m";
             case "times": return number.toFixed(1) + "×";
+            case "year": return String(value).slice(0, 4);
             case "month": {
                 const [year, month] = String(value).split("-").map(Number);
                 return timeLocale.months[month - 1] + " " + year;

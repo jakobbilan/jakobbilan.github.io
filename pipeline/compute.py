@@ -95,17 +95,23 @@ def rate_bins(frame, n=40):
 
 
 def regional_prices(hpi, base_dates=("1991-04-01", "1995-01-01")):
-    """Average price by English region, and as a multiple of its level when the bands were fixed."""
-    codes = list(config.REGIONS) + [config.ENGLAND]
-    frame = hpi[hpi.code.isin(codes)][["code", "date", "price"]].dropna().copy()
+    """Average price by English region, as a multiple of its level in the earliest common month.
+
+    April 1991, when the bands were fixed, is used if every region reaches back that far;
+    otherwise January 1995, when the official index starts. England is kept only if it
+    reaches the same month.
+    """
+    regions = list(config.REGIONS)
+    frame = hpi[hpi.code.isin(regions + [config.ENGLAND])][["code", "date", "price"]].dropna().copy()
     base = None
     for candidate in pd.to_datetime(list(base_dates)):
-        at_base = frame[frame.date == candidate]
-        if at_base.code.nunique() == len(codes):
+        if frame[(frame.date == candidate) & frame.code.isin(regions)].code.nunique() == len(regions):
             base = candidate
             break
     if base is None:
-        base = frame.groupby("code").date.min().max()
+        base = frame[frame.code.isin(regions)].groupby("code").date.min().max()
+    if not ((frame.code == config.ENGLAND) & (frame.date == base)).any():
+        frame = frame[frame.code != config.ENGLAND]
     frame = frame[frame.date >= base]
     start = frame[frame.date == base].set_index("code").price
     frame["multiple"] = frame.price / frame.code.map(start)

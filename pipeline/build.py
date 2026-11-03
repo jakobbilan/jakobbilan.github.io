@@ -155,6 +155,7 @@ def build_outputs(paths, meta):
 
     bins = compute.rate_bins(msoa)
     regions, base = compute.regional_prices(hpi)
+    fetch.log(f"regional prices from {base:%B %Y}")
     references = pd.DataFrame([
         {"key": "fairer_share", "label": "Fairer Share proposal", "rate": config.FAIRER_SHARE_RATE},
         {"key": "neutral", "label": "Flat rate raising today's total", "rate": england["revenue_neutral_rate"]},
