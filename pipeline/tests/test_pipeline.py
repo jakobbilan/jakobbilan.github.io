@@ -133,3 +133,16 @@ def test_regions_fall_back_to_1995():
     hpi = _hpi(list(config.REGIONS) + [config.ENGLAND], "1995-01-01")
     frame, base = compute.regional_prices(hpi)
     assert base == pd.Timestamp("1995-01-01") and frame.code.nunique() == 10
+
+
+def test_facts_for_the_text(built):
+    (tables, summary, results, geo), truth = built
+    f = summary["facts"]
+    assert set(f) == {"data", "policy", "fig1", "pair", "fig2", "fig3", "fig4", "fig5", "fig6"}
+    assert f["fig1"]["cheap_rate"] > f["fig1"]["dear_rate"] and f["fig1"]["ratio"] > 1
+    assert f["pair"]["a_name"] == "Burnley" and f["pair"]["b_name"] == "Westminster"
+    assert f["fig4"]["rate_10m_with"] > f["fig4"]["rate_10m_now"]
+    assert f["fig4"]["charge_2m"] == 2500 and f["fig4"]["charge_10m"] == 7500
+    assert f["fig6"]["neutral_rate"] == pytest.approx(summary["england"]["revenue_neutral_rate"])
+    assert 0 < f["fig6"]["neutral_less"] < 1 and f["fig6"]["fs_revenue"] < 1
+    assert f["fig2"]["london_x"] > f["fig2"]["north_east_x"]

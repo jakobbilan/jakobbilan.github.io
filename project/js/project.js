@@ -40,9 +40,15 @@
             case "pct1": return (100 * number).toFixed(1) + "%";
             case "pct2": return (100 * number).toFixed(2) + "%";
             case "gbp": return "£" + Math.round(number).toLocaleString("en-GB");
+            case "gbpk": return number >= 1e6
+                ? "£" + Number((number / 1e6).toFixed(2)) + "m"
+                : "£" + Math.round(number / 1000) + "k";
             case "int": return Math.round(number).toLocaleString("en-GB");
+            case "thousands": return (Math.round(number / 1000) * 1000).toLocaleString("en-GB");
             case "millions": return (number / 1e6).toFixed(1) + "m";
+            case "millions2": return (number / 1e6).toFixed(2) + "m";
             case "times": return number.toFixed(1) + "×";
+            case "times0": return Math.round(number) + "×";
             case "year": return String(value).slice(0, 4);
             case "month": {
                 const [year, month] = String(value).split("-").map(Number);
@@ -62,13 +68,20 @@
         }, source);
     }
 
+    // Numbers in the text: <span data-stat="facts.fig1.cheap_rate" data-format="pct2">1.49%</span>.
+    // A key that summary.json lacks keeps its typed value and is reported, so typos show up at once.
     function fillStats() {
+        const missing = [];
         document.querySelectorAll("[data-stat]").forEach(function (element) {
             const value = lookup(element.dataset.stat, summary);
-            if (value == null) return;
+            if (value == null) {
+                missing.push(element.dataset.stat);
+                return;
+            }
             element.textContent = formatValue(value, element.dataset.format);
             if (element.tagName === "TIME") element.dateTime = String(value);
         });
+        if (missing.length) console.warn("No value in summary.json for: " + missing.join(", "));
     }
 
     // Charts ------------------------------------------------------------------------------

@@ -74,3 +74,9 @@ ENGLAND = "E92000001"
 
 # Price Paid property types, and how the Valuation Office types map onto them
 PPD_TYPES = ["D", "S", "T", "F"]
+
+# Councils and values the page's text quotes (figures 1, 3 and 4)
+PAIR = ("E07000117", "E09000033")            # Burnley, Westminster
+SURCHARGE_COUNCIL = "E09000033"              # Band H home in Westminster
+COMPARE_COUNCIL = "E07000117"                # against the average home in Burnley
+SURCHARGE_VALUES = (2_000_000, 5_000_000, 10_000_000)

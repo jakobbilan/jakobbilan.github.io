@@ -15,7 +15,7 @@ from datetime import date, datetime, timedelta, timezone
 import numpy as np
 import pandas as pd
 
-from . import checks, compute, config, fetch, hexmap, read, sales
+from . import checks, compute, config, facts, fetch, hexmap, read, sales
 
 MSOA_NAMES_URL = "https://houseofcommonslibrary.github.io/msoanames/MSOA-Names-2.2.csv"
 
@@ -178,6 +178,7 @@ def build_outputs(paths, meta):
         "sources": meta,
     }
     tables = {"msoa": msoa, "bins": bins, "councils": councils, "regions": regions, "references": references}
+    summary["facts"] = facts.collect(tables, summary, results)
     return tables, summary, results, geo
 
 
