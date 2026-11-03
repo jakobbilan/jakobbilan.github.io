@@ -150,36 +150,7 @@ body.project-page > header {
     color: inherit;
 }
 
-/* Your council, the closer: a council found by name or location, its rate, today's bill
-   against a flat rate, and its neighbours */
-.lead-in {
-    margin: 0 0 1.1rem;
-}
-
-.council-card {
-    padding: 1.1rem 1.25rem 1.25rem;
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    background: var(--tint);
-    font-family: var(--sans);
-}
-
-.council-find {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    align-items: center;
-}
-
-.council-find .field {
-    flex: 1 1 15rem;
-}
-
-.council-find .field input[type="search"] {
-    width: 100%;
-    min-width: 0;
-}
-
+/* Finding a council on the maps: by name or by location, read out under figures 3 and 6 */
 .locate {
     display: inline-flex;
     flex: 0 0 auto;
@@ -210,136 +181,29 @@ body.project-page > header {
     cursor: progress;
 }
 
-.council-privacy {
-    font: 0.75rem/1.45 var(--sans);
+.chart .locate-note {
+    margin: -0.35rem 0 0.9rem;
+    font: 0.75rem/1.4 var(--sans);
     color: var(--ink-3);
 }
 
-.council-result {
-    margin-top: 1.1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--rule);
+.chart .council-readout {
+    margin: 0.6rem 0 0;
+    font: 0.875rem/1.55 var(--sans);
+    color: var(--ink-2);
 }
 
-.council-result[hidden] {
+.council-readout b {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.council-readout.is-message {
+    color: var(--ink-3);
+}
+
+.council-readout[hidden] {
     display: none;
-}
-
-.council-message {
-    font: 0.875rem/1.5 var(--sans);
-    color: var(--ink-3);
-}
-
-.council-name {
-    font: 700 1.05rem/1.3 var(--sans);
-    color: var(--ink);
-}
-
-.council-rate {
-    font: 0.875rem/1.3 var(--sans);
-    color: var(--ink-2);
-}
-
-.council-rate strong {
-    font: 700 1.55rem/1.15 var(--sans);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-}
-
-.council-rank,
-.council-detail {
-    font: 0.8125rem/1.45 var(--sans);
-    color: var(--ink-3);
-}
-
-.council-neighbours-title {
-    font: 600 0.6875rem/1.3 var(--sans);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-}
-
-.council-neighbours {
-    display: grid;
-    gap: 0.2rem;
-    margin: 0.4rem 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.council-neighbours li {
-    display: grid;
-    grid-template-columns: minmax(6.5rem, 11rem) minmax(0, 1fr) 4.4rem;
-    gap: 0.75rem;
-    align-items: center;
-    font: 0.78rem/1.3 var(--sans);
-    color: var(--ink-2);
-}
-
-.council-neighbours .bar {
-    width: var(--w, 0%);
-    height: 0.45rem;
-    border-radius: 2px;
-    background: #c3ccd7;
-}
-
-.council-neighbours .rate {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-}
-
-.council-neighbours .is-self {
-    font-weight: 600;
-    color: var(--ink);
-}
-
-.council-neighbours .is-self .bar {
-    background: var(--blue);
-}
-
-.council-flat {
-    font: 0.875rem/1.5 var(--sans);
-    color: var(--ink-2);
-}
-
-.council-flat b {
-    font-weight: 600;
-    color: var(--ink);
-}
-
-.council-links {
-    font: 500 0.8125rem/1.4 var(--sans);
-}
-
-/* Paragraph spacing in the card; these selectors outrank the page's `.project p` */
-.project .council-card p {
-    margin: 0;
-}
-
-.project .council-card .council-privacy {
-    margin-top: 0.75rem;
-}
-
-.project .council-card .council-rate {
-    margin-top: 0.1rem;
-}
-
-.project .council-card .council-rank,
-.project .council-card .council-detail {
-    margin-top: 0.25rem;
-}
-
-.project .council-card .council-flat {
-    margin-top: 0.9rem;
-}
-
-.project .council-card .council-neighbours-title {
-    margin-top: 0.9rem;
-}
-
-.project .council-card .council-links {
-    margin-top: 0.85rem;
 }
 
 /* Section links, pinned under the top edge once the reader passes the opening */
@@ -993,17 +857,9 @@ body.project-page > header {
         font-size: 1.0625rem;
     }
 
-    .council-card {
-        padding: 1rem 0.9rem 1.1rem;
-    }
-
     .locate {
         flex: 1 1 100%;
         justify-content: center;
-    }
-
-    .council-neighbours li {
-        grid-template-columns: minmax(6rem, 1fr) minmax(0, 0.7fr) 4.2rem;
     }
 
     .controls {

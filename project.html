@@ -56,7 +56,6 @@
                 <li><a href="#data">Data</a></li>
                 <li><a href="#tools">Tools</a></li>
                 <li><a href="#conclusions">Conclusions</a></li>
-                <li><a href="#your-council">Your council</a></li>
             </ol>
         </nav>
 
@@ -160,12 +159,15 @@
                         <button type="button" data-value="map" aria-pressed="false">Map</button>
                     </div>
                     <label class="field">
-                        <span class="visually-hidden">Highlight a council</span>
-                        <input type="search" list="council-list" placeholder="Highlight a council" autocomplete="off" data-council-search data-chart="chart-3 chart-6">
+                        <span class="visually-hidden">Find your council</span>
+                        <input type="search" list="council-list" placeholder="Find your council" autocomplete="off" data-council-search data-chart="chart-3 chart-6">
                     </label>
+                    <button type="button" class="locate" data-locate>Use my location</button>
                 </div>
+                <p class="locate-note">Your location stays in your browser: it is not stored or sent anywhere.</p>
                 <div class="chart-body" id="chart-3" data-spec="project/charts/03-map-rates.vl.json" data-height="640 420" data-fit="screen"
                     role="img" aria-label="Map of English councils, as equal hexagons or real boundaries, shaded by council tax as a share of home value."></div>
+                <p class="council-readout" data-readout="rate" aria-live="polite" hidden></p>
                 <footer class="chart-foot">
                     <p>Sources: as figure 1. Hexagon layout: Open Innovations. Boundaries: ONS, December 2024.</p>
                     <p class="chart-actions">
@@ -291,6 +293,7 @@
                 </div>
                 <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420" data-fit="screen"
                     role="img" aria-label="Hexagon map of English councils shaded by the share of homes that would pay less under a flat tax on current value."></div>
+                <p class="council-readout" data-readout="flat" aria-live="polite" hidden></p>
                 <footer class="chart-foot">
                     <p>Sources: as figures 1 and 3. Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>
                     <p class="chart-actions">
@@ -348,23 +351,6 @@ python -m pipeline.build</code></pre>
         <section id="conclusions" aria-labelledby="conclusions-title">
             <h2 id="conclusions-title">Conclusions</h2>
             <p class="draft">[Conclusions, up to 200 words: what the evidence shows about each claim, and what it does not]</p>
-        </section>
-
-        <!-- Closer: the reader's own council, found by name or location; the location is matched in the browser and never sent -->
-        <section id="your-council" class="your-council" aria-labelledby="your-council-title">
-            <h2 id="your-council-title">Your council</h2>
-            <p class="lead-in">If you pay council tax in England, see how your council taxes you compared to your neighbours.</p>
-            <div class="council-card">
-                <div class="council-find">
-                    <label class="field">
-                        <span class="visually-hidden">Find your council</span>
-                        <input type="search" list="council-list" placeholder="Type your council" autocomplete="off" data-your-council>
-                    </label>
-                    <button type="button" class="locate" data-locate>Use my location</button>
-                </div>
-                <p class="council-privacy">This page does not store or send your location anywhere.</p>
-                <div class="council-result" data-council-result aria-live="polite" hidden></div>
-            </div>
         </section>
 
         <footer class="page-foot">

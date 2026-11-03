@@ -165,6 +165,10 @@
             .then(function (result) {
                 element.style.minHeight = "";
                 views.set(id, result.view);
+                // a tap on a chart's empty space hides an open tooltip
+                result.view.addEventListener("touchstart", function (event, item) {
+                    if (!item || item.tooltip == null) hideTooltips();
+                });
                 element.dataset.extra = Math.ceil(element.getBoundingClientRect().height - result.view.height());
                 if (element.dataset.fit) {
                     const height = heightFor(element);
@@ -348,6 +352,7 @@
                     targets(input).forEach(function (id) {
                         setSignal(id, "council", code || "");
                     });
+                    if (targets(input).some(function (id) { return MAP_CHARTS.indexOf(id) >= 0; })) setChosen(code);
                 }
             };
             input.addEventListener("input", apply);
@@ -465,119 +470,122 @@
         return node;
     }
 
-    function showCouncilMessage(text) {
-        const box = document.querySelector("[data-council-result]");
-        box.hidden = false;
-        box.innerHTML = "";
-        box.appendChild(element("p", "council-message", text));
+    // The council chosen on the maps, by name or by location, read out under figures 3 and 6
+    let chosen = null;
+    const flatState = { rate: null, local: false };
+
+    function readout(kind) {
+        return document.querySelector('[data-readout="' + kind + '"]');
     }
 
-    function showCouncil(code) {
-        const box = document.querySelector("[data-council-result]");
-        const council = councils.find(function (row) { return row.lad === code; });
-        if (!box || !council || !isFinite(council.rate_mix)) {
-            showCouncilMessage("No rate is available for that council.");
+    function councilRow(code) {
+        return councils.find(function (row) { return row.lad === code; });
+    }
+
+    function showMessage(text) {
+        const box = readout("rate");
+        if (!box) return;
+        box.hidden = false;
+        box.className = "council-readout is-message";
+        box.textContent = text;
+    }
+
+    // Figure 3: the council's rate, its rank, and its largest neighbours
+    function showRateReadout() {
+        const box = readout("rate");
+        if (!box) return;
+        const council = chosen && councilRow(chosen);
+        if (!council || !isFinite(council.rate_mix)) {
+            box.hidden = true;
             return;
         }
         const ranked = councils.filter(function (row) { return isFinite(row.rate_mix); })
             .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
-        const rank = ranked.findIndex(function (row) { return row.lad === code; }) + 1;
+        const rank = ranked.findIndex(function (row) { return row.lad === chosen; }) + 1;
         const fromBottom = ranked.length - rank + 1;
         const place = rank <= fromBottom
             ? (rank === 1 ? "highest" : ordinal(rank) + " highest")
             : (fromBottom === 1 ? "lowest" : ordinal(fromBottom) + " lowest");
-
-        box.hidden = false;
+        box.className = "council-readout";
         box.innerHTML = "";
-
-        // 1. The council's rate, its rank and England's rate in one line; its bill and value below
-        box.appendChild(element("p", "council-name", council.name));
-        const rate = element("p", "council-rate");
-        rate.appendChild(element("strong", null, formatValue(council.rate_mix, "pct2")));
-        rate.appendChild(document.createTextNode(" of home value a year · " + place + " of " + ranked.length +
-            " councils (England " + formatValue(summary.england.rate_mix, "pct2") + ")"));
-        box.appendChild(rate);
-        box.appendChild(element("p", "council-detail", "Average bill " + formatValue(council.bill, "gbp") +
-            " before discounts, on an average home worth " + formatValue(council.value, "gbp")));
-
-        // 2. Next door: the council and its eight largest neighbours, by rate
-        const nearby = ((neighbourMap && neighbourMap[code]) || []).map(function (lad) {
-            return councils.find(function (row) { return row.lad === lad; });
-        }).filter(function (row) { return row && isFinite(row.rate_mix); })
+        box.appendChild(element("b", null, council.name));
+        box.appendChild(document.createTextNode(": " + formatValue(council.rate_mix, "pct2") + " of home value a year, " +
+            place + " of " + ranked.length + " (England " + formatValue(summary.england.rate_mix, "pct2") + ")."));
+        const nearby = ((neighbourMap && neighbourMap[chosen]) || []).map(councilRow)
+            .filter(function (row) { return row && isFinite(row.rate_mix); })
             .sort(function (x, y) { return y.dwellings - x.dwellings; })
-            .slice(0, 8);
-        const rows = [council].concat(nearby).sort(function (x, y) { return y.rate_mix - x.rate_mix; });
-        if (rows.length > 1) {
-            const top = rows[0].rate_mix;
-            box.appendChild(element("p", "council-neighbours-title", "Next door"));
-            const list = element("ul", "council-neighbours");
-            rows.forEach(function (row) {
-                const item = element("li", row.lad === code ? "is-self" : null);
-                item.appendChild(element("span", "name", row.name));
-                const bar = element("span", "bar");
-                bar.style.setProperty("--w", (100 * row.rate_mix / top).toFixed(1) + "%");
-                item.appendChild(bar);
-                item.appendChild(element("span", "rate", formatValue(row.rate_mix, "pct2")));
-                list.appendChild(item);
-            });
-            box.appendChild(list);
-        } else if (neighbourMap) {
-            box.appendChild(element("p", "council-detail", "No council shares a border with it."));
+            .slice(0, 8)
+            .sort(function (x, y) { return y.rate_mix - x.rate_mix; });
+        if (nearby.length) {
+            box.appendChild(document.createTextNode(" Next door: " + nearby.map(function (row) {
+                return row.name + " " + formatValue(row.rate_mix, "pct2");
+            }).join(", ") + "."));
         }
+        box.hidden = false;
+    }
 
-        // 3. The same council at the one flat rate on today's value that raises today's total for England;
-        //    both bills before discounts, so like is compared with like
-        const neutral = summary.england.revenue_neutral_rate;
-        if (isFinite(neutral) && isFinite(council.value) && isFinite(council.bill) && council.bill > 0) {
-            const flat = neutral * council.value;
+    // Figure 6: the same council's average bill at the slider's rate; both bills before discounts
+    function showFlatReadout() {
+        const box = readout("flat");
+        if (!box) return;
+        const council = chosen && councilRow(chosen);
+        if (!council || !isFinite(council.bill) || !isFinite(council.value) || flatState.rate === null) {
+            box.hidden = true;
+            return;
+        }
+        box.innerHTML = "";
+        box.appendChild(element("b", null, council.name));
+        if (flatState.local) {
+            box.appendChild(document.createTextNode(": its own rate would be " + formatValue(council.rate_mix, "pct2") +
+                " of value, so its average bill stays at " + formatValue(council.bill, "gbp") +
+                "; the change runs between its own areas."));
+        } else {
+            const flat = flatState.rate * council.value;
             const ratio = flat / council.bill;
             const change = ratio >= 2 ? ratio.toFixed(1) + " times today’s"
-                : ratio >= 1 ? formatValue(ratio - 1, "pct0") + " more than today"
-                : formatValue(1 - ratio, "pct0") + " less than today";
-            const line = element("p", "council-flat");
-            line.appendChild(document.createTextNode("At a flat " + formatValue(neutral, "pct2") +
-                " of value, which raises the same total for England, the average bill here would be about "));
-            line.appendChild(element("b", null, formatValue(Math.round(flat / 10) * 10, "gbp")));
-            line.appendChild(document.createTextNode(": " + change + "."));
-            box.appendChild(line);
+                : ratio >= 1 ? formatValue(ratio - 1, "pct0") + " more"
+                : formatValue(1 - ratio, "pct0") + " less";
+            box.appendChild(document.createTextNode(": average bill " + formatValue(council.bill, "gbp") +
+                " today, before discounts; about " + formatValue(Math.round(flat / 10) * 10, "gbp") +
+                " at " + formatValue(flatState.rate, "pct2") + " (" + change + ")."));
         }
+        box.hidden = false;
+    }
 
-        const links = element("p", "council-links");
-        const toMap = element("a", null, "See it on the map");
-        toMap.href = "#figure-3";
-        const toFlat = element("a", null, "Try other rates");
-        toFlat.href = "#figure-6";
-        links.appendChild(toMap);
-        links.appendChild(document.createTextNode(" · "));
-        links.appendChild(toFlat);
-        box.appendChild(links);
+    function showReadouts() {
+        showRateReadout();
+        showFlatReadout();
+    }
+
+    // Choosing a council (by the search box or by location) picks it out on both maps and reads it out
+    function setChosen(code) {
+        chosen = code || null;
+        const show = function () { showReadouts(); };
+        if (!chosen || neighbourMap) {
+            show();
+        } else {
+            fetchJSON(NEIGHBOURS).then(function (map) { neighbourMap = map; })
+                .catch(function () { neighbourMap = {}; }).then(show);
+        }
     }
 
     function chooseCouncil(code) {
-        const council = councils.find(function (row) { return row.lad === code; });
+        const council = councilRow(code);
         if (!council) return;
-        const input = document.querySelector("input[data-your-council]");
-        if (input) input.value = council.name;
-        // pick the council out on both maps, and show it in their search boxes
         MAP_CHARTS.forEach(function (id) { setSignal(id, "council", code); });
         document.querySelectorAll("input[data-council-search]").forEach(function (search) {
             if (targets(search).some(function (id) { return MAP_CHARTS.indexOf(id) >= 0; })) search.value = council.name;
         });
-        const show = function () { showCouncil(code); };
-        if (neighbourMap) {
-            show();
-        } else {
-            fetchJSON(NEIGHBOURS).then(function (map) { neighbourMap = map; }).catch(function () { neighbourMap = {}; }).then(show);
-        }
+        setChosen(code);
     }
 
     function locate(button) {
         if (!("geolocation" in navigator)) {
-            showCouncilMessage("This browser cannot share a location. Type your council instead.");
+            showMessage("This browser cannot share a location. Type your council instead.");
             return;
         }
         button.setAttribute("aria-busy", "true");
-        showCouncilMessage("Finding your council…");
+        showMessage("Finding your council…");
         const loaded = boundaries ? Promise.resolve(boundaries)
             : fetchJSON(BOUNDARIES).then(function (geo) { boundaries = geo; return geo; });
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -585,29 +593,21 @@
                 const [east, north] = toNationalGrid(position.coords.latitude, position.coords.longitude);
                 const code = councilAt(east, north);
                 if (code) chooseCouncil(code);
-                else showCouncilMessage("That location is outside England. Type your council instead.");
+                else showMessage("That location is outside England. Type your council instead.");
             }).catch(function () {
-                showCouncilMessage("The council map could not be loaded. Type your council instead.");
+                showMessage("The council map could not be loaded. Type your council instead.");
             }).then(function () { button.removeAttribute("aria-busy"); });
         }, function (error) {
             button.removeAttribute("aria-busy");
-            showCouncilMessage(error.code === 1 ? "Location access was declined. Type your council instead."
+            showMessage(error.code === 1 ? "Location access was declined. Type your council instead."
                 : "Your location could not be found. Type your council instead.");
         }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 });
     }
 
-    function wireYourCouncil() {
-        const input = document.querySelector("input[data-your-council]");
-        const button = document.querySelector("[data-locate]");
-        if (!input) return;
-        const byName = new Map(councils.map(function (row) { return [row.name.toLowerCase(), row.lad]; }));
-        const pick = function () {
-            const code = byName.get(input.value.trim().toLowerCase());
-            if (code) chooseCouncil(code);
-        };
-        input.addEventListener("input", pick);
-        input.addEventListener("change", pick);
-        if (button) button.addEventListener("click", function () { locate(button); });
+    function wireLocate() {
+        document.querySelectorAll("[data-locate]").forEach(function (button) {
+            button.addEventListener("click", function () { locate(button); });
+        });
     }
 
     // Flat-tax slider -----------------------------------------------------------------------
@@ -649,6 +649,9 @@
             targets(input).forEach(function (id) {
                 setSignal(id, "rate", rate);
             });
+            flatState.rate = rate;
+            flatState.local = local;
+            showFlatReadout();
         }
 
         let frame = 0;
@@ -776,11 +779,39 @@
 
     // Start ------------------------------------------------------------------------------
 
+    // Tooltips on touch screens: a tap shows one like a mouse hover, but lifting the finger sends no
+    // "pointer left" event, so the tooltip would stay. It is hidden on scroll, on a tap outside a chart,
+    // on a tap on a chart's empty space (above), and with Escape. A mouse keeps its usual behaviour.
+    function hideTooltips() {
+        document.querySelectorAll("#vg-tooltip-element.visible, .vg-tooltip.visible").forEach(function (tip) {
+            tip.classList.remove("visible");
+        });
+    }
+
+    function wireTooltipDismissal() {
+        let pending = false;
+        window.addEventListener("scroll", function () {
+            if (pending) return;
+            pending = true;
+            requestAnimationFrame(function () {
+                pending = false;
+                hideTooltips();
+            });
+        }, { passive: true });
+        document.addEventListener("pointerdown", function (event) {
+            if (event.pointerType !== "mouse" && !event.target.closest(".chart-body")) hideTooltips();
+        }, { passive: true });
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") hideTooltips();
+        });
+    }
+
     function init() {
         trackProgress();
         trackSections();
         wireControls();
         wireJumps();
+        wireTooltipDismissal();
         refitOnResize();
 
         Promise.all([
@@ -801,7 +832,7 @@
                 .then(function (rows) {
                     councils = rows;
                     wireCouncils();
-                    wireYourCouncil();
+                    wireLocate();
                 })
                 .catch(function (error) {
                     console.error(error);
