@@ -239,11 +239,10 @@
       ],
       "mark": {
         "type": "circle",
-        "size": 40,
-        "color": "#16191d",
-        "opacity": 0.9,
+        "size": 30,
+        "opacity": 1,
         "stroke": "#ffffff",
-        "strokeWidth": 0.6
+        "strokeWidth": 0.7
       },
       "encoding": {
         "tooltip": [
@@ -273,7 +272,20 @@
             "type": "quantitative",
             "format": ".2%"
           }
-        ]
+        ],
+        "color": {
+          "condition": [
+            {
+              "test": "datum.lad == pair[0]",
+              "value": "#0b7a5a"
+            },
+            {
+              "test": "datum.lad == pair[1]",
+              "value": "#a2447b"
+            }
+          ],
+          "value": "#16191d"
+        }
       }
     },
     {
@@ -396,12 +408,24 @@
         "baseline": "bottom",
         "dy": -8,
         "fontWeight": 600,
-        "fontSize": 13,
-        "color": "#16191d"
+        "fontSize": 13
       },
       "encoding": {
         "text": {
           "field": "council"
+        },
+        "color": {
+          "condition": [
+            {
+              "test": "datum.lad == pair[0]",
+              "value": "#0b7a5a"
+            },
+            {
+              "test": "datum.lad == pair[1]",
+              "value": "#a2447b"
+            }
+          ],
+          "value": "#16191d"
         }
       }
     },
@@ -525,12 +549,24 @@
         "baseline": "top",
         "dy": 8,
         "fontWeight": 600,
-        "fontSize": 13,
-        "color": "#16191d"
+        "fontSize": 13
       },
       "encoding": {
         "text": {
           "field": "council"
+        },
+        "color": {
+          "condition": [
+            {
+              "test": "datum.lad == pair[0]",
+              "value": "#0b7a5a"
+            },
+            {
+              "test": "datum.lad == pair[1]",
+              "value": "#a2447b"
+            }
+          ],
+          "value": "#16191d"
         }
       }
     },

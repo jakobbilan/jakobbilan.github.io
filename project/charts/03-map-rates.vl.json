@@ -3,28 +3,6 @@
   "description": "Hexagon map of English councils coloured by council tax as a share of home value, measured two ways.",
   "width": "container",
   "height": 600,
-  "data": {
-    "url": "project/data/councils.csv",
-    "format": {
-      "parse": {
-        "dwellings": "number",
-        "band_d": "number",
-        "bill": "number",
-        "value": "number",
-        "price": "number",
-        "rate_mix": "number",
-        "rate_press": "number",
-        "share_ad": "number",
-        "households": "number",
-        "fuel_poor": "number",
-        "fp_rate": "number",
-        "fp_outside_ad": "number",
-        "sales_2m": "number",
-        "sales_all": "number",
-        "r_local": "number"
-      }
-    }
-  },
   "params": [
     {
       "name": "method",
@@ -33,37 +11,81 @@
     {
       "name": "council",
       "value": ""
+    },
+    {
+      "name": "shape",
+      "value": "hex"
     }
   ],
   "projection": {
     "type": "identity",
     "reflectY": true
   },
-  "transform": [
-    {
-      "lookup": "lad",
-      "from": {
-        "data": {
-          "url": "project/geo/hex-lad-2025.geojson",
-          "format": {
-            "type": "json",
-            "property": "features"
-          }
-        },
-        "key": "properties.lad"
-      },
-      "as": "geo"
-    },
-    {
-      "filter": "isValid(datum.geo)"
-    },
-    {
-      "calculate": "method == 'press' ? datum.rate_press : datum.rate_mix",
-      "as": "rate"
-    }
-  ],
   "layer": [
     {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/hex-lad-2025.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "hex"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/lad-2025-map.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "map"
+        },
+        {
+          "calculate": "shape == 'map' ? datum.map : datum.hex",
+          "as": "geo"
+        },
+        {
+          "filter": "isValid(datum.geo)"
+        },
+        {
+          "calculate": "method == 'press' ? datum.rate_press : datum.rate_mix",
+          "as": "rate"
+        }
+      ],
       "mark": {
         "type": "geoshape",
         "stroke": "#ffffff",
@@ -155,7 +177,110 @@
       }
     },
     {
+      "data": {
+        "url": "project/geo/regions-2025-hex.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
       "transform": [
+        {
+          "filter": "shape == 'hex'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#16191d",
+        "strokeWidth": 1.2,
+        "strokeOpacity": 0.55
+      }
+    },
+    {
+      "data": {
+        "url": "project/geo/regions-2025-map.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "transform": [
+        {
+          "filter": "shape == 'map'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#16191d",
+        "strokeWidth": 1.2,
+        "strokeOpacity": 0.55
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/hex-lad-2025.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "hex"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/lad-2025-map.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "map"
+        },
+        {
+          "calculate": "shape == 'map' ? datum.map : datum.hex",
+          "as": "geo"
+        },
+        {
+          "filter": "isValid(datum.geo)"
+        },
+        {
+          "calculate": "method == 'press' ? datum.rate_press : datum.rate_mix",
+          "as": "rate"
+        },
         {
           "filter": "datum.lad == council"
         }

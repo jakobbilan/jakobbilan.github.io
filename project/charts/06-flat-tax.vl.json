@@ -3,19 +3,6 @@
   "description": "Share of homes in each council that would pay less under a flat tax on current value, for a chosen rate.",
   "width": "container",
   "height": 600,
-  "data": {
-    "url": "project/data/msoa.csv",
-    "format": {
-      "parse": {
-        "dwellings": "number",
-        "bill": "number",
-        "value": "number",
-        "rate": "number",
-        "sales": "number",
-        "r_local": "number"
-      }
-    }
-  },
   "params": [
     {
       "name": "rate",
@@ -28,94 +15,129 @@
     {
       "name": "council",
       "value": ""
+    },
+    {
+      "name": "shape",
+      "value": "hex"
     }
   ],
   "projection": {
     "type": "identity",
     "reflectY": true
   },
-  "transform": [
+  "layer": [
     {
-      "calculate": "mode == 'local' ? datum.r_local : rate",
-      "as": "r"
-    },
-    {
-      "calculate": "datum.r * datum.value < datum.bill ? datum.dwellings : 0",
-      "as": "less"
-    },
-    {
-      "calculate": "datum.r * datum.value * datum.dwellings",
-      "as": "new_total"
-    },
-    {
-      "calculate": "datum.bill * datum.dwellings",
-      "as": "old_total"
-    },
-    {
-      "aggregate": [
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
         {
-          "op": "sum",
-          "field": "less",
+          "calculate": "mode == 'local' ? datum.r_local : rate",
+          "as": "r"
+        },
+        {
+          "calculate": "datum.r * datum.value < datum.bill ? datum.dwellings : 0",
           "as": "less"
         },
         {
-          "op": "sum",
-          "field": "dwellings",
-          "as": "dwellings"
-        },
-        {
-          "op": "sum",
-          "field": "new_total",
+          "calculate": "datum.r * datum.value * datum.dwellings",
           "as": "new_total"
         },
         {
-          "op": "sum",
-          "field": "old_total",
+          "calculate": "datum.bill * datum.dwellings",
           "as": "old_total"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "less",
+              "as": "less"
+            },
+            {
+              "op": "sum",
+              "field": "dwellings",
+              "as": "dwellings"
+            },
+            {
+              "op": "sum",
+              "field": "new_total",
+              "as": "new_total"
+            },
+            {
+              "op": "sum",
+              "field": "old_total",
+              "as": "old_total"
+            }
+          ],
+          "groupby": [
+            "lad",
+            "council",
+            "region"
+          ]
+        },
+        {
+          "calculate": "datum.less / datum.dwellings",
+          "as": "share_less"
+        },
+        {
+          "calculate": "datum.old_total / datum.dwellings",
+          "as": "bill_now"
+        },
+        {
+          "calculate": "datum.new_total / datum.dwellings",
+          "as": "bill_flat"
+        },
+        {
+          "calculate": "datum.new_total / datum.old_total - 1",
+          "as": "change"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/hex-lad-2025.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "hex"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/lad-2025-map.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "map"
+        },
+        {
+          "calculate": "shape == 'map' ? datum.map : datum.hex",
+          "as": "geo"
+        },
+        {
+          "filter": "isValid(datum.geo)"
         }
       ],
-      "groupby": [
-        "lad",
-        "council",
-        "region"
-      ]
-    },
-    {
-      "calculate": "datum.less / datum.dwellings",
-      "as": "share_less"
-    },
-    {
-      "calculate": "datum.old_total / datum.dwellings",
-      "as": "bill_now"
-    },
-    {
-      "calculate": "datum.new_total / datum.dwellings",
-      "as": "bill_flat"
-    },
-    {
-      "calculate": "datum.new_total / datum.old_total - 1",
-      "as": "change"
-    },
-    {
-      "lookup": "lad",
-      "from": {
-        "data": {
-          "url": "project/geo/hex-lad-2025.geojson",
-          "format": {
-            "type": "json",
-            "property": "features"
-          }
-        },
-        "key": "properties.lad"
-      },
-      "as": "geo"
-    },
-    {
-      "filter": "isValid(datum.geo)"
-    }
-  ],
-  "layer": [
-    {
       "mark": {
         "type": "geoshape",
         "stroke": "#ffffff",
@@ -192,7 +214,158 @@
       }
     },
     {
+      "data": {
+        "url": "project/geo/regions-2025-hex.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
       "transform": [
+        {
+          "filter": "shape == 'hex'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#16191d",
+        "strokeWidth": 1.2,
+        "strokeOpacity": 0.55
+      }
+    },
+    {
+      "data": {
+        "url": "project/geo/regions-2025-map.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "transform": [
+        {
+          "filter": "shape == 'map'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#16191d",
+        "strokeWidth": 1.2,
+        "strokeOpacity": 0.55
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "mode == 'local' ? datum.r_local : rate",
+          "as": "r"
+        },
+        {
+          "calculate": "datum.r * datum.value < datum.bill ? datum.dwellings : 0",
+          "as": "less"
+        },
+        {
+          "calculate": "datum.r * datum.value * datum.dwellings",
+          "as": "new_total"
+        },
+        {
+          "calculate": "datum.bill * datum.dwellings",
+          "as": "old_total"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "less",
+              "as": "less"
+            },
+            {
+              "op": "sum",
+              "field": "dwellings",
+              "as": "dwellings"
+            },
+            {
+              "op": "sum",
+              "field": "new_total",
+              "as": "new_total"
+            },
+            {
+              "op": "sum",
+              "field": "old_total",
+              "as": "old_total"
+            }
+          ],
+          "groupby": [
+            "lad",
+            "council",
+            "region"
+          ]
+        },
+        {
+          "calculate": "datum.less / datum.dwellings",
+          "as": "share_less"
+        },
+        {
+          "calculate": "datum.old_total / datum.dwellings",
+          "as": "bill_now"
+        },
+        {
+          "calculate": "datum.new_total / datum.dwellings",
+          "as": "bill_flat"
+        },
+        {
+          "calculate": "datum.new_total / datum.old_total - 1",
+          "as": "change"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/hex-lad-2025.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "hex"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/geo/lad-2025-map.geojson",
+              "format": {
+                "type": "json",
+                "property": "features"
+              }
+            },
+            "key": "properties.lad"
+          },
+          "as": "map"
+        },
+        {
+          "calculate": "shape == 'map' ? datum.map : datum.hex",
+          "as": "geo"
+        },
+        {
+          "filter": "isValid(datum.geo)"
+        },
         {
           "filter": "datum.lad == council"
         }

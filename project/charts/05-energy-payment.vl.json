@@ -141,6 +141,10 @@
       "transform": [
         {
           "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate)"
+        },
+        {
+          "calculate": "datum.fp_outside_ad / datum.fuel_poor",
+          "as": "miss"
         }
       ],
       "mark": {
@@ -156,15 +160,26 @@
           "field": "fp_rate"
         },
         "size": {
-          "field": "households",
+          "field": "fuel_poor",
           "type": "quantitative",
           "scale": {
             "range": [
-              14,
-              320
+              12,
+              420
             ]
           },
-          "legend": null
+          "legend": {
+            "title": "Fuel-poor households",
+            "values": [
+              5000,
+              15000,
+              30000
+            ],
+            "symbolFillColor": "#9aa3ad",
+            "symbolStrokeColor": "#ffffff",
+            "symbolOpacity": 0.7,
+            "labelExpr": "format(datum.value, ',')"
+          }
         },
         "color": {
           "condition": {
@@ -219,6 +234,12 @@
             "title": "Fuel-poor outside Bands A–D (upper bound)",
             "type": "quantitative",
             "format": ",.0f"
+          },
+          {
+            "field": "miss",
+            "title": "Share of fuel-poor outside Bands A–D (upper bound)",
+            "type": "quantitative",
+            "format": ".0%"
           }
         ]
       }
@@ -248,7 +269,11 @@
       },
       "transform": [
         {
-          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad)"
+          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad) && datum.fuel_poor >= 1000"
+        },
+        {
+          "calculate": "datum.fp_outside_ad / datum.fuel_poor",
+          "as": "miss"
         },
         {
           "window": [
@@ -259,13 +284,13 @@
           ],
           "sort": [
             {
-              "field": "fp_outside_ad",
+              "field": "miss",
               "order": "descending"
             }
           ]
         },
         {
-          "filter": "datum.rank <= 4"
+          "filter": "datum.rank <= 5"
         }
       ],
       "mark": {
@@ -317,7 +342,11 @@
       },
       "transform": [
         {
-          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad)"
+          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad) && datum.fuel_poor >= 1000"
+        },
+        {
+          "calculate": "datum.fp_outside_ad / datum.fuel_poor",
+          "as": "miss"
         },
         {
           "window": [
@@ -328,13 +357,13 @@
           ],
           "sort": [
             {
-              "field": "fp_outside_ad",
+              "field": "miss",
               "order": "descending"
             }
           ]
         },
         {
-          "filter": "datum.rank <= 4"
+          "filter": "datum.rank <= 5"
         }
       ],
       "mark": {

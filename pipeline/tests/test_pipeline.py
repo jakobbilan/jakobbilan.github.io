@@ -146,3 +146,11 @@ def test_facts_for_the_text(built):
     assert f["fig6"]["neutral_rate"] == pytest.approx(summary["england"]["revenue_neutral_rate"])
     assert 0 < f["fig6"]["neutral_less"] < 1 and f["fig6"]["fs_revenue"] < 1
     assert f["fig2"]["london_x"] > f["fig2"]["north_east_x"]
+
+
+def test_figure_5_rankings(built):
+    (tables, summary, results, geo), truth = built
+    fig5 = summary["facts"]["fig5"]
+    shares = [fig5[f"miss{k}_share"] for k in range(1, 6)]
+    assert shares == sorted(shares, reverse=True) and all(0 < s <= 1 for s in shares)
+    assert 0 < fig5["top10_outside_share"] <= 1 and 0 <= fig5["london_outside_share"] <= 1

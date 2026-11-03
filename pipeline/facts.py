@@ -9,6 +9,9 @@ import pandas as pd
 
 from . import compute, config
 
+# Councils with fewer fuel-poor households are left out of the share ranking (figure 5 uses the same floor)
+MIN_FUEL_POOR = 1000
+
 
 def _row(councils, code):
     return councils.set_index("lad").loc[code]
@@ -82,10 +85,18 @@ def energy(councils, england):
     if outside:
         out.update({"outside_max": outside, "outside_share_max": outside / england["fuel_poor"],
                     "inside_share_min": 1 - outside / england["fuel_poor"]})
-    top = councils.dropna(subset=["fp_outside_ad"]).nlargest(3, "fp_outside_ad")
+    known = councils.dropna(subset=["fp_outside_ad", "fuel_poor"])
+    top = known.nlargest(3, "fp_outside_ad")
     for rank, (_, row) in enumerate(top.iterrows(), start=1):
         out.update({f"top{rank}_name": row["name"], f"top{rank}_outside": row.fp_outside_ad,
                     f"top{rank}_share": row.fp_outside_ad / row.fuel_poor})
+    # highest shares of fuel-poor households outside Bands A-D, as labelled in figure 5
+    sizable = known[known.fuel_poor >= MIN_FUEL_POOR].assign(miss=lambda f: f.fp_outside_ad / f.fuel_poor)
+    for rank, (_, row) in enumerate(sizable.nlargest(5, "miss").iterrows(), start=1):
+        out.update({f"miss{rank}_name": row["name"], f"miss{rank}_share": row.miss, f"miss{rank}_outside": row.fp_outside_ad})
+    total = known.fp_outside_ad.sum()
+    out["top10_outside_share"] = known.nlargest(10, "fp_outside_ad").fp_outside_ad.sum() / total
+    out["london_outside_share"] = known[known.region == "London"].fp_outside_ad.sum() / total
     return out
 
 

@@ -72,7 +72,7 @@
       "filter": "datum.rank <= 15"
     },
     {
-      "calculate": "pad(datum.rank, 2, '0', 'left') + '|' + datum.name",
+      "calculate": "pad(datum.rank, 2, '0', 'left') + '|' + datum.lad + '|' + datum.name",
       "as": "order"
     }
   ],
@@ -84,9 +84,22 @@
       "title": null,
       "axis": {
         "grid": false,
-        "labelColor": "#16191d",
         "labelLimit": 180,
-        "labelExpr": "split(datum.label, '|')[1]"
+        "labelExpr": "split(datum.label, '|')[2]",
+        "labelColor": {
+          "condition": {
+            "test": "split(datum.value, '|')[1] == council",
+            "value": "#16191d"
+          },
+          "value": "#5b636d"
+        },
+        "labelFontWeight": {
+          "condition": {
+            "test": "split(datum.value, '|')[1] == council",
+            "value": 600
+          },
+          "value": 400
+        }
       }
     },
     "x": {
@@ -114,9 +127,9 @@
         "color": {
           "condition": {
             "test": "datum.lad == council",
-            "value": "#16191d"
+            "value": "#1f4e8c"
           },
-          "value": "#1f4e8c"
+          "value": "#bccbe0"
         },
         "tooltip": [
           {
@@ -149,7 +162,7 @@
         "type": "text",
         "align": "left",
         "dx": 4,
-        "color": "#16191d",
+        "color": "#5b636d",
         "fontSize": 11.5
       },
       "encoding": {
@@ -157,6 +170,37 @@
           "field": "sales_2m",
           "type": "quantitative",
           "format": ","
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.lad == council",
+            "value": 0
+          },
+          "value": 1
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "color": "#16191d",
+        "fontSize": 11.5,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "sales_2m",
+          "type": "quantitative",
+          "format": ","
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.lad == council",
+            "value": 1
+          },
+          "value": 0
         }
       }
     }
