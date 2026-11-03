@@ -148,9 +148,13 @@ def test_facts_for_the_text(built):
     assert f["fig2"]["london_x"] > f["fig2"]["north_east_x"]
 
 
-def test_figure_5_rankings(built):
+def test_figure_5_estimate_lies_within_its_bounds(built):
     (tables, summary, results, geo), truth = built
-    fig5 = summary["facts"]["fig5"]
-    shares = [fig5[f"miss{k}_share"] for k in range(1, 6)]
-    assert shares == sorted(shares, reverse=True) and all(0 < s <= 1 for s in shares)
-    assert 0 < fig5["top10_outside_share"] <= 1 and 0 <= fig5["london_outside_share"] <= 1
+    england, fig5, councils = summary["england"], summary["facts"]["fig5"], tables["councils"]
+    assert england["fp_outside_ad_min"] <= england["fp_outside_ad"] <= england["fp_outside_ad_max"] <= england["fuel_poor"]
+    inside = councils.dropna(subset=["fp_outside_ad"])
+    assert (inside.fp_outside_ad_min <= inside.fp_outside_ad + 1e-6).all()
+    assert (inside.fp_outside_ad <= inside.fp_outside_ad_max + 1e-6).all()
+    shares = [fig5[f"lab{k}_share_ad"] for k in range(1, 6)]
+    assert shares == sorted(shares)
+    assert 0 < fig5["top10_outside_share"] <= 1

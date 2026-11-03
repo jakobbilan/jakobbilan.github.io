@@ -131,8 +131,15 @@ def build_outputs(paths, meta):
         lsoa["share_eh"] = lsoa[list("EFGH")].sum(axis=1) / lsoa.dwellings.where(lsoa.dwellings > 0)
         lsoa = lsoa.merge(fp_lsoa.rename(columns={"code": "lsoa"}), on="lsoa", how="inner")
         lsoa = lsoa.merge(s["lsoa_lad"], on="lsoa", how="left")
+        # Fuel-poor households living outside Bands A-D, per small area: the proportional estimate assumes
+        # they are spread across bands like all homes; the bounds are the fewest that cannot fit into the
+        # area's A-D homes and the most that the area's E-H homes could hold.
+        homes_ad = lsoa[config.ENERGY_PAYMENT_BANDS].sum(axis=1)
         lsoa["fp_outside_ad"] = lsoa.fuel_poor * lsoa.share_eh
-        councils["fp_outside_ad"] = councils.lad.map(lsoa.groupby("lad").fp_outside_ad.sum())
+        lsoa["fp_outside_ad_min"] = (lsoa.fuel_poor - homes_ad).clip(lower=0)
+        lsoa["fp_outside_ad_max"] = lsoa.fuel_poor.clip(upper=lsoa.dwellings - homes_ad)
+        for column in ("fp_outside_ad", "fp_outside_ad_min", "fp_outside_ad_max"):
+            councils[column] = councils.lad.map(lsoa.groupby("lad")[column].sum())
 
     councils = councils.merge(s["high_value"], on="lad", how="left")
 
@@ -146,6 +153,8 @@ def build_outputs(paths, meta):
         "fuel_poor": float(councils.fuel_poor.sum()),
         "fp_rate": float(councils.fuel_poor.sum() / councils.households.sum()),
         "fp_outside_ad": float(councils.fp_outside_ad.sum()) if "fp_outside_ad" in councils else None,
+        "fp_outside_ad_min": float(councils.fp_outside_ad_min.sum()) if "fp_outside_ad_min" in councils else None,
+        "fp_outside_ad_max": float(councils.fp_outside_ad_max.sum()) if "fp_outside_ad_max" in councils else None,
         "msoas": int(len(msoa)),
         "sales_used": int(s["n_sales"]),
         "msoa_fallback_share": float((msoa.fallback_share * msoa.dwellings).sum() / msoa.dwellings.sum()),
@@ -203,7 +212,7 @@ def write_outputs(tables, summary, results, geo):
     c = tables["councils"]
     columns = {"lad": None, "name": None, "region": None, "dwellings": 0, "band_d": 2, "bill": 0, "value": -2,
                "price": 0, "rate_mix": 6, "rate_press": 6, "share_ad": 4, "households": 0, "fuel_poor": 0,
-               "fp_rate": 4, "fp_outside_ad": 0, "sales_2m": 0, "sales_all": 0, "r_local": 6}
+               "fp_rate": 4, "fp_outside_ad": 0, "fp_outside_ad_min": 0, "fp_outside_ad_max": 0, "sales_2m": 0, "sales_all": 0, "r_local": 6}
     council_out = pd.DataFrame({k: (c[k].round(d) if d is not None else c[k]) for k, d in columns.items()
                                 if k in c})
     council_out.sort_values("lad").to_csv(config.OUT_DATA / "councils.csv", index=False)

@@ -134,7 +134,9 @@
             "fp_outside_ad": "number",
             "sales_2m": "number",
             "sales_all": "number",
-            "r_local": "number"
+            "r_local": "number",
+            "fp_outside_ad_min": "number",
+            "fp_outside_ad_max": "number"
           }
         }
       },
@@ -145,6 +147,10 @@
         {
           "calculate": "datum.fp_outside_ad / datum.fuel_poor",
           "as": "miss"
+        },
+        {
+          "calculate": "isValid(datum.fp_outside_ad_min) ? format(datum.fp_outside_ad_min / datum.fuel_poor, '.0%') + '–' + format(datum.fp_outside_ad_max / datum.fuel_poor, '.0%') : 'not yet built'",
+          "as": "miss_range"
         }
       ],
       "mark": {
@@ -230,16 +236,14 @@
             "format": ",.0f"
           },
           {
-            "field": "fp_outside_ad",
-            "title": "Fuel-poor outside Bands A–D (upper bound)",
-            "type": "quantitative",
-            "format": ",.0f"
-          },
-          {
             "field": "miss",
-            "title": "Share of fuel-poor outside Bands A–D (upper bound)",
+            "title": "Fuel-poor outside Bands A–D, estimate",
             "type": "quantitative",
             "format": ".0%"
+          },
+          {
+            "field": "miss_range",
+            "title": "Possible range"
           }
         ]
       }
@@ -263,17 +267,15 @@
             "fp_outside_ad": "number",
             "sales_2m": "number",
             "sales_all": "number",
-            "r_local": "number"
+            "r_local": "number",
+            "fp_outside_ad_min": "number",
+            "fp_outside_ad_max": "number"
           }
         }
       },
       "transform": [
         {
-          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad) && datum.fuel_poor >= 1000"
-        },
-        {
-          "calculate": "datum.fp_outside_ad / datum.fuel_poor",
-          "as": "miss"
+          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
         },
         {
           "window": [
@@ -284,8 +286,8 @@
           ],
           "sort": [
             {
-              "field": "miss",
-              "order": "descending"
+              "field": "share_ad",
+              "order": "ascending"
             }
           ]
         },
@@ -336,17 +338,15 @@
             "fp_outside_ad": "number",
             "sales_2m": "number",
             "sales_all": "number",
-            "r_local": "number"
+            "r_local": "number",
+            "fp_outside_ad_min": "number",
+            "fp_outside_ad_max": "number"
           }
         }
       },
       "transform": [
         {
-          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad) && datum.fuel_poor >= 1000"
-        },
-        {
-          "calculate": "datum.fp_outside_ad / datum.fuel_poor",
-          "as": "miss"
+          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
         },
         {
           "window": [
@@ -357,8 +357,8 @@
           ],
           "sort": [
             {
-              "field": "miss",
-              "order": "descending"
+              "field": "share_ad",
+              "order": "ascending"
             }
           ]
         },

@@ -97,10 +97,10 @@
       },
       "mark": {
         "type": "circle",
-        "size": 14,
-        "color": "#9aa3ad",
+        "size": 9,
+        "color": "#a3acb6",
         "opacity": {
-          "expr": "council != '' || step >= 1 ? 0.16 : 0.32"
+          "expr": "council != '' || step >= 1 ? 0.2 : 0.42"
         }
       },
       "encoding": {
@@ -156,8 +156,8 @@
       },
       "mark": {
         "type": "area",
-        "color": "#1f4e8c",
-        "opacity": 0.14,
+        "color": "#cfd5dc",
+        "opacity": 0.6,
         "interpolate": "monotone"
       },
       "encoding": {
@@ -185,8 +185,8 @@
       },
       "mark": {
         "type": "line",
-        "color": "#1f4e8c",
-        "strokeWidth": 3,
+        "color": "#16191d",
+        "strokeWidth": 1.8,
         "interpolate": "monotone"
       },
       "encoding": {
@@ -220,6 +220,95 @@
     },
     {
       "data": {
+        "url": "project/data/msoa_bins.csv",
+        "format": {
+          "parse": {
+            "bin": "number",
+            "value": "number",
+            "rate_p25": "number",
+            "rate": "number",
+            "rate_p75": "number",
+            "dwellings": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "value",
+              "as": "last"
+            }
+          ]
+        },
+        {
+          "filter": "datum.value == datum.last"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 6,
+        "fontSize": 11.5,
+        "fontWeight": 500,
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "value": "Median"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa_bins.csv",
+        "format": {
+          "parse": {
+            "bin": "number",
+            "value": "number",
+            "rate_p25": "number",
+            "rate": "number",
+            "rate_p75": "number",
+            "dwellings": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "max",
+              "field": "value",
+              "as": "last"
+            }
+          ]
+        },
+        {
+          "filter": "datum.value == datum.last"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 6,
+        "fontSize": 11.5,
+        "fontWeight": 500,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "text": {
+          "value": "Median"
+        }
+      }
+    },
+    {
+      "data": {
         "url": "project/data/msoa.csv",
         "format": {
           "parse": {
@@ -239,10 +328,11 @@
       ],
       "mark": {
         "type": "circle",
-        "size": 30,
-        "opacity": 1,
+        "size": 26,
+        "color": "#1f4e8c",
+        "opacity": 0.95,
         "stroke": "#ffffff",
-        "strokeWidth": 0.7
+        "strokeWidth": 0.6
       },
       "encoding": {
         "tooltip": [
@@ -272,20 +362,7 @@
             "type": "quantitative",
             "format": ".2%"
           }
-        ],
-        "color": {
-          "condition": [
-            {
-              "test": "datum.lad == pair[0]",
-              "value": "#0b7a5a"
-            },
-            {
-              "test": "datum.lad == pair[1]",
-              "value": "#a2447b"
-            }
-          ],
-          "value": "#16191d"
-        }
+        ]
       }
     },
     {
@@ -408,24 +485,12 @@
         "baseline": "bottom",
         "dy": -8,
         "fontWeight": 600,
-        "fontSize": 13
+        "fontSize": 13,
+        "color": "#1f4e8c"
       },
       "encoding": {
         "text": {
           "field": "council"
-        },
-        "color": {
-          "condition": [
-            {
-              "test": "datum.lad == pair[0]",
-              "value": "#0b7a5a"
-            },
-            {
-              "test": "datum.lad == pair[1]",
-              "value": "#a2447b"
-            }
-          ],
-          "value": "#16191d"
         }
       }
     },
@@ -549,24 +614,12 @@
         "baseline": "top",
         "dy": 8,
         "fontWeight": 600,
-        "fontSize": 13
+        "fontSize": 13,
+        "color": "#1f4e8c"
       },
       "encoding": {
         "text": {
           "field": "council"
-        },
-        "color": {
-          "condition": [
-            {
-              "test": "datum.lad == pair[0]",
-              "value": "#0b7a5a"
-            },
-            {
-              "test": "datum.lad == pair[1]",
-              "value": "#a2447b"
-            }
-          ],
-          "value": "#16191d"
         }
       }
     },
@@ -586,11 +639,11 @@
       ],
       "mark": {
         "type": "rule",
-        "color": "#c4532d",
-        "strokeWidth": 1.6,
+        "color": "#5b636d",
+        "strokeWidth": 1.1,
         "strokeDash": [
-          6,
-          4
+          4,
+          3
         ],
         "opacity": {
           "expr": "step >= 2 ? 1 : 0"
@@ -617,13 +670,13 @@
           "filter": "indexof(['fairer_share', 'neutral'], datum.key) >= 0"
         },
         {
-          "calculate": "datum.label + ': ' + format(datum.rate, '.2%')",
+          "calculate": "(datum.key == 'neutral' ? 'Flat tax, same revenue' : 'Fairer Share') + ': ' + format(datum.rate, '.2%')",
           "as": "text"
         }
       ],
       "mark": {
         "type": "text",
-        "align": "right",
+        "align": "left",
         "baseline": "bottom",
         "dy": -4,
         "fontWeight": 500,
@@ -633,16 +686,15 @@
         "fill": "#ffffff",
         "stroke": "#ffffff",
         "strokeWidth": 4,
-        "strokeJoin": "round"
+        "strokeJoin": "round",
+        "dx": 2
       },
       "encoding": {
         "y": {
           "field": "rate"
         },
         "x": {
-          "value": {
-            "expr": "width"
-          }
+          "value": 0
         },
         "text": {
           "field": "text"
@@ -663,29 +715,28 @@
           "filter": "indexof(['fairer_share', 'neutral'], datum.key) >= 0"
         },
         {
-          "calculate": "datum.label + ': ' + format(datum.rate, '.2%')",
+          "calculate": "(datum.key == 'neutral' ? 'Flat tax, same revenue' : 'Fairer Share') + ': ' + format(datum.rate, '.2%')",
           "as": "text"
         }
       ],
       "mark": {
         "type": "text",
-        "align": "right",
+        "align": "left",
         "baseline": "bottom",
         "dy": -4,
-        "color": "#c4532d",
+        "color": "#3d434b",
         "fontWeight": 500,
         "opacity": {
           "expr": "step >= 2 ? 1 : 0"
-        }
+        },
+        "dx": 2
       },
       "encoding": {
         "y": {
           "field": "rate"
         },
         "x": {
-          "value": {
-            "expr": "width"
-          }
+          "value": 0
         },
         "text": {
           "field": "text"

@@ -9,7 +9,7 @@ import pandas as pd
 
 from . import compute, config
 
-# Councils with fewer fuel-poor households are left out of the share ranking (figure 5 uses the same floor)
+# Councils with fewer fuel-poor households are not labelled in figure 5 (the chart uses the same floor)
 MIN_FUEL_POOR = 1000
 
 
@@ -80,20 +80,27 @@ def surcharge(councils, council=config.SURCHARGE_COUNCIL, compare=config.COMPARE
 
 
 def energy(councils, england):
+    """Fuel-poor households outside Bands A-D: a proportional estimate (est) between two bounds (min, max)."""
     out = {"share_ad": england["share_ad"], "fuel_poor": england["fuel_poor"], "fp_rate": england["fp_rate"]}
-    outside = england.get("fp_outside_ad")
-    if outside:
-        out.update({"outside_max": outside, "outside_share_max": outside / england["fuel_poor"],
-                    "inside_share_min": 1 - outside / england["fuel_poor"]})
+    for suffix, key in (("est", "fp_outside_ad"), ("min", "fp_outside_ad_min"), ("max", "fp_outside_ad_max")):
+        if england.get(key) is not None:
+            out[f"outside_{suffix}"] = england[key]
+            out[f"outside_share_{suffix}"] = england[key] / england["fuel_poor"]
+    if "outside_share_est" in out:
+        out["inside_share_est"] = 1 - out["outside_share_est"]
     known = councils.dropna(subset=["fp_outside_ad", "fuel_poor"])
-    top = known.nlargest(3, "fp_outside_ad")
-    for rank, (_, row) in enumerate(top.iterrows(), start=1):
+    for rank, (_, row) in enumerate(known.nlargest(3, "fp_outside_ad").iterrows(), start=1):
         out.update({f"top{rank}_name": row["name"], f"top{rank}_outside": row.fp_outside_ad,
                     f"top{rank}_share": row.fp_outside_ad / row.fuel_poor})
-    # highest shares of fuel-poor households outside Bands A-D, as labelled in figure 5
-    sizable = known[known.fuel_poor >= MIN_FUEL_POOR].assign(miss=lambda f: f.fp_outside_ad / f.fuel_poor)
-    for rank, (_, row) in enumerate(sizable.nlargest(5, "miss").iterrows(), start=1):
-        out.update({f"miss{rank}_name": row["name"], f"miss{rank}_share": row.miss, f"miss{rank}_outside": row.fp_outside_ad})
+    # the councils labelled in figure 5: fewest homes in Bands A-D
+    sizable = known[known.fuel_poor >= MIN_FUEL_POOR]
+    for rank, (_, row) in enumerate(sizable.nsmallest(5, "share_ad").iterrows(), start=1):
+        out.update({f"lab{rank}_name": row["name"], f"lab{rank}_share_ad": row.share_ad, f"lab{rank}_fp_rate": row.fp_rate,
+                    f"lab{rank}_miss_est": row.fp_outside_ad / row.fuel_poor})
+        for suffix in ("min", "max"):
+            column = f"fp_outside_ad_{suffix}"
+            if column in row and pd.notna(row[column]):
+                out[f"lab{rank}_miss_{suffix}"] = row[column] / row.fuel_poor
     total = known.fp_outside_ad.sum()
     out["top10_outside_share"] = known.nlargest(10, "fp_outside_ad").fp_outside_ad.sum() / total
     out["london_outside_share"] = known[known.region == "London"].fp_outside_ad.sum() / total
