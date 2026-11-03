@@ -1,0 +1,42 @@
+{
+  "background": null,
+  "font": "Inter, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+  "padding": 4,
+  "view": {"stroke": null},
+  "axis": {
+    "labelColor": "#5b636d",
+    "labelFontSize": 12,
+    "labelPadding": 6,
+    "titleColor": "#5b636d",
+    "titleFontSize": 12,
+    "titleFontWeight": 500,
+    "titlePadding": 10,
+    "domainColor": "#16191d",
+    "tickColor": "#16191d",
+    "tickSize": 4,
+    "gridColor": "#e6e8eb",
+    "labelOverlap": true
+  },
+  "axisX": {"grid": false, "titleAnchor": "end", "titleAlign": "right"},
+  "axisY": {"domain": false, "ticks": false, "grid": true, "labelPadding": 8, "title": null},
+  "legend": {
+    "orient": "top",
+    "direction": "horizontal",
+    "labelColor": "#16191d",
+    "labelFontSize": 12,
+    "titleColor": "#5b636d",
+    "titleFontSize": 12,
+    "titleFontWeight": 500,
+    "padding": 0,
+    "offset": 14,
+    "symbolType": "circle",
+    "columnPadding": 14
+  },
+  "text": {"fontSize": 12, "color": "#16191d"},
+  "line": {"strokeWidth": 2, "strokeCap": "round", "strokeJoin": "round"},
+  "rule": {"color": "#5b636d"},
+  "range": {"category": ["#1f4e8c", "#c4532d", "#16191d", "#7f8fa6", "#b7a57a", "#5e8c6a"]},
+  "numberFormat": ",.3~r",
+  "timeFormat": "%b %Y",
+  "tooltipFormat": {"numberFormat": ",.3~r"}
+}

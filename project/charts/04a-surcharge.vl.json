@@ -1,0 +1,325 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Council tax and the 2028 surcharge as a share of value for a Band H home in one council, against the average home in another.",
+  "width": "container",
+  "height": 380,
+  "padding": {
+    "top": 8,
+    "right": 8,
+    "bottom": 4,
+    "left": 4
+  },
+  "params": [
+    {
+      "name": "council",
+      "value": "E09000033"
+    },
+    {
+      "name": "compare",
+      "value": "E07000117"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Value of the home (log scale)",
+      "scale": {
+        "type": "log",
+        "domain": [
+          1500000,
+          20000000
+        ],
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          2000000,
+          3000000,
+          5000000,
+          10000000,
+          20000000
+        ],
+        "labelExpr": "'£' + format(datum.value / 1e6, '.3~') + 'm'"
+      }
+    },
+    "y": {
+      "type": "quantitative",
+      "scale": {
+        "type": "log",
+        "domain": [
+          0.0001,
+          0.03
+        ],
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          0.0001,
+          0.0002,
+          0.0005,
+          0.001,
+          0.002,
+          0.005,
+          0.01,
+          0.02
+        ],
+        "format": ".2~%"
+      }
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "sequence": {
+          "start": 6.177,
+          "stop": 7.302,
+          "step": 0.0015,
+          "as": "lv"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "pow(10, datum.lv)",
+          "as": "value"
+        },
+        {
+          "calculate": "council",
+          "as": "lad"
+        },
+        {
+          "lookup": "lad",
+          "from": {
+            "data": {
+              "url": "project/data/councils.csv",
+              "format": {
+                "parse": {
+                  "dwellings": "number",
+                  "band_d": "number",
+                  "bill": "number",
+                  "value": "number",
+                  "price": "number",
+                  "rate_mix": "number",
+                  "rate_press": "number",
+                  "share_ad": "number",
+                  "households": "number",
+                  "fuel_poor": "number",
+                  "fp_rate": "number",
+                  "fp_outside_ad": "number",
+                  "sales_2m": "number",
+                  "sales_all": "number",
+                  "r_local": "number"
+                }
+              }
+            },
+            "key": "lad",
+            "fields": [
+              "name",
+              "band_d"
+            ]
+          }
+        },
+        {
+          "calculate": "2 * datum.band_d",
+          "as": "bill"
+        },
+        {
+          "calculate": "datum.value >= 5e6 ? 7500 : datum.value >= 3.5e6 ? 5000 : datum.value >= 2.5e6 ? 3500 : datum.value >= 2e6 ? 2500 : 0",
+          "as": "surcharge"
+        },
+        {
+          "calculate": "datum.bill / datum.value",
+          "as": "Council tax only"
+        },
+        {
+          "calculate": "(datum.bill + datum.surcharge) / datum.value",
+          "as": "With the 2028 surcharge"
+        },
+        {
+          "fold": [
+            "Council tax only",
+            "With the 2028 surcharge"
+          ],
+          "as": [
+            "series",
+            "rate"
+          ]
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "strokeWidth": 2.6,
+            "interpolate": "linear"
+          },
+          "encoding": {
+            "y": {
+              "field": "rate"
+            },
+            "color": {
+              "field": "series",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Council tax only",
+                  "With the 2028 surcharge"
+                ],
+                "range": [
+                  "#1f4e8c",
+                  "#c4532d"
+                ]
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "name",
+                "title": "Council"
+              },
+              {
+                "field": "series",
+                "title": "Bill"
+              },
+              {
+                "field": "value",
+                "title": "Home value",
+                "type": "quantitative",
+                "format": "$,.0f"
+              },
+              {
+                "field": "bill",
+                "title": "Band H council tax",
+                "type": "quantitative",
+                "format": "$,.0f"
+              },
+              {
+                "field": "surcharge",
+                "title": "Surcharge",
+                "type": "quantitative",
+                "format": "$,.0f"
+              },
+              {
+                "field": "rate",
+                "title": "Share of value",
+                "type": "quantitative",
+                "format": ".3%"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.lv >= 7.3"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "bottom",
+            "dx": -2,
+            "dy": -6,
+            "fontWeight": 600
+          },
+          "encoding": {
+            "y": {
+              "field": "rate"
+            },
+            "text": {
+              "field": "series"
+            },
+            "color": {
+              "field": "series",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Council tax only",
+                  "With the 2028 surcharge"
+                ],
+                "range": [
+                  "#1f4e8c",
+                  "#c4532d"
+                ]
+              },
+              "legend": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.lad == compare"
+        },
+        {
+          "calculate": "datum.name + ', average home'",
+          "as": "label"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#16191d",
+            "strokeWidth": 1.2,
+            "strokeDash": [
+              4,
+              3
+            ]
+          },
+          "encoding": {
+            "y": {
+              "field": "rate_mix"
+            },
+            "x": null
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "bottom",
+            "dx": 2,
+            "dy": -5,
+            "fontWeight": 600
+          },
+          "encoding": {
+            "y": {
+              "field": "rate_mix"
+            },
+            "x": {
+              "value": 0
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

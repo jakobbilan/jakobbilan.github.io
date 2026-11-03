@@ -1,0 +1,177 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Hexagon map of English councils coloured by council tax as a share of home value, measured two ways.",
+  "width": "container",
+  "height": 600,
+  "data": {
+    "url": "project/data/councils.csv",
+    "format": {
+      "parse": {
+        "dwellings": "number",
+        "band_d": "number",
+        "bill": "number",
+        "value": "number",
+        "price": "number",
+        "rate_mix": "number",
+        "rate_press": "number",
+        "share_ad": "number",
+        "households": "number",
+        "fuel_poor": "number",
+        "fp_rate": "number",
+        "fp_outside_ad": "number",
+        "sales_2m": "number",
+        "sales_all": "number",
+        "r_local": "number"
+      }
+    }
+  },
+  "params": [
+    {
+      "name": "method",
+      "value": "mix"
+    },
+    {
+      "name": "council",
+      "value": ""
+    }
+  ],
+  "projection": {
+    "type": "identity",
+    "reflectY": true
+  },
+  "transform": [
+    {
+      "lookup": "lad",
+      "from": {
+        "data": {
+          "url": "project/geo/hex-lad-2025.geojson",
+          "format": {
+            "type": "json",
+            "property": "features"
+          }
+        },
+        "key": "properties.lad"
+      },
+      "as": "geo"
+    },
+    {
+      "filter": "isValid(datum.geo)"
+    },
+    {
+      "calculate": "method == 'press' ? datum.rate_press : datum.rate_mix",
+      "as": "rate"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        },
+        "color": {
+          "condition": {
+            "test": "!isValid(datum.rate)",
+            "value": "#e6e8eb"
+          },
+          "field": "rate",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              0.0025,
+              0.005,
+              0.0075,
+              0.01,
+              0.0125,
+              0.015
+            ],
+            "range": [
+              "#eef2f8",
+              "#d2deee",
+              "#adc3e1",
+              "#7f9fcd",
+              "#5279b5",
+              "#2f5a99",
+              "#173c72"
+            ]
+          },
+          "legend": {
+            "format": ".2~%",
+            "orient": "top-left",
+            "direction": "vertical",
+            "symbolType": "square",
+            "symbolSize": 140,
+            "labelFontSize": 12,
+            "offset": 0
+          }
+        },
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Council"
+          },
+          {
+            "field": "region",
+            "title": "Region"
+          },
+          {
+            "field": "rate_mix",
+            "title": "Average bill ÷ value",
+            "type": "quantitative",
+            "format": ".2%"
+          },
+          {
+            "field": "rate_press",
+            "title": "Band D ÷ average price",
+            "type": "quantitative",
+            "format": ".2%"
+          },
+          {
+            "field": "band_d",
+            "title": "Band D, 2026-27",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "bill",
+            "title": "Average bill per home",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "value",
+            "title": "Average home value",
+            "type": "quantitative",
+            "format": "$,.0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.lad == council"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#16191d",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        }
+      }
+    }
+  ]
+}

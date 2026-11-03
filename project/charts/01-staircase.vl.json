@@ -1,0 +1,406 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Council tax bill as a share of home value against home value, for every middle-layer super output area in England, with the median by value and two flat-tax reference lines.",
+  "width": "container",
+  "height": 460,
+  "padding": {
+    "top": 8,
+    "right": 8,
+    "bottom": 4,
+    "left": 4
+  },
+  "params": [
+    {
+      "name": "step",
+      "value": 2
+    },
+    {
+      "name": "council",
+      "value": ""
+    },
+    {
+      "name": "pair",
+      "value": [
+        "E07000117",
+        "E09000033"
+      ]
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Average home value (log scale)",
+      "scale": {
+        "type": "log",
+        "domain": [
+          50000,
+          5000000
+        ],
+        "clamp": true,
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          50000,
+          100000,
+          250000,
+          500000,
+          1000000,
+          2500000,
+          5000000
+        ],
+        "labelExpr": "datum.value >= 1e6 ? '£' + format(datum.value / 1e6, '.3~') + 'm' : '£' + format(datum.value / 1e3, '.0f') + 'k'"
+      }
+    },
+    "y": {
+      "field": "rate",
+      "type": "quantitative",
+      "scale": {
+        "type": "log",
+        "domain": [
+          0.0005,
+          0.04
+        ],
+        "clamp": true,
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          0.0005,
+          0.001,
+          0.002,
+          0.005,
+          0.01,
+          0.02,
+          0.04
+        ],
+        "format": ".2~%"
+      },
+      "title": null
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "circle",
+        "size": 14,
+        "color": "#9aa3ad",
+        "opacity": {
+          "expr": "council != '' || step >= 1 ? 0.16 : 0.32"
+        }
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Area"
+          },
+          {
+            "field": "council",
+            "title": "Council"
+          },
+          {
+            "field": "value",
+            "title": "Average home value",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "bill",
+            "title": "Average bill, before discounts",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "rate",
+            "title": "Bill as share of value",
+            "type": "quantitative",
+            "format": ".2%"
+          },
+          {
+            "field": "sales",
+            "title": "Sales used",
+            "type": "quantitative",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa_bins.csv",
+        "format": {
+          "parse": {
+            "bin": "number",
+            "value": "number",
+            "rate_p25": "number",
+            "rate": "number",
+            "rate_p75": "number",
+            "dwellings": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "area",
+        "color": "#1f4e8c",
+        "opacity": 0.14,
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "y": {
+          "field": "rate_p25"
+        },
+        "y2": {
+          "field": "rate_p75"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa_bins.csv",
+        "format": {
+          "parse": {
+            "bin": "number",
+            "value": "number",
+            "rate_p25": "number",
+            "rate": "number",
+            "rate_p75": "number",
+            "dwellings": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "line",
+        "color": "#1f4e8c",
+        "strokeWidth": 3,
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "value",
+            "title": "Typical home value",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "rate",
+            "title": "Median bill as share of value",
+            "type": "quantitative",
+            "format": ".2%"
+          },
+          {
+            "field": "rate_p25",
+            "title": "Lower quartile",
+            "type": "quantitative",
+            "format": ".2%"
+          },
+          {
+            "field": "rate_p75",
+            "title": "Upper quartile",
+            "type": "quantitative",
+            "format": ".2%"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "council != '' ? datum.lad == council : step >= 1 && indexof(pair, datum.lad) >= 0"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 40,
+        "color": "#16191d",
+        "opacity": 0.9,
+        "stroke": "#ffffff",
+        "strokeWidth": 0.6
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Area"
+          },
+          {
+            "field": "council",
+            "title": "Council"
+          },
+          {
+            "field": "value",
+            "title": "Average home value",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "bill",
+            "title": "Average bill, before discounts",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "rate",
+            "title": "Bill as share of value",
+            "type": "quantitative",
+            "format": ".2%"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/msoa.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "bill": "number",
+            "value": "number",
+            "rate": "number",
+            "sales": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "council != '' ? datum.lad == council : step >= 1 && indexof(pair, datum.lad) >= 0"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "median",
+              "field": "value",
+              "as": "value"
+            },
+            {
+              "op": "max",
+              "field": "rate",
+              "as": "rate"
+            }
+          ],
+          "groupby": [
+            "lad",
+            "council"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": -14,
+        "fontWeight": 600,
+        "fontSize": 13,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "text": {
+          "field": "council"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/reference_rates.csv",
+        "format": {
+          "parse": {
+            "rate": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "indexof(['fairer_share', 'neutral'], datum.key) >= 0"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#c4532d",
+        "strokeWidth": 1.6,
+        "strokeDash": [
+          6,
+          4
+        ],
+        "opacity": {
+          "expr": "step >= 2 ? 1 : 0"
+        }
+      },
+      "encoding": {
+        "y": {
+          "field": "rate"
+        },
+        "x": null
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/reference_rates.csv",
+        "format": {
+          "parse": {
+            "rate": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "indexof(['fairer_share', 'neutral'], datum.key) >= 0"
+        },
+        {
+          "calculate": "datum.label + ': ' + format(datum.rate, '.2%')",
+          "as": "text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "bottom",
+        "dy": -4,
+        "color": "#c4532d",
+        "fontWeight": 500,
+        "opacity": {
+          "expr": "step >= 2 ? 1 : 0"
+        }
+      },
+      "encoding": {
+        "y": {
+          "field": "rate"
+        },
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "text": {
+          "field": "text"
+        }
+      }
+    }
+  ]
+}

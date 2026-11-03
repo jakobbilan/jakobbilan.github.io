@@ -1,0 +1,214 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Share of homes in each council that would pay less under a flat tax on current value, for a chosen rate.",
+  "width": "container",
+  "height": 600,
+  "data": {
+    "url": "project/data/msoa.csv",
+    "format": {
+      "parse": {
+        "dwellings": "number",
+        "bill": "number",
+        "value": "number",
+        "rate": "number",
+        "sales": "number",
+        "r_local": "number"
+      }
+    }
+  },
+  "params": [
+    {
+      "name": "rate",
+      "value": 0.0048
+    },
+    {
+      "name": "mode",
+      "value": "national"
+    },
+    {
+      "name": "council",
+      "value": ""
+    }
+  ],
+  "projection": {
+    "type": "identity",
+    "reflectY": true
+  },
+  "transform": [
+    {
+      "calculate": "mode == 'local' ? datum.r_local : rate",
+      "as": "r"
+    },
+    {
+      "calculate": "datum.r * datum.value < datum.bill ? datum.dwellings : 0",
+      "as": "less"
+    },
+    {
+      "calculate": "datum.r * datum.value * datum.dwellings",
+      "as": "new_total"
+    },
+    {
+      "calculate": "datum.bill * datum.dwellings",
+      "as": "old_total"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "less",
+          "as": "less"
+        },
+        {
+          "op": "sum",
+          "field": "dwellings",
+          "as": "dwellings"
+        },
+        {
+          "op": "sum",
+          "field": "new_total",
+          "as": "new_total"
+        },
+        {
+          "op": "sum",
+          "field": "old_total",
+          "as": "old_total"
+        }
+      ],
+      "groupby": [
+        "lad",
+        "council",
+        "region"
+      ]
+    },
+    {
+      "calculate": "datum.less / datum.dwellings",
+      "as": "share_less"
+    },
+    {
+      "calculate": "datum.old_total / datum.dwellings",
+      "as": "bill_now"
+    },
+    {
+      "calculate": "datum.new_total / datum.dwellings",
+      "as": "bill_flat"
+    },
+    {
+      "calculate": "datum.new_total / datum.old_total - 1",
+      "as": "change"
+    },
+    {
+      "lookup": "lad",
+      "from": {
+        "data": {
+          "url": "project/geo/hex-lad-2025.geojson",
+          "format": {
+            "type": "json",
+            "property": "features"
+          }
+        },
+        "key": "properties.lad"
+      },
+      "as": "geo"
+    },
+    {
+      "filter": "isValid(datum.geo)"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        },
+        "color": {
+          "field": "share_less",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              0.1,
+              0.25,
+              0.4,
+              0.6,
+              0.75,
+              0.9
+            ],
+            "range": [
+              "#b8431f",
+              "#d9785a",
+              "#f0b9a5",
+              "#eef0f2",
+              "#a9bfdf",
+              "#6b8fc4",
+              "#2f5a99"
+            ]
+          },
+          "legend": {
+            "format": ".0%",
+            "orient": "top-left",
+            "direction": "vertical",
+            "symbolType": "square",
+            "symbolSize": 140,
+            "offset": 0
+          }
+        },
+        "tooltip": [
+          {
+            "field": "council",
+            "title": "Council"
+          },
+          {
+            "field": "share_less",
+            "title": "Homes that would pay less",
+            "type": "quantitative",
+            "format": ".0%"
+          },
+          {
+            "field": "bill_now",
+            "title": "Average bill now",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "bill_flat",
+            "title": "Average bill at the flat rate",
+            "type": "quantitative",
+            "format": "$,.0f"
+          },
+          {
+            "field": "change",
+            "title": "Change in the council's total",
+            "type": "quantitative",
+            "format": "+.0%"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.lad == council"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": null,
+        "stroke": "#16191d",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "shape": {
+          "field": "geo",
+          "type": "geojson"
+        }
+      }
+    }
+  ]
+}

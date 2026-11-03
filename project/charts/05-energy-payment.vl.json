@@ -1,0 +1,293 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Share of homes in Bands A to D against the fuel poverty rate, by council, sized by households.",
+  "width": "container",
+  "height": 440,
+  "padding": {
+    "top": 8,
+    "right": 8,
+    "bottom": 4,
+    "left": 4
+  },
+  "params": [
+    {
+      "name": "region",
+      "value": "London"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "type": "quantitative",
+      "title": "Homes in Bands A–D, eligible for the £100 payment",
+      "scale": {
+        "domain": [
+          0.1,
+          1
+        ],
+        "nice": false
+      },
+      "axis": {
+        "format": ".0%",
+        "values": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1
+        ]
+      }
+    },
+    "y": {
+      "type": "quantitative",
+      "scale": {
+        "zero": false,
+        "nice": true
+      },
+      "axis": {
+        "format": ".0%",
+        "tickCount": 6
+      }
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "project/data/reference_rates.csv",
+        "format": {
+          "parse": {
+            "rate": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.key == 'england_share_ad'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#5b636d",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "rate"
+        },
+        "y": null
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/reference_rates.csv",
+        "format": {
+          "parse": {
+            "rate": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.key == 'england_fp'"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#5b636d",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "y": {
+          "field": "rate"
+        },
+        "x": null
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate)"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "x": {
+          "field": "share_ad"
+        },
+        "y": {
+          "field": "fp_rate"
+        },
+        "size": {
+          "field": "households",
+          "type": "quantitative",
+          "scale": {
+            "range": [
+              14,
+              320
+            ]
+          },
+          "legend": null
+        },
+        "color": {
+          "condition": {
+            "test": "datum.region == region",
+            "value": "#1f4e8c"
+          },
+          "value": "#9aa3ad"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.region == region",
+            "value": 0.9
+          },
+          "value": 0.5
+        },
+        "order": {
+          "condition": {
+            "test": "datum.region == region",
+            "value": 1
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Council"
+          },
+          {
+            "field": "region",
+            "title": "Region"
+          },
+          {
+            "field": "share_ad",
+            "title": "Homes in Bands A–D",
+            "type": "quantitative",
+            "format": ".1%"
+          },
+          {
+            "field": "fp_rate",
+            "title": "Households in fuel poverty",
+            "type": "quantitative",
+            "format": ".1%"
+          },
+          {
+            "field": "fuel_poor",
+            "title": "Fuel-poor households",
+            "type": "quantitative",
+            "format": ",.0f"
+          },
+          {
+            "field": "fp_outside_ad",
+            "title": "Fuel-poor outside Bands A–D (upper bound)",
+            "type": "quantitative",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.fp_outside_ad) && isValid(datum.share_ad)"
+        },
+        {
+          "window": [
+            {
+              "op": "row_number",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "fp_outside_ad",
+              "order": "descending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.rank <= 4"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 9,
+        "dy": -9,
+        "fontWeight": 600,
+        "fontSize": 11.5,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "x": {
+          "field": "share_ad"
+        },
+        "y": {
+          "field": "fp_rate"
+        },
+        "text": {
+          "field": "name"
+        }
+      }
+    }
+  ]
+}
