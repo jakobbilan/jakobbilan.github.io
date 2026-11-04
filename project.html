@@ -234,7 +234,7 @@
                 </div>
 
                 <footer class="chart-foot">
-                    <p class="chart-key">Bills: each council’s 2026-27 Band D [8] times the statutory band ratios [1], averaged over the area’s homes by band [9], before discounts and council tax support. Values: median prices of standard sales, January 2024 to July 2026, brought to August 2026 prices by council and property type [10, 12], weighted by the area’s mix of types. Line: median across 40 groups of areas with equal numbers of homes; shading: the middle half.</p>
+                    <p class="chart-key">Dots: small areas. Line: median by home value; shading: middle half of areas. Bills before discounts.</p>
                     <p>Sources: Valuation Office (Council Tax stock of properties, 2026); MHCLG (Council Tax levels 2026-27, Table 9); HM Land Registry (Price Paid Data, UK House Price Index); ONS (postcode lookup).</p>
                     <p class="chart-actions">
                         <a href="project/data/msoa.csv" download>Data (CSV)</a>
@@ -243,8 +243,7 @@
                     </p>
                     <details class="chart-notes">
                         <summary>Notes and method</summary>
-                        <p class="draft">[Notes: how bills and values are built; sales from <span data-stat="sales_window.0" data-format="month">–</span> to <span data-stat="sales_window.1" data-format="month">–</span>]</p>
-                    </details>
+                        <p>Bills: each council’s <span data-stat="sources.levels.year">2026-27</span> Band D (MHCLG) times the statutory band ratios (Local Government Finance Act 1992), averaged over the area’s homes by band (Valuation Office), before discounts and council tax support. Values: median prices of standard sales, <span data-stat="sales_window.0" data-format="month">January 2024</span> to <span data-stat="sales_window.1" data-format="month">July 2026</span>, brought to <span data-stat="price_month" data-format="month">August 2026</span> prices by council and property type (HM Land Registry), weighted by the area’s mix of types. Line: median across 40 groups of areas with equal numbers of homes; shading: the middle half.</p>                    </details>
                 </footer>
             </figure>
         </section>
