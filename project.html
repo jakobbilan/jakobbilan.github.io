@@ -262,7 +262,7 @@
                     </div>
                 </div>
                 <div class="chart-body" id="chart-2" data-spec="project/charts/02-regions.vl.json" data-height="400 300"
-                    role="img" aria-label="Line chart of average house prices by English region since 1991, London highlighted against the North East."></div>
+                    role="img" aria-label="aria-label="Line chart of average house prices by English region, as multiples of their starting level, London highlighted against the North East."></div>
                 <footer class="chart-foot">
                     <p class="chart-key">The series starts in <span data-stat="regions_base" data-format="month">January 1995</span>, the first month every region covers; council tax bands date from April 1991.</p>
                     <p>Source: HM Land Registry, UK House Price Index (to <span data-stat="price_month" data-format="month">–</span>).</p>
@@ -271,6 +271,10 @@
                         <a href="project/charts/02-regions.vl.json">Chart specification</a>
                         <button type="button" data-save="chart-2">Save image</button>
                     </p>
+                    <details class="chart-notes">
+                        <summary>Notes and method</summary>
+                        <p>Prices: UK House Price Index average prices for England and its nine regions, monthly (HM Land Registry). The index adjusts for the mix of homes sold, so it tracks price change rather than changes in what was sold; its averages are geometric means, which sit below the simple average of sale prices. Each line divides a region’s price by its own price in <span data-stat="regions_base" data-format="month">January 1995</span>; the grey lines are the other seven regions.</p>
+                    </details>
                 </footer>
             </figure>
         </section>
