@@ -211,7 +211,46 @@
         {
           "transform": [
             {
-              "filter": "abs(datum.lv - 6.845) < 0.00075"
+              "joinaggregate": [
+                {
+                  "op": "min",
+                  "field": "lv",
+                  "as": "lv_start"
+                },
+                {
+                  "op": "max",
+                  "field": "lv",
+                  "as": "lv_end"
+                }
+              ]
+            },
+            {
+              "calculate": "datum.lv_start + (datum.lv_end - datum.lv_start) * clamp((width - 180) / max(width, 1), 0.2, 0.62)",
+              "as": "lv_anchor"
+            },
+            {
+              "calculate": "abs(datum.lv - datum.lv_anchor)",
+              "as": "gap"
+            },
+            {
+              "window": [
+                {
+                  "op": "row_number",
+                  "as": "nearest"
+                }
+              ],
+              "sort": [
+                {
+                  "field": "gap",
+                  "order": "ascending"
+                }
+              ],
+              "groupby": [
+                "series"
+              ]
+            },
+            {
+              "filter": "datum.nearest == 1"
             }
           ],
           "mark": {
@@ -238,7 +277,46 @@
         {
           "transform": [
             {
-              "filter": "abs(datum.lv - 6.845) < 0.00075"
+              "joinaggregate": [
+                {
+                  "op": "min",
+                  "field": "lv",
+                  "as": "lv_start"
+                },
+                {
+                  "op": "max",
+                  "field": "lv",
+                  "as": "lv_end"
+                }
+              ]
+            },
+            {
+              "calculate": "datum.lv_start + (datum.lv_end - datum.lv_start) * clamp((width - 180) / max(width, 1), 0.2, 0.62)",
+              "as": "lv_anchor"
+            },
+            {
+              "calculate": "abs(datum.lv - datum.lv_anchor)",
+              "as": "gap"
+            },
+            {
+              "window": [
+                {
+                  "op": "row_number",
+                  "as": "nearest"
+                }
+              ],
+              "sort": [
+                {
+                  "field": "gap",
+                  "order": "ascending"
+                }
+              ],
+              "groupby": [
+                "series"
+              ]
+            },
+            {
+              "filter": "datum.nearest == 1"
             }
           ],
           "mark": {

@@ -489,10 +489,14 @@ body.project-page > header {
 }
 
 .chart-notes > :not(summary) {
-    max-width: var(--measure);
     margin-top: 0.6rem;
-    font-size: 0.875rem;
     color: var(--ink-2);
+}
+
+/* Key, sources and notes keep one reading width, so each footer reads as one block */
+.chart-foot > p:not(.chart-actions),
+.chart-notes > :not(summary) {
+    max-width: var(--measure);
 }
 
 /* Controls above charts */

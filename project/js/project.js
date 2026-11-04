@@ -200,7 +200,8 @@
             return;
         }
         try {
-            view.signal(name, value).runAsync();
+            // resize() makes Vega re-measure axes and labels, so longer labels after a switch stay inside the chart
+            view.signal(name, value).resize().runAsync();
         } catch (error) {
             console.warn(id + ": no parameter " + name, error);
         }
