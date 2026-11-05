@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Share of homes in Bands A to D against the fuel poverty rate, by council, sized by households.",
+  "description": "Share of homes in Bands A to D against the fuel poverty rate, by council, sized by fuel-poor households. Dashed lines mark England. In each quarter of the chart, the council furthest into it on both measures (in standard deviations, among councils with at least 1,000 fuel-poor households) is labelled with the estimated share of its fuel-poor households outside Bands A to D.",
   "width": "container",
   "height": 440,
   "padding": {
@@ -250,72 +250,79 @@
     },
     {
       "data": {
-        "url": "project/data/councils.csv",
+        "url": "project/data/reference_rates.csv",
         "format": {
           "parse": {
-            "dwellings": "number",
-            "band_d": "number",
-            "bill": "number",
-            "value": "number",
-            "price": "number",
-            "rate_mix": "number",
-            "rate_press": "number",
-            "share_ad": "number",
-            "households": "number",
-            "fuel_poor": "number",
-            "fp_rate": "number",
-            "fp_outside_ad": "number",
-            "sales_2m": "number",
-            "sales_all": "number",
-            "r_local": "number",
-            "fp_outside_ad_min": "number",
-            "fp_outside_ad_max": "number"
+            "rate": "number"
           }
         }
       },
       "transform": [
         {
-          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
+          "filter": "datum.key == 'england_share_ad'"
         },
         {
-          "window": [
-            {
-              "op": "row_number",
-              "as": "rank"
-            }
-          ],
-          "sort": [
-            {
-              "field": "share_ad",
-              "order": "ascending"
-            }
-          ]
+          "calculate": "'England: ' + format(datum.rate, '.0%') + ' of homes in Bands A–D'",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "dx": -5,
+        "dy": 2,
+        "fontSize": 11,
+        "color": "#5b636d"
+      },
+      "encoding": {
+        "x": {
+          "field": "rate"
+        },
+        "y": {
+          "value": 0
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/reference_rates.csv",
+        "format": {
+          "parse": {
+            "rate": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.key == 'england_fp'"
         },
         {
-          "filter": "datum.rank <= 5"
+          "calculate": "'England: ' + format(datum.rate, '.1%') + ' fuel poor'",
+          "as": "label"
         }
       ],
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": 9,
-        "dy": -9,
-        "fontWeight": 600,
-        "fontSize": 11.5,
-        "fill": "#ffffff",
-        "stroke": "#ffffff",
-        "strokeWidth": 4,
-        "strokeJoin": "round"
+        "baseline": "top",
+        "dx": 4,
+        "dy": 4,
+        "fontSize": 11,
+        "color": "#5b636d"
       },
       "encoding": {
         "x": {
-          "field": "share_ad"
+          "value": 0
         },
         "y": {
-          "field": "fp_rate"
+          "field": "rate"
         },
         "text": {
-          "field": "name"
+          "field": "label"
         }
       }
     },
@@ -349,6 +356,84 @@
           "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
         },
         {
+          "calculate": "'england_share_ad'",
+          "as": "k_x0"
+        },
+        {
+          "lookup": "k_x0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "x0"
+          ]
+        },
+        {
+          "calculate": "'england_fp'",
+          "as": "k_y0"
+        },
+        {
+          "lookup": "k_y0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "y0"
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "stdev",
+              "field": "share_ad",
+              "as": "sx"
+            },
+            {
+              "op": "stdev",
+              "field": "fp_rate",
+              "as": "sy"
+            }
+          ]
+        },
+        {
+          "calculate": "(datum.share_ad - datum.x0) / datum.sx",
+          "as": "dx"
+        },
+        {
+          "calculate": "(datum.fp_rate - datum.y0) / datum.sy",
+          "as": "dy"
+        },
+        {
+          "calculate": "(datum.dy >= 0 ? 'top' : 'bottom') + '-' + (datum.dx >= 0 ? 'right' : 'left')",
+          "as": "quadrant"
+        },
+        {
+          "calculate": "abs(datum.dx) * abs(datum.dy)",
+          "as": "depth"
+        },
+        {
           "window": [
             {
               "op": "row_number",
@@ -357,13 +442,23 @@
           ],
           "sort": [
             {
-              "field": "share_ad",
-              "order": "ascending"
+              "field": "depth",
+              "order": "descending"
             }
+          ],
+          "groupby": [
+            "quadrant"
           ]
         },
         {
-          "filter": "datum.rank <= 5"
+          "filter": "datum.rank == 1"
+        },
+        {
+          "calculate": "datum.name + (width < 520 ? '\\n' : ': ') + format(datum.fp_outside_ad / datum.fuel_poor, '.0%') + ' missed'",
+          "as": "label"
+        },
+        {
+          "filter": "datum.dx < 0"
         }
       ],
       "mark": {
@@ -373,7 +468,11 @@
         "dy": -9,
         "fontWeight": 600,
         "fontSize": 11.5,
-        "color": "#16191d"
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round",
+        "lineBreak": "\n"
       },
       "encoding": {
         "x": {
@@ -383,7 +482,481 @@
           "field": "fp_rate"
         },
         "text": {
-          "field": "name"
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number",
+            "fp_outside_ad_min": "number",
+            "fp_outside_ad_max": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
+        },
+        {
+          "calculate": "'england_share_ad'",
+          "as": "k_x0"
+        },
+        {
+          "lookup": "k_x0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "x0"
+          ]
+        },
+        {
+          "calculate": "'england_fp'",
+          "as": "k_y0"
+        },
+        {
+          "lookup": "k_y0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "y0"
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "stdev",
+              "field": "share_ad",
+              "as": "sx"
+            },
+            {
+              "op": "stdev",
+              "field": "fp_rate",
+              "as": "sy"
+            }
+          ]
+        },
+        {
+          "calculate": "(datum.share_ad - datum.x0) / datum.sx",
+          "as": "dx"
+        },
+        {
+          "calculate": "(datum.fp_rate - datum.y0) / datum.sy",
+          "as": "dy"
+        },
+        {
+          "calculate": "(datum.dy >= 0 ? 'top' : 'bottom') + '-' + (datum.dx >= 0 ? 'right' : 'left')",
+          "as": "quadrant"
+        },
+        {
+          "calculate": "abs(datum.dx) * abs(datum.dy)",
+          "as": "depth"
+        },
+        {
+          "window": [
+            {
+              "op": "row_number",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "depth",
+              "order": "descending"
+            }
+          ],
+          "groupby": [
+            "quadrant"
+          ]
+        },
+        {
+          "filter": "datum.rank == 1"
+        },
+        {
+          "calculate": "datum.name + (width < 520 ? '\\n' : ': ') + format(datum.fp_outside_ad / datum.fuel_poor, '.0%') + ' missed'",
+          "as": "label"
+        },
+        {
+          "filter": "datum.dx < 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 9,
+        "dy": -9,
+        "fontWeight": 600,
+        "fontSize": 11.5,
+        "color": "#16191d",
+        "lineBreak": "\n"
+      },
+      "encoding": {
+        "x": {
+          "field": "share_ad"
+        },
+        "y": {
+          "field": "fp_rate"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number",
+            "fp_outside_ad_min": "number",
+            "fp_outside_ad_max": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
+        },
+        {
+          "calculate": "'england_share_ad'",
+          "as": "k_x0"
+        },
+        {
+          "lookup": "k_x0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "x0"
+          ]
+        },
+        {
+          "calculate": "'england_fp'",
+          "as": "k_y0"
+        },
+        {
+          "lookup": "k_y0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "y0"
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "stdev",
+              "field": "share_ad",
+              "as": "sx"
+            },
+            {
+              "op": "stdev",
+              "field": "fp_rate",
+              "as": "sy"
+            }
+          ]
+        },
+        {
+          "calculate": "(datum.share_ad - datum.x0) / datum.sx",
+          "as": "dx"
+        },
+        {
+          "calculate": "(datum.fp_rate - datum.y0) / datum.sy",
+          "as": "dy"
+        },
+        {
+          "calculate": "(datum.dy >= 0 ? 'top' : 'bottom') + '-' + (datum.dx >= 0 ? 'right' : 'left')",
+          "as": "quadrant"
+        },
+        {
+          "calculate": "abs(datum.dx) * abs(datum.dy)",
+          "as": "depth"
+        },
+        {
+          "window": [
+            {
+              "op": "row_number",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "depth",
+              "order": "descending"
+            }
+          ],
+          "groupby": [
+            "quadrant"
+          ]
+        },
+        {
+          "filter": "datum.rank == 1"
+        },
+        {
+          "calculate": "datum.name + (width < 520 ? '\\n' : ': ') + format(datum.fp_outside_ad / datum.fuel_poor, '.0%') + ' missed'",
+          "as": "label"
+        },
+        {
+          "filter": "datum.dx >= 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -9,
+        "dy": -9,
+        "fontWeight": 600,
+        "fontSize": 11.5,
+        "fill": "#ffffff",
+        "stroke": "#ffffff",
+        "strokeWidth": 4,
+        "strokeJoin": "round",
+        "lineBreak": "\n"
+      },
+      "encoding": {
+        "x": {
+          "field": "share_ad"
+        },
+        "y": {
+          "field": "fp_rate"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/data/councils.csv",
+        "format": {
+          "parse": {
+            "dwellings": "number",
+            "band_d": "number",
+            "bill": "number",
+            "value": "number",
+            "price": "number",
+            "rate_mix": "number",
+            "rate_press": "number",
+            "share_ad": "number",
+            "households": "number",
+            "fuel_poor": "number",
+            "fp_rate": "number",
+            "fp_outside_ad": "number",
+            "sales_2m": "number",
+            "sales_all": "number",
+            "r_local": "number",
+            "fp_outside_ad_min": "number",
+            "fp_outside_ad_max": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.share_ad) && isValid(datum.fp_rate) && datum.fuel_poor >= 1000"
+        },
+        {
+          "calculate": "'england_share_ad'",
+          "as": "k_x0"
+        },
+        {
+          "lookup": "k_x0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "x0"
+          ]
+        },
+        {
+          "calculate": "'england_fp'",
+          "as": "k_y0"
+        },
+        {
+          "lookup": "k_y0",
+          "from": {
+            "data": {
+              "url": "project/data/reference_rates.csv",
+              "format": {
+                "parse": {
+                  "rate": "number"
+                }
+              }
+            },
+            "key": "key",
+            "fields": [
+              "rate"
+            ]
+          },
+          "as": [
+            "y0"
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "stdev",
+              "field": "share_ad",
+              "as": "sx"
+            },
+            {
+              "op": "stdev",
+              "field": "fp_rate",
+              "as": "sy"
+            }
+          ]
+        },
+        {
+          "calculate": "(datum.share_ad - datum.x0) / datum.sx",
+          "as": "dx"
+        },
+        {
+          "calculate": "(datum.fp_rate - datum.y0) / datum.sy",
+          "as": "dy"
+        },
+        {
+          "calculate": "(datum.dy >= 0 ? 'top' : 'bottom') + '-' + (datum.dx >= 0 ? 'right' : 'left')",
+          "as": "quadrant"
+        },
+        {
+          "calculate": "abs(datum.dx) * abs(datum.dy)",
+          "as": "depth"
+        },
+        {
+          "window": [
+            {
+              "op": "row_number",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "depth",
+              "order": "descending"
+            }
+          ],
+          "groupby": [
+            "quadrant"
+          ]
+        },
+        {
+          "filter": "datum.rank == 1"
+        },
+        {
+          "calculate": "datum.name + (width < 520 ? '\\n' : ': ') + format(datum.fp_outside_ad / datum.fuel_poor, '.0%') + ' missed'",
+          "as": "label"
+        },
+        {
+          "filter": "datum.dx >= 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -9,
+        "dy": -9,
+        "fontWeight": 600,
+        "fontSize": 11.5,
+        "color": "#16191d",
+        "lineBreak": "\n"
+      },
+      "encoding": {
+        "x": {
+          "field": "share_ad"
+        },
+        "y": {
+          "field": "fp_rate"
+        },
+        "text": {
+          "field": "label"
         }
       }
     }

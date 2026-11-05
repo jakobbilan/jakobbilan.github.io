@@ -156,6 +156,13 @@
             .then(function (spec) {
                 const height = heightFor(element);
                 if (height && typeof spec.height === "number") spec.height = height;
+                if (supplied.has(id)) spec.datasets = Object.assign({}, spec.datasets, supplied.get(id));
+                const waiting = queued.get(id);
+                if (waiting && Array.isArray(spec.params)) {
+                    spec.params.forEach(function (param) {
+                        if (Object.prototype.hasOwnProperty.call(waiting, param.name)) param.value = waiting[param.name];
+                    });
+                }
                 return vegaEmbed(element, spec, {
                     renderer: element.dataset.renderer || "svg",
                     actions: false,
@@ -209,9 +216,27 @@
             // a slider being dragged skips it (relayout false): its charts keep fixed axes, and re-measuring every
             // frame is slow
             const updated = view.signal(name, value);
-            (relayout === false ? updated : updated.resize()).runAsync();
+            return (relayout === false ? updated : updated.resize()).runAsync();
         } catch (error) {
             console.warn(id + ": no parameter " + name, error);
+        }
+    }
+
+    // Datasets the page computes and supplies to a chart (figure 6). Rows sent before the chart exists wait for it,
+    // and a chart embedded later starts with the latest rows, so it never draws empty first
+    const supplied = new Map();
+
+    function setData(id, name, values) {
+        const rows = supplied.get(id) || {};
+        rows[name] = values;
+        supplied.set(id, rows);
+        const view = views.get(id);
+        if (!view) return Promise.resolve();
+        try {
+            return view.data(name, values).runAsync();
+        } catch (error) {
+            console.warn(id + ": no dataset " + name, error);
+            return Promise.resolve();
         }
     }
 
@@ -650,32 +675,78 @@
     // Figure 6: a tax on current value. theta sets how steeply bills rise with value: a home worth twice as much
     // pays 2^theta times as much. The bill raises today's total for England ("national") or for each council
     // ("local"); "fairer" is Fairer Share's 0.48% of value. Same arithmetic as the chart specs.
+    const GROUPS = ["Lowest-income fifth", "Second fifth", "Middle fifth", "Fourth fifth", "Highest-income fifth"];
+
     function reform(rows, theta, mode) {
         let bills = 0, powers = 0;
         const councils = {};
         rows.forEach(function (row) {
             row.pv = Math.pow(row.value, theta);
-            const c = councils[row.lad] || (councils[row.lad] = { bills: 0, powers: 0, homes: 0, total: 0 });
+            const c = councils[row.lad] || (councils[row.lad] = {
+                lad: row.lad, council: row.council, region: row.region, bills: 0, powers: 0, homes: 0, total: 0, less: 0 });
             c.bills += row.dwellings * row.bill;
             c.powers += row.dwellings * row.pv;
             c.homes += row.dwellings;
             bills += row.dwellings * row.bill;
             powers += row.dwellings * row.pv;
         });
+        const groups = GROUPS.map(function (name, k) {
+            return { income_group: k + 1, group: name, bills: 0, flat: 0, incomes: 0, less: 0, homes: 0 };
+        });
         let less = 0, homes = 0;
         rows.forEach(function (row) {
             const c = councils[row.lad];
             const bill = mode === "fairer" ? 0.0048 * row.value
                 : (mode === "local" ? c.bills / c.powers : bills / powers) * row.pv;
+            const pays = bill < row.bill ? row.dwellings : 0;
             homes += row.dwellings;
-            if (bill < row.bill) less += row.dwellings;
+            less += pays;
             c.total += row.dwellings * bill;
+            c.less += pays;
+            const g = groups[row.income_group - 1];
+            if (g && row.net_income > 0) {
+                g.bills += row.dwellings * row.bill;
+                g.flat += row.dwellings * bill;
+                g.incomes += row.dwellings * row.net_income;
+                g.less += pays;
+                g.homes += row.dwellings;
+            }
         });
         const average = {};
-        Object.keys(councils).forEach(function (code) {
-            average[code] = councils[code].total / councils[code].homes;
+        const list = Object.keys(councils).map(function (code) {
+            const c = councils[code];
+            average[code] = c.total / c.homes;
+            return { lad: code, council: c.council, region: c.region, share_less: c.less / c.homes,
+                     bill_now: c.bills / c.homes, bill_flat: c.total / c.homes, change: c.total / c.bills - 1 };
         });
-        return { less: less / homes, average: average };
+        const income = groups.filter(function (g) { return g.homes > 0 && g.incomes > 0; }).map(function (g) {
+            return { income_group: g.income_group, group: g.group, today: g.bills / g.incomes, flat: g.flat / g.incomes,
+                     share_less: g.less / g.homes, mean_income: g.incomes / g.homes, change: (g.flat - g.bills) / g.homes };
+        });
+        return { less: less / homes, average: average, councils: list, groups: income };
+    }
+
+    // Figure 3: the pair the press claim names, under the measure chosen with the switch
+    function wireGapReadout() {
+        const box = document.querySelector("[data-gap-readout]");
+        const pair = summary.facts && summary.facts.pair;
+        const group = document.querySelector('.segmented[data-signal="method"]');
+        if (!box || !pair || !group) return;
+        function show(method) {
+            const press = method === "press";
+            const gap = press ? pair.gap_press : pair.gap_mix;
+            box.textContent = "";
+            box.appendChild(document.createTextNode(pair.a_name + ": "));
+            const strong = document.createElement("strong");
+            strong.textContent = gap.toFixed(1) + " times";
+            box.appendChild(strong);
+            box.appendChild(document.createTextNode(" the rate in " + pair.b_name + (press ? ", by Band D ÷ price" : ", on actual bills")));
+        }
+        group.addEventListener("choice", function (event) {
+            show(event.detail);
+        });
+        const pressed = group.querySelector('button[aria-pressed="true"]');
+        show(pressed ? pressed.dataset.value : "mix");
     }
 
     function wireReform(group) {
@@ -707,7 +778,7 @@
                 mark.hidden = true;
                 return;
             }
-            mark.style.setProperty("--at", (100 * (theta - min) / (max - min)).toFixed(2) + "%");
+            mark.style.setProperty("--at", ((theta - min) / (max - min)).toFixed(4));
             mark.title = (key === "today" ? "Today’s slope"
                 : key === "equal" ? "The same share of household income in the poorest and richest fifths of areas"
                 : "In proportion to value") + ": a home worth twice as much pays " + times(theta) + " as much";
@@ -736,37 +807,65 @@
             return "Bill for a home worth twice as much";
         }
 
-        function update(dragging) {
+        // The readout updates at once; the charts redraw with the latest position, one redraw at a time, so a fast
+        // drag never builds a queue of stale frames behind the thumb
+        let busy = false;
+        let again = false;
+
+        function current() {
+            const value = Number(input.value);
+            return mode === "fairer" ? 1 : pinned !== null && Math.abs(pinned - value) < 0.006 ? pinned : value;
+        }
+
+        function redraw() {
+            if (busy) {
+                again = true;
+                return;
+            }
+            busy = true;
+            const theta = current();
+            const mine = ++ticket;
+            loadAreas().then(function (rows) {
+                const result = reform(rows, theta, mode);
+                if (mine === ticket || !again) {
+                    lessNote.textContent = "Homes in areas paying less: " + formatValue(result.less, "pct0");
+                    flatState.average = result.average;
+                    flatState.mode = mode;
+                    showFlatReadout();
+                }
+                const shares = {};
+                result.councils.forEach(function (row) { shares[row.lad] = row; });
+                return Promise.all(charts.map(function (id) {
+                    return id === "chart-6b" ? setData(id, "groups", result.groups)
+                        : Promise.resolve(setSignal(id, "shares", shares, false));
+                }));
+            }).catch(function (error) {
+                console.error("figure 6", error);
+            }).then(function () {
+                busy = false;
+                if (again) {
+                    again = false;
+                    redraw();
+                }
+            });
+        }
+
+        function update() {
             const fairer = mode === "fairer";
             if (fairer) input.value = 1;          // Fairer Share's proposal is in proportion to value
             input.disabled = fairer;
-            const value = Number(input.value);
-            const theta = fairer ? 1 : pinned !== null && Math.abs(pinned - value) < 0.006 ? pinned : value;
-            input.style.setProperty("--fill", (100 * (theta - min) / (max - min)).toFixed(2) + "%");
+            const theta = current();
+            input.style.setProperty("--f", ((theta - min) / (max - min)).toFixed(4));
             output.textContent = fairer ? formatValue(0.0048, "pct2") : times(theta);
             note.textContent = fairer ? "Raises " + formatValue(0.0048 / neutral, "pct0") + " of today’s bills"
                 : mode === "local" ? "Each council raises its current total" : describe(theta);
-            charts.forEach(function (id) {
-                setSignal(id, "theta", theta, !dragging);
-                setSignal(id, "mode", mode, !dragging);
-            });
-            const mine = ++ticket;
-            loadAreas().then(function (rows) {
-                if (mine !== ticket) return;
-                const result = reform(rows, theta, mode);
-                lessNote.textContent = "Homes in areas paying less: " + formatValue(result.less, "pct0");
-                flatState.average = result.average;
-                flatState.mode = mode;
-                showFlatReadout();
-            }).catch(function () {
-                lessNote.textContent = "";
-            });
+            redraw();
         }
 
         input.addEventListener("input", function () {
             pinned = null;
             cancelAnimationFrame(frame);
-            frame = requestAnimationFrame(function () { update(true); });
+            frame = requestAnimationFrame(update);
         });
         group.addEventListener("choice", function (event) {
             const leaving = mode === "fairer" && event.detail !== "fairer";
@@ -954,6 +1053,7 @@
                 })
                 .then(function () {
                     document.querySelectorAll("[data-scenarios]").forEach(wireReform);
+                    wireGapReadout();
                     lazyLoad();
                 });
         });

@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Councils with the most home sales at £2 million or more since January 2024.",
+  "description": "Home sales at £2 million or more since January 2024, by council: the twelve councils with the most, the council chosen on the page if it is not among them, and all other councils together, so the rows add up to every such sale in England. Homes only (detached, semi-detached, terraced, flats), including purchases by companies.",
   "width": "container",
   "height": 360,
   "padding": {
@@ -39,9 +39,6 @@
   ],
   "transform": [
     {
-      "filter": "datum.sales_2m > 0"
-    },
-    {
       "joinaggregate": [
         {
           "op": "sum",
@@ -49,10 +46,6 @@
           "as": "total"
         }
       ]
-    },
-    {
-      "calculate": "datum.sales_2m / datum.total",
-      "as": "share"
     },
     {
       "window": [
@@ -65,15 +58,77 @@
         {
           "field": "sales_2m",
           "order": "descending"
+        },
+        {
+          "field": "name",
+          "order": "ascending"
         }
       ]
     },
     {
-      "filter": "datum.rank <= 15"
+      "calculate": "datum.rank <= 12 ? 'top' : datum.lad == council ? 'chosen' : 'other'",
+      "as": "group"
     },
     {
-      "calculate": "pad(datum.rank, 2, '0', 'left') + '|' + datum.lad + '|' + datum.name",
+      "calculate": "datum.group == 'other' ? 'other' : datum.lad",
+      "as": "row_lad"
+    },
+    {
+      "calculate": "datum.group == 'other' ? '' : datum.name",
+      "as": "row_name"
+    },
+    {
+      "calculate": "datum.group == 'other' ? 99 : datum.rank",
+      "as": "row_rank"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "sales_2m",
+          "as": "sales_2m"
+        },
+        {
+          "op": "sum",
+          "field": "sales_all",
+          "as": "sales_all"
+        },
+        {
+          "op": "count",
+          "as": "n"
+        },
+        {
+          "op": "max",
+          "field": "total",
+          "as": "total"
+        }
+      ],
+      "groupby": [
+        "group",
+        "row_lad",
+        "row_name",
+        "row_rank"
+      ]
+    },
+    {
+      "calculate": "datum.sales_2m / datum.total",
+      "as": "share"
+    },
+    {
+      "calculate": "datum.group == 'other' ? datum.n + ' other councils' : datum.group == 'chosen' ? datum.row_name + ' (' + datum.row_rank + (datum.row_rank % 100 >= 11 && datum.row_rank % 100 <= 13 ? 'th' : datum.row_rank % 10 == 1 ? 'st' : datum.row_rank % 10 == 2 ? 'nd' : datum.row_rank % 10 == 3 ? 'rd' : 'th') + ')' : datum.row_name",
+      "as": "label"
+    },
+    {
+      "calculate": "pad(datum.group == 'other' ? 99 : datum.group == 'chosen' ? 98 : datum.row_rank, 2, '0', 'left') + '|' + datum.row_lad + '|' + datum.label",
       "as": "order"
+    },
+    {
+      "calculate": "datum.row_lad",
+      "as": "lad"
+    },
+    {
+      "calculate": "datum.row_name",
+      "as": "name"
     }
   ],
   "encoding": {
@@ -155,7 +210,12 @@
             "format": ","
           }
         ]
-      }
+      },
+      "transform": [
+        {
+          "filter": "datum.group != 'other'"
+        }
+      ]
     },
     {
       "mark": {
@@ -178,7 +238,12 @@
           },
           "value": 1
         }
-      }
+      },
+      "transform": [
+        {
+          "filter": "datum.group != 'other'"
+        }
+      ]
     },
     {
       "mark": {
@@ -201,6 +266,38 @@
             "value": 1
           },
           "value": 0
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.group != 'other'"
+        }
+      ]
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group == 'other'"
+        },
+        {
+          "calculate": "format(datum.sales_2m, ',') + ' sales, ' + format(datum.share, '.0%') + ' of all'",
+          "as": "rest"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 2,
+        "color": "#5b636d",
+        "fontSize": 11.5,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "text": {
+          "field": "rest"
         }
       }
     }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Council tax as a share of household income, for each fifth of areas ranked by income: today, and under a reform that raises today's total with bills rising with value as set by the slider (or Fairer Share's 0.48% of value). Shares are average bills divided by average net household income (ONS small area income estimates).",
+  "description": "Council tax as a share of household income, for each fifth of areas ranked by income: today, and under the reform set with the page's slider and buttons. Shares are average bills divided by average net household income (ONS small area income estimates). The page computes the five groups from project/data/msoa.csv and supplies them as the dataset 'groups'.",
   "width": "container",
   "height": 270,
   "padding": {
@@ -9,159 +9,7 @@
     "bottom": 4,
     "left": 4
   },
-  "data": {
-    "url": "project/data/msoa.csv",
-    "format": {
-      "parse": {
-        "dwellings": "number",
-        "bill": "number",
-        "value": "number",
-        "r_local": "number",
-        "income": "number",
-        "net_income": "number",
-        "income_group": "number",
-        "lad": "string"
-      }
-    }
-  },
-  "params": [
-    {
-      "name": "theta",
-      "value": 1
-    },
-    {
-      "name": "mode",
-      "value": "national"
-    }
-  ],
-  "transform": [
-    {
-      "calculate": "pow(datum.value, theta)",
-      "as": "pv"
-    },
-    {
-      "calculate": "datum.dwellings * datum.pv",
-      "as": "w_pv"
-    },
-    {
-      "calculate": "datum.dwellings * datum.bill",
-      "as": "w_bill"
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "w_pv",
-          "as": "pv_all"
-        },
-        {
-          "op": "sum",
-          "field": "w_bill",
-          "as": "bill_all"
-        }
-      ]
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "w_pv",
-          "as": "pv_lad"
-        },
-        {
-          "op": "sum",
-          "field": "w_bill",
-          "as": "bill_lad"
-        }
-      ],
-      "groupby": [
-        "lad"
-      ]
-    },
-    {
-      "calculate": "mode == 'fairer' ? 0.0048 * datum.value : (mode == 'local' ? datum.bill_lad / datum.pv_lad : datum.bill_all / datum.pv_all) * datum.pv",
-      "as": "new_bill"
-    },
-    {
-      "filter": "isValid(datum.income_group) && isValid(datum.net_income)"
-    },
-    {
-      "calculate": "datum.new_bill",
-      "as": "flat_bill"
-    },
-    {
-      "calculate": "datum.dwellings * datum.bill",
-      "as": "bills"
-    },
-    {
-      "calculate": "datum.dwellings * datum.flat_bill",
-      "as": "flat_bills"
-    },
-    {
-      "calculate": "datum.dwellings * datum.net_income",
-      "as": "incomes"
-    },
-    {
-      "calculate": "datum.flat_bill < datum.bill ? datum.dwellings : 0",
-      "as": "less"
-    },
-    {
-      "aggregate": [
-        {
-          "op": "sum",
-          "field": "bills",
-          "as": "bills"
-        },
-        {
-          "op": "sum",
-          "field": "flat_bills",
-          "as": "flat_bills"
-        },
-        {
-          "op": "sum",
-          "field": "incomes",
-          "as": "incomes"
-        },
-        {
-          "op": "sum",
-          "field": "less",
-          "as": "less"
-        },
-        {
-          "op": "sum",
-          "field": "dwellings",
-          "as": "homes"
-        }
-      ],
-      "groupby": [
-        "income_group"
-      ]
-    },
-    {
-      "calculate": "datum.bills / datum.incomes",
-      "as": "today"
-    },
-    {
-      "calculate": "datum.flat_bills / datum.incomes",
-      "as": "flat"
-    },
-    {
-      "calculate": "datum.less / datum.homes",
-      "as": "share_less"
-    },
-    {
-      "calculate": "datum.incomes / datum.homes",
-      "as": "mean_income"
-    },
-    {
-      "calculate": "datum.flat_bills / datum.homes - datum.bills / datum.homes",
-      "as": "change"
-    },
-    {
-      "calculate": "[\"Lowest-income fifth\", \"Second fifth\", \"Middle fifth\", \"Fourth fifth\", \"Highest-income fifth\"][datum.income_group - 1]",
-      "as": "group"
-    }
-  ],
+  "transform": [],
   "encoding": {
     "y": {
       "field": "group",
@@ -423,5 +271,11 @@
         }
       }
     }
-  ]
+  ],
+  "data": {
+    "name": "groups"
+  },
+  "datasets": {
+    "groups": []
+  }
 }

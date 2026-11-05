@@ -1,176 +1,57 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Share of homes in each council in areas that would pay less under a tax on current value that raises today's total, with bills rising with value as set by the slider (or Fairer Share's 0.48% of value).",
   "width": "container",
   "height": 600,
-  "params": [
-    {
-      "name": "theta",
-      "value": 1
-    },
-    {
-      "name": "mode",
-      "value": "national"
-    },
-    {
-      "name": "council",
-      "value": ""
-    }
-  ],
   "projection": {
     "type": "identity",
     "reflectY": true
   },
+  "description": "Share of homes in each council in areas that would pay less under a tax on current value that raises today's total, with bills rising with value as set by the page's slider (or Fairer Share's 0.48% of value). The page computes each council's result from project/data/msoa.csv and sets it in the signal 'shares'; the hexagons read their colours and tooltips from it, so a slider step recolours the map without redrawing it.",
+  "params": [
+    {
+      "name": "council",
+      "value": ""
+    },
+    {
+      "name": "shares",
+      "value": {}
+    }
+  ],
   "layer": [
     {
       "data": {
-        "url": "project/data/msoa.csv",
-        "format": {
-          "parse": {
-            "dwellings": "number",
-            "bill": "number",
-            "value": "number",
-            "rate": "number",
-            "sales": "number",
-            "r_local": "number"
-          }
-        }
-      },
-      "transform": [
-        {
-          "calculate": "pow(datum.value, theta)",
-          "as": "pv"
-        },
-        {
-          "calculate": "datum.dwellings * datum.pv",
-          "as": "w_pv"
-        },
-        {
-          "calculate": "datum.dwellings * datum.bill",
-          "as": "w_bill"
-        },
-        {
-          "joinaggregate": [
-            {
-              "op": "sum",
-              "field": "w_pv",
-              "as": "pv_all"
-            },
-            {
-              "op": "sum",
-              "field": "w_bill",
-              "as": "bill_all"
-            }
-          ]
-        },
-        {
-          "joinaggregate": [
-            {
-              "op": "sum",
-              "field": "w_pv",
-              "as": "pv_lad"
-            },
-            {
-              "op": "sum",
-              "field": "w_bill",
-              "as": "bill_lad"
-            }
-          ],
-          "groupby": [
-            "lad"
-          ]
-        },
-        {
-          "calculate": "mode == 'fairer' ? 0.0048 * datum.value : (mode == 'local' ? datum.bill_lad / datum.pv_lad : datum.bill_all / datum.pv_all) * datum.pv",
-          "as": "new_bill"
-        },
-        {
-          "calculate": "datum.new_bill < datum.bill ? datum.dwellings : 0",
-          "as": "less"
-        },
-        {
-          "calculate": "datum.new_bill * datum.dwellings",
-          "as": "new_total"
-        },
-        {
-          "calculate": "datum.bill * datum.dwellings",
-          "as": "old_total"
-        },
-        {
-          "aggregate": [
-            {
-              "op": "sum",
-              "field": "less",
-              "as": "less"
-            },
-            {
-              "op": "sum",
-              "field": "dwellings",
-              "as": "dwellings"
-            },
-            {
-              "op": "sum",
-              "field": "new_total",
-              "as": "new_total"
-            },
-            {
-              "op": "sum",
-              "field": "old_total",
-              "as": "old_total"
-            }
-          ],
-          "groupby": [
-            "lad",
-            "council",
-            "region"
-          ]
-        },
-        {
-          "calculate": "datum.less / datum.dwellings",
-          "as": "share_less"
-        },
-        {
-          "calculate": "datum.old_total / datum.dwellings",
-          "as": "bill_now"
-        },
-        {
-          "calculate": "datum.new_total / datum.dwellings",
-          "as": "bill_flat"
-        },
-        {
-          "calculate": "datum.new_total / datum.old_total - 1",
-          "as": "change"
-        },
-        {
-          "lookup": "lad",
-          "from": {
-            "data": {
-              "url": "project/geo/hex-lad-2025.geojson",
-              "format": {
-                "type": "json",
-                "property": "features"
-              }
-            },
-            "key": "properties.lad"
+        "values": [
+          {
+            "share": 0.05
           },
-          "as": "geo"
-        },
-        {
-          "filter": "isValid(datum.geo)"
-        }
-      ],
+          {
+            "share": 0.2
+          },
+          {
+            "share": 0.3
+          },
+          {
+            "share": 0.5
+          },
+          {
+            "share": 0.7
+          },
+          {
+            "share": 0.8
+          },
+          {
+            "share": 0.95
+          }
+        ]
+      },
       "mark": {
-        "type": "geoshape",
-        "stroke": "#ffffff",
-        "strokeWidth": 1
+        "type": "point",
+        "opacity": 0,
+        "size": 0
       },
       "encoding": {
-        "shape": {
-          "field": "geo",
-          "type": "geojson"
-        },
         "color": {
-          "field": "share_less",
+          "field": "share",
           "type": "quantitative",
           "title": null,
           "scale": {
@@ -201,37 +82,27 @@
             "symbolSize": 140,
             "offset": 0
           }
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "project/geo/hex-lad-2025.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1,
+        "fill": {
+          "expr": "isValid(shares[datum.properties.lad]) ? scale('color', shares[datum.properties.lad].share_less) : '#eef0f2'"
         },
-        "tooltip": [
-          {
-            "field": "council",
-            "title": "Council"
-          },
-          {
-            "field": "share_less",
-            "title": "Homes that would pay less",
-            "type": "quantitative",
-            "format": ".0%"
-          },
-          {
-            "field": "bill_now",
-            "title": "Average bill now",
-            "type": "quantitative",
-            "format": "$,.0f"
-          },
-          {
-            "field": "bill_flat",
-            "title": "Average bill under the reform",
-            "type": "quantitative",
-            "format": "$,.0f"
-          },
-          {
-            "field": "change",
-            "title": "Change in the council's total",
-            "type": "quantitative",
-            "format": "+.0%"
-          }
-        ]
+        "tooltip": {
+          "expr": "isValid(shares[datum.properties.lad]) ? {'Council': shares[datum.properties.lad].council, 'Homes that would pay less': format(shares[datum.properties.lad].share_less, '.0%'), 'Average bill now': '£' + format(shares[datum.properties.lad].bill_now, ',.0f'), 'Average bill under the reform': '£' + format(shares[datum.properties.lad].bill_flat, ',.0f'), 'Change in the council\\'s total': format(shares[datum.properties.lad].change, '+.0%')} : null"
+        }
       }
     },
     {
@@ -252,142 +123,15 @@
     },
     {
       "data": {
-        "url": "project/data/msoa.csv",
+        "url": "project/geo/hex-lad-2025.geojson",
         "format": {
-          "parse": {
-            "dwellings": "number",
-            "bill": "number",
-            "value": "number",
-            "rate": "number",
-            "sales": "number",
-            "r_local": "number"
-          }
+          "type": "json",
+          "property": "features"
         }
       },
       "transform": [
         {
-          "calculate": "pow(datum.value, theta)",
-          "as": "pv"
-        },
-        {
-          "calculate": "datum.dwellings * datum.pv",
-          "as": "w_pv"
-        },
-        {
-          "calculate": "datum.dwellings * datum.bill",
-          "as": "w_bill"
-        },
-        {
-          "joinaggregate": [
-            {
-              "op": "sum",
-              "field": "w_pv",
-              "as": "pv_all"
-            },
-            {
-              "op": "sum",
-              "field": "w_bill",
-              "as": "bill_all"
-            }
-          ]
-        },
-        {
-          "joinaggregate": [
-            {
-              "op": "sum",
-              "field": "w_pv",
-              "as": "pv_lad"
-            },
-            {
-              "op": "sum",
-              "field": "w_bill",
-              "as": "bill_lad"
-            }
-          ],
-          "groupby": [
-            "lad"
-          ]
-        },
-        {
-          "calculate": "mode == 'fairer' ? 0.0048 * datum.value : (mode == 'local' ? datum.bill_lad / datum.pv_lad : datum.bill_all / datum.pv_all) * datum.pv",
-          "as": "new_bill"
-        },
-        {
-          "calculate": "datum.new_bill < datum.bill ? datum.dwellings : 0",
-          "as": "less"
-        },
-        {
-          "calculate": "datum.new_bill * datum.dwellings",
-          "as": "new_total"
-        },
-        {
-          "calculate": "datum.bill * datum.dwellings",
-          "as": "old_total"
-        },
-        {
-          "aggregate": [
-            {
-              "op": "sum",
-              "field": "less",
-              "as": "less"
-            },
-            {
-              "op": "sum",
-              "field": "dwellings",
-              "as": "dwellings"
-            },
-            {
-              "op": "sum",
-              "field": "new_total",
-              "as": "new_total"
-            },
-            {
-              "op": "sum",
-              "field": "old_total",
-              "as": "old_total"
-            }
-          ],
-          "groupby": [
-            "lad",
-            "council",
-            "region"
-          ]
-        },
-        {
-          "calculate": "datum.less / datum.dwellings",
-          "as": "share_less"
-        },
-        {
-          "calculate": "datum.old_total / datum.dwellings",
-          "as": "bill_now"
-        },
-        {
-          "calculate": "datum.new_total / datum.dwellings",
-          "as": "bill_flat"
-        },
-        {
-          "calculate": "datum.new_total / datum.old_total - 1",
-          "as": "change"
-        },
-        {
-          "lookup": "lad",
-          "from": {
-            "data": {
-              "url": "project/geo/hex-lad-2025.geojson",
-              "format": {
-                "type": "json",
-                "property": "features"
-              }
-            },
-            "key": "properties.lad"
-          },
-          "as": "geo"
-        },
-        {
-          "filter": "isValid(datum.geo)"
-        },
-        {
-          "filter": "datum.lad == council"
+          "filter": "datum.properties.lad == council"
         }
       ],
       "mark": {
@@ -395,12 +139,6 @@
         "fill": null,
         "stroke": "#16191d",
         "strokeWidth": 2.5
-      },
-      "encoding": {
-        "shape": {
-          "field": "geo",
-          "type": "geojson"
-        }
       }
     }
   ]

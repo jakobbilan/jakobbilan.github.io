@@ -2,7 +2,9 @@
 
 Yearly files have no header row; columns follow HM Land Registry's published order.
 Category A rows are standard sales at market value; category B adds repossessions,
-buy-to-let and company purchases, which are kept only for counting £2m+ sales.
+buy-to-let and company purchases, which are kept only for counting £2m+ sales. That count, like the
+prices, covers homes only (detached, semi-detached, terraced, flats): property type O ("other") holds
+commercial buildings and land, which the surcharge does not reach.
 """
 
 import csv
@@ -106,7 +108,8 @@ def summarise(sales_paths, lookup_csv, hpi):
     high = con.execute(f"""
         SELECT p.lad, count(*) FILTER (WHERE s.price >= 2000000) AS sales_2m, count(*) AS sales_all
         FROM sales s JOIN pc_unique p USING (pc)
-        WHERE p.msoa LIKE 'E02%' AND s.sold >= DATE '{start}' AND s.sold < DATE '{cutoff}'
+        WHERE p.msoa LIKE 'E02%' AND s.ptype IN ('D', 'S', 'T', 'F')
+          AND s.sold >= DATE '{start}' AND s.sold < DATE '{cutoff}'
         GROUP BY 1
     """).df()
     matched = con.execute(f"""

@@ -89,6 +89,14 @@ def make_sources(directory, hexjson_path, fixture_path, msoas_per_council=3, sal
     msoas = pd.DataFrame(msoa_rows)
     lsoas = pd.DataFrame(lsoa_rows)
 
+    # two sales at £2m or more in the first council: a commercial building (type O), which the count must leave
+    # out, and a house bought by a company (category B), which it must include
+    first = postcode_rows[0]["pcds"]
+    sale_rows.append(["{COMMERC1}", 3_000_000, "2025-03-01 00:00", first, "O", "N", "F", "1", "", "MILL LANE", "",
+                      "TOWN", "TOWN", "COUNTY", "B", "A"])
+    sale_rows.append(["{MANSION1}", 2_500_000, "2025-03-02 00:00", first, "D", "N", "F", "1", "", "PARK ROAD", "",
+                      "TOWN", "TOWN", "COUNTY", "B", "A"])
+
     # a few Welsh postcodes and sales, which the pipeline must leave out
     postcode_rows.append({"pcds": "CF10 1AA", "msoa": "W02000001", "lsoa": "W01000001", "lad": "W06000015"})
     sale_rows.append(["{WALES001}", 250000, "2025-05-01 00:00", "CF10 1AA", "T", "N", "F", "1", "", "QUEEN ST",

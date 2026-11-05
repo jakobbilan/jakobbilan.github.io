@@ -229,3 +229,14 @@ def test_unchanged_build_writes_nothing(built, tmp_path):
         assert kept["built"] == "2026-11-01T04:00Z"                          # the date the data last changed
     finally:
         config.OUT_DATA, config.OUT_GEO = out_data, out_geo
+
+
+def test_two_million_sales_count_homes_only(built):
+    (tables, summary, results, geo), truth = built
+    folder = build.config.CACHE.parent
+    rows = pd.concat([pd.read_csv(f, header=None) for f in sorted(folder.glob("pp-*.csv"))])
+    start, end = summary["sales_window"]
+    homes = rows[(rows[1] >= 2_000_000) & rows[4].isin(["D", "S", "T", "F"]) & (rows[2].str[:10] >= start)
+                 & (rows[2].str[:10] <= end) & ~rows[3].str.startswith("CF")]
+    assert "{COMMERC1}" not in set(homes[0]) and "{MANSION1}" in set(homes[0])
+    assert tables["councils"].sales_2m.sum() == len(homes)             # commercial sales left out, company purchases in

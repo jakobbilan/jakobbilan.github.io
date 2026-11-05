@@ -197,7 +197,7 @@
 
         <section id="aims" aria-labelledby="aims-title">
             <h2 id="aims-title">Aims</h2>
-<p>England’s council tax bands are fixed by law at 1 April 1991 values and have never been revalued (<a href="https://www.legislation.gov.uk/ukpga/1992/14/section/5/data.html">Local Government Finance Act 1992</a>; <a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>). Since then, prices in London have risen faster than in any other English region, especially compared to the North East (<a href="#figure-1">figure 1</a>). Thus, bills have drifted from what homes are worth. In this project, I investigate and visualise whether a property’s bill still rises with its value, for each of <span data-stat="england.msoas" data-format="int">6,856</span> small areas in <span data-stat="sources.levels.year">2026-27</span> (<a href="#figure-2">figure 2</a>); earlier studies have found it does not (<a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>; <a href="https://www.resolutionfoundation.org/press-releases/its-time-to-properly-abolish-the-poll-tax-by-scrapping-council-tax/">Resolution Foundation 2018</a>; <a href="https://trustforlondon.org.uk/research/poor-tax-council-tax-london-time-reform/">IPPR 2018</a>). Further, I test four claims made this year: Mortgage Introducer’s July ranking, which puts Burnley’s rate at 16 times Westminster’s (<a href="https://www.mpamag.com/uk/news/general/council-tax-by-town-full-2026-rankings-vs-house-value/583878">Mortgage Introducer 2026</a>; <a href="#figure-3">figure 3</a>); HM Treasury’s, that its 2028 surcharge on £2m homes targets the largest inequalities (<a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge">HM Treasury 2026</a>; <a href="#figure-4">figure 4</a>); the Department for Energy Security and Net Zero’s, that its £100 payment to Bands A–D reaches 83% of fuel-stressed households (<a href="https://www.gov.uk/government/news/what-the-autumn-budget-2026-means-for-your-energy-bills">DESNZ 2026</a>; <a href="#figure-5">figure 5</a>); and the Fairer Share campaign’s estimate that under a flat 0.48% tax, 77% of households would pay less (<a href="https://www.lbc.co.uk/article/mansion-tax-broken-property-tax-system-budget-opinion-5HjdkRL_2/">Fairer Share 2026</a>; <a href="#figure-6">figure 6</a>).</p>
+<p>England’s council tax bands are fixed by law at 1 April 1991 values and have never been revalued (<a href="https://www.legislation.gov.uk/ukpga/1992/14/section/5/data.html">Local Government Finance Act 1992</a>; <a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>). Since then, prices in London have risen faster than in any other English region, especially compared to the North East (<a href="#figure-1">figure 1</a>). Thus, bills have drifted from what homes are worth. In this project, I investigate and visualise whether a property’s bill still rises with its value, for each of <span data-stat="england.msoas" data-format="int">6,856</span> small areas in <span data-stat="sources.levels.year">2026-27</span> (<a href="#figure-2">figure 2</a>); earlier studies have found it does not (<a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>; <a href="https://www.resolutionfoundation.org/press-releases/its-time-to-properly-abolish-the-poll-tax-by-scrapping-council-tax/">Resolution Foundation 2018</a>; <a href="https://trustforlondon.org.uk/research/poor-tax-council-tax-london-time-reform/">IPPR 2018</a>). Further, I test four recent claims. Mortgage Introducer found council tax, relative to home values, “roughly 15 times larger” in Burnley than in Westminster (<a href="https://www.mpamag.com/uk/news/general/council-tax-by-town-full-2026-rankings-vs-house-value/583878">Mortgage Introducer 2026</a>; <a href="#figure-3">figure 3</a>). HM Treasury says its 2028 surcharge on £2m homes is “designed to address the largest inequalities” (<a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge">HM Treasury 2026</a>; <a href="#figure-4">figure 4</a>). The energy department says its £100 payment to Bands A–D reaches “an estimated 83% of fuel stressed households” (<a href="https://www.gov.uk/government/news/what-the-autumn-budget-2026-means-for-your-energy-bills">DESNZ 2026</a>; <a href="#figure-5">figure 5</a>). And Fairer Share says that if an annual tax of 0.48% of current values replaced council tax and stamp duty, “77% of households would pay less” (<a href="https://www.lbc.co.uk/article/mansion-tax-broken-property-tax-system-budget-opinion-5HjdkRL_2/">Fairer Share 2026</a>; <a href="#figure-6">figure 6</a>).</p>
         </section>
 
         <!-- Figure 1: regional prices since the valuation date -->
@@ -285,12 +285,12 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 3</p>
                     <h3 class="chart-title draft" id="title-3">[Headline]</h3>
-                    <p class="chart-subtitle">Bill as % of home value, by council, 2026-27</p>
+                    <p class="chart-subtitle">Bill as % of home value, by council, <span data-stat="sources.levels.year">2026-27</span></p>
                 </div>
                 <div class="controls">
                     <div class="segmented" role="group" aria-label="Measure" data-chart="chart-3" data-signal="method">
-                        <button type="button" data-value="mix" aria-pressed="true">Average bill ÷ average value</button>
-                        <button type="button" data-value="press" aria-pressed="false">Band D ÷ average price</button>
+                        <button type="button" data-value="mix" aria-pressed="true">Actual bills</button>
+                        <button type="button" data-value="press" aria-pressed="false">Band D ÷ price</button>
                     </div>
                     <div class="segmented" role="group" aria-label="View" data-chart="chart-3" data-signal="shape">
                         <button type="button" data-value="hex" aria-pressed="true">Hexagons</button>
@@ -303,10 +303,12 @@
                     <button type="button" class="locate" data-locate>Use my location</button>
                 </div>
                 <p class="locate-note">Your location stays in your browser: it is not stored or sent anywhere.</p>
+                <p class="chart-readout" data-gap-readout aria-live="polite"></p>
                 <div class="chart-body" id="chart-3" data-spec="project/charts/03-map-rates.vl.json" data-height="640 420" data-fit="screen"
                     role="img" aria-label="Map of English councils, as equal hexagons or real boundaries, shaded by council tax as a share of home value."></div>
                 <p class="council-readout" data-readout="rate" aria-live="polite" hidden></p>
                 <footer class="chart-foot">
+                    <p class="chart-key">Actual bills: each council’s average bill, across its mix of bands, ÷ its average home value. Band D ÷ price: the Band D bill ÷ the average house price, the measure Mortgage Introducer used.</p>
                     <p>Sources: as figure 2. Hexagon layout: Open Innovations. Boundaries: ONS, December 2024.</p>
                     <p class="chart-actions">
                         <a href="project/data/councils.csv" download>Data (CSV)</a>
@@ -344,17 +346,20 @@
                             role="img" aria-label="Line chart: council tax on a Band H home falls as a share of value as the value rises, with and without the 2028 surcharge."></div>
                     </div>
                     <div>
-                        <p class="panel-title">Sales at £2 million or more since <span data-stat="sales_window.0" data-format="month">January 2024</span></p>
+                        <p class="panel-title">Home sales at £2 million or more since <span data-stat="sales_window.0" data-format="month">January 2024</span></p>
                         <div class="chart-body" id="chart-4b" data-spec="project/charts/04b-high-value.vl.json"
-                            role="img" aria-label="Bar chart of the fifteen councils with the most sales at two million pounds or more."></div>
+                            role="img" aria-label="Bar chart of home sales at two million pounds or more: the twelve councils with the most, the chosen council, and all other councils together."></div>
                     </div>
                 </div>
                 <footer class="chart-foot">
+                    <p class="chart-key">Sales: homes only, including purchases by companies; the last row adds up all other councils, so the rows cover every such sale in England.</p>
                     <p>Sources: HM Treasury (High Value Council Tax Surcharge, 28 October 2026); MHCLG (Table 9); HM Land Registry (Price Paid Data).</p>
                     <p class="chart-actions">
                         <a href="project/data/councils.csv" download>Data (CSV)</a>
-                        <a href="project/charts/04a-surcharge.vl.json">Chart specification</a>
-                        <button type="button" data-save="chart-4a">Save image</button>
+                        <a href="project/charts/04a-surcharge.vl.json">Rate chart specification</a>
+                        <a href="project/charts/04b-high-value.vl.json">Sales chart specification</a>
+                        <button type="button" data-save="chart-4a">Save rate chart</button>
+                        <button type="button" data-save="chart-4b">Save sales chart</button>
                     </p>
                 </footer>
             </figure>
@@ -386,8 +391,8 @@
                 <div class="chart-body" id="chart-5" data-spec="project/charts/05-energy-payment.vl.json" data-height="440 340"
                     role="img" aria-label="Scatter plot of councils: share of homes in Bands A to D against the fuel poverty rate."></div>
                 <footer class="chart-foot">
-                    <p class="chart-key">Circles sized by fuel-poor households; dashed lines: England. Labelled: the five councils with the fewest homes in Bands A–D, among those with at least 1,000 fuel-poor households.</p>
-                    <p>Sources: DESNZ (Sub-regional fuel poverty, 2026, 2024 data); Valuation Office (Council Tax stock of properties, 2026); HM Treasury (Budget, 28 October 2026).</p>
+                    <p class="chart-key">Circles sized by fuel-poor households; dashed lines: England. Labelled: in each quarter of the chart, the council furthest into it on both measures, among councils with at least 1,000 fuel-poor households, with the estimated share of its fuel-poor households outside Bands A–D (“missed”).</p>
+                    <p>Sources: DESNZ (Sub-regional fuel poverty, 2026, 2024 data; Household Energy Payment, 28 October 2026); Valuation Office (Council Tax stock of properties, 2026).</p>
                     <p class="chart-actions">
                         <a href="project/data/councils.csv" download>Data (CSV)</a>
                         <a href="project/charts/05-energy-payment.vl.json">Chart specification</a>
@@ -449,8 +454,8 @@
                     </div>
                 </div>
                 <footer class="chart-foot">
-                    <p class="chart-key">Income groups: fifths of areas by mean equivalised household income before housing costs, each holding a fifth of homes. Share of income: average bill ÷ average net household income. Bills before discounts and support.</p>
-                    <p>Sources: as figures 2 and 3; ONS (Income estimates for small areas, <span data-stat="sources.income.year">financial year ending 2023</span>). Slider: the bill for a home worth twice as much, as a multiple, with the total raised unchanged. Marks: today’s slope; the slope at which the bill takes the same share of income in the poorest and richest fifths of areas; a bill in proportion to value. Fairer Share: 0.48% of value.</p>
+                    <p class="chart-key">Income groups: fifths of areas by mean equivalised household income before housing costs, each holding a fifth of homes. Share of income: average bill ÷ average net household income. Bills before discounts and support. Slider: the bill for a home worth twice as much, as a multiple, with the total raised unchanged. Marks: today’s slope; the slope at which the bill takes the same share of income in the poorest and richest fifths of areas; a bill in proportion to value. Fairer Share: 0.48% of value.</p>
+                    <p>Sources: as figures 2 and 3; ONS (Income estimates for small areas, <span data-stat="sources.income.year">financial year ending 2023</span>).</p>
                     <p class="chart-actions">
                         <a href="project/data/msoa.csv" download>Data (CSV)</a>
                         <a href="project/charts/06-flat-tax.vl.json">Map specification</a>
