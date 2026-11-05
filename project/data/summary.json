@@ -1,5 +1,5 @@
 {
-  "built": "2026-11-05T17:04Z",
+  "built": "2026-11-05T17:14Z",
   "price_month": "2026-08",
   "sales_window": [
     "2024-01-01",
@@ -233,6 +233,8 @@
       "london_outside_share": 0.24021491814014462
     },
     "fig6": {
+      "theta_today": 0.2358430491590158,
+      "theta_equal": 0.46941694517160304,
       "income1_less_neutral": 0.9869864451768368,
       "income1_less_fs": 0.9967485375160599,
       "income1_mean": 29304.361287948977,
