@@ -1,5 +1,5 @@
 {
-  "built": "2026-11-05T12:25Z",
+  "built": "2026-11-05T16:00Z",
   "price_month": "2026-08",
   "sales_window": [
     "2024-01-01",
@@ -57,7 +57,11 @@
     "income": {
       "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales/financialyearending2023/datasetfinal.xlsx",
       "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales",
-      "year": "financial year ending 2023"
+      "year": "financial year ending 2023",
+      "sheets": {
+        "income": "Net income before housing costs",
+        "net_income": "Net annual income"
+      }
     },
     "hpi": {
       "url": "https://publicdata.landregistry.gov.uk/market-trend-data/house-price-index-data/UK-HPI-full-file-2026-08.csv",
@@ -232,18 +236,33 @@
       "income1_less_neutral": 0.9869864451768368,
       "income1_less_fs": 0.9967485375160599,
       "income1_mean": 29304.361287948977,
+      "income1_burden_today": 0.05824378881516929,
+      "income1_burden_neutral": 0.03711055182260001,
+      "income1_burden_fs": 0.027744393483395788,
       "income2_less_neutral": 0.9439760905046083,
       "income2_less_fs": 0.9877851151444147,
       "income2_mean": 33916.85175457697,
+      "income2_burden_today": 0.057848834204918285,
+      "income2_burden_neutral": 0.04435383136178668,
+      "income2_burden_fs": 0.03315957562905824,
       "income3_less_neutral": 0.789810597671709,
       "income3_less_fs": 0.9599780458917894,
       "income3_mean": 37250.03662291893,
+      "income3_burden_today": 0.056272220738046316,
+      "income3_burden_neutral": 0.05055916633109733,
+      "income3_burden_fs": 0.03779877517283824,
       "income4_less_neutral": 0.4702440584445609,
       "income4_less_fs": 0.8743160660892081,
       "income4_mean": 41155.97908510835,
+      "income4_burden_today": 0.05376702675028338,
+      "income4_burden_neutral": 0.05679152522628584,
+      "income4_burden_fs": 0.04245817820043079,
       "income5_less_neutral": 0.14063210550250113,
       "income5_less_fs": 0.512619372442019,
       "income5_mean": 49965.896432122456,
+      "income5_burden_today": 0.04708306984802763,
+      "income5_burden_neutral": 0.07005860939891612,
+      "income5_burden_fs": 0.05237684514514123,
       "fs_rate": 0.0048,
       "fs_revenue": 0.7476146842553736,
       "fs_less": 0.8663096494442267,
