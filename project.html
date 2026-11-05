@@ -407,27 +407,19 @@
                 <div class="chart-head">
                     <p class="chart-number">Figure 6</p>
                     <h3 class="chart-title draft" id="title-6">[Headline]</h3>
-                    <p class="chart-subtitle">Homes in areas that would pay less under a flat tax</p>
+                    <p class="chart-subtitle">A flat tax on current value: homes in areas that would pay less, by council; bill as a share of household income, by income of the area</p>
                 </div>
+                <!-- Scenarios: each sets the rate and how revenue is shared; the readout shows what it raises and who pays less -->
                 <div class="controls">
-                    <div class="slider">
-                        <div class="slider-readout">
-                            <output for="rate">0.48%</output>
-                            <small data-revenue>–</small>
-                            <small data-less>–</small>
-                        </div>
-                        <div class="slider-track">
-                            <label class="visually-hidden" for="rate">Flat tax rate</label>
-                            <input id="rate" type="range" min="0.002" max="0.012" step="0.00001" value="0.0048" data-chart="chart-6 chart-6b">
-                            <div class="slider-marks">
-                                <button type="button" data-rate="0.0048">0.48%</button>
-                                <button type="button" data-rate="neutral">–</button>
-                            </div>
-                        </div>
+                    <div class="slider-readout" aria-live="polite">
+                        <output data-flat-rate>–</output>
+                        <small data-revenue>–</small>
+                        <small data-less>–</small>
                     </div>
-                    <div class="segmented" role="group" aria-label="Revenue" data-chart="chart-6 chart-6b" data-signal="mode">
-                        <button type="button" data-value="national" aria-pressed="true">One rate for England</button>
-                        <button type="button" data-value="local" aria-pressed="false">Each council keeps its revenue</button>
+                    <div class="segmented" role="group" aria-label="Scenario" data-scenarios="chart-6 chart-6b">
+                        <button type="button" data-value="neutral" aria-pressed="true">Same total as today</button>
+                        <button type="button" data-value="local" aria-pressed="false">Each council keeps its total</button>
+                        <button type="button" data-value="fairer" aria-pressed="false">Fairer Share’s 0.48%</button>
                     </div>
                 </div>
                 <!-- Map by council, and the same flat tax by income: both follow the slider and the revenue switch -->
@@ -439,14 +431,14 @@
                         <p class="council-readout" data-readout="flat" aria-live="polite" hidden></p>
                     </div>
                     <div>
-                        <p class="panel-title">By income of the area</p>
+                        <p class="panel-title">Bill as a share of household income</p>
                         <div class="chart-body" id="chart-6b" data-spec="project/charts/06b-income.vl.json" data-height="300 260"
-                            role="img" aria-label="Bar chart: share of homes in areas that would pay less under a flat tax, for each fifth of areas ranked by household income, with the share for England as a line."></div>
+                            role="img" aria-label="Dot chart: council tax as a share of household income for each fifth of areas ranked by income, today and under the chosen flat tax."></div>
                     </div>
                 </div>
                 <footer class="chart-foot">
-                    <p class="chart-key">Income groups: fifths of areas by mean household income before housing costs, each holding a fifth of homes.</p>
-                    <p>Sources: as figures 2 and 3; ONS (Income estimates for small areas, <span data-stat="sources.income.year">financial year ending 2023</span>). Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>
+                    <p class="chart-key">Income groups: fifths of areas by mean equivalised household income before housing costs, each holding a fifth of homes. Share of income: average bill ÷ average net household income. Bills before discounts and support.</p>
+                    <p>Sources: as figures 2 and 3; ONS (Income estimates for small areas, <span data-stat="sources.income.year">financial year ending 2023</span>). Scenarios: the one rate that raises today’s total; each council’s own such rate; Fairer Share’s proposed 0.48%.</p>
                     <p class="chart-actions">
                         <a href="project/data/msoa.csv" download>Data (CSV)</a>
                         <a href="project/charts/06-flat-tax.vl.json">Map specification</a>

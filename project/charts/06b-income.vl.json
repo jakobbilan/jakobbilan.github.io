@@ -1,10 +1,10 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Share of homes in areas that would pay less under a flat tax on current value, for each fifth of areas ranked by mean household income (ONS small area income estimates), with the share for England as a dashed line. Follows the rate slider and the revenue switch of the map beside it.",
+  "description": "Council tax as a share of household income, for each fifth of areas ranked by income: today, and under the flat tax on current value chosen with the scenario buttons. Shares are average bills divided by average net household income (ONS small area income estimates).",
   "width": "container",
-  "height": 260,
+  "height": 270,
   "padding": {
-    "top": 24,
+    "top": 8,
     "right": 8,
     "bottom": 4,
     "left": 4
@@ -18,6 +18,7 @@
         "value": "number",
         "r_local": "number",
         "income": "number",
+        "net_income": "number",
         "income_group": "number"
       }
     }
@@ -25,7 +26,7 @@
   "params": [
     {
       "name": "rate",
-      "value": 0.0048
+      "value": 0.0064
     },
     {
       "name": "mode",
@@ -34,36 +35,45 @@
   ],
   "transform": [
     {
-      "calculate": "mode == 'local' ? datum.r_local : rate",
-      "as": "applied"
+      "filter": "isValid(datum.income_group) && isValid(datum.net_income)"
     },
     {
-      "calculate": "datum.applied * datum.value < datum.bill ? datum.dwellings : 0",
+      "calculate": "(mode == 'local' ? datum.r_local : rate) * datum.value",
+      "as": "flat_bill"
+    },
+    {
+      "calculate": "datum.dwellings * datum.bill",
+      "as": "bills"
+    },
+    {
+      "calculate": "datum.dwellings * datum.flat_bill",
+      "as": "flat_bills"
+    },
+    {
+      "calculate": "datum.dwellings * datum.net_income",
+      "as": "incomes"
+    },
+    {
+      "calculate": "datum.flat_bill < datum.bill ? datum.dwellings : 0",
       "as": "less"
     },
     {
-      "joinaggregate": [
+      "aggregate": [
         {
           "op": "sum",
-          "field": "less",
-          "as": "less_all"
+          "field": "bills",
+          "as": "bills"
         },
         {
           "op": "sum",
-          "field": "dwellings",
-          "as": "homes_all"
-        }
-      ]
-    },
-    {
-      "filter": "isValid(datum.income_group) && isValid(datum.income)"
-    },
-    {
-      "calculate": "datum.income * datum.dwellings",
-      "as": "income_weighted"
-    },
-    {
-      "aggregate": [
+          "field": "flat_bills",
+          "as": "flat_bills"
+        },
+        {
+          "op": "sum",
+          "field": "incomes",
+          "as": "incomes"
+        },
         {
           "op": "sum",
           "field": "less",
@@ -73,21 +83,6 @@
           "op": "sum",
           "field": "dwellings",
           "as": "homes"
-        },
-        {
-          "op": "sum",
-          "field": "income_weighted",
-          "as": "income_weighted"
-        },
-        {
-          "op": "max",
-          "field": "less_all",
-          "as": "less_all"
-        },
-        {
-          "op": "max",
-          "field": "homes_all",
-          "as": "homes_all"
         }
       ],
       "groupby": [
@@ -95,19 +90,27 @@
       ]
     },
     {
+      "calculate": "datum.bills / datum.incomes",
+      "as": "today"
+    },
+    {
+      "calculate": "datum.flat_bills / datum.incomes",
+      "as": "flat"
+    },
+    {
       "calculate": "datum.less / datum.homes",
-      "as": "share"
+      "as": "share_less"
     },
     {
-      "calculate": "datum.less_all / datum.homes_all",
-      "as": "england"
-    },
-    {
-      "calculate": "datum.income_weighted / datum.homes",
+      "calculate": "datum.incomes / datum.homes",
       "as": "mean_income"
     },
     {
-      "calculate": "['Lowest-income fifth', 'Second fifth', 'Middle fifth', 'Fourth fifth', 'Highest-income fifth'][datum.income_group - 1]",
+      "calculate": "datum.flat_bills / datum.homes - datum.bills / datum.homes",
+      "as": "change"
+    },
+    {
+      "calculate": "[\"Lowest-income fifth\", \"Second fifth\", \"Middle fifth\", \"Fourth fifth\", \"Highest-income fifth\"][datum.income_group - 1]",
       "as": "group"
     }
   ],
@@ -134,59 +137,80 @@
   "layer": [
     {
       "mark": {
-        "type": "bar",
-        "height": {
-          "band": 0.62
+        "type": "rule",
+        "strokeWidth": 2.5,
+        "color": "#c9cdd2"
+      },
+      "encoding": {
+        "x": {
+          "field": "today",
+          "type": "quantitative",
+          "scale": {
+            "zero": true,
+            "nice": true
+          },
+          "axis": {
+            "format": ".0%",
+            "tickCount": 5,
+            "grid": true,
+            "title": "Bill as a share of net household income"
+          }
         },
-        "cornerRadiusEnd": 2
+        "x2": {
+          "field": "flat"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "today",
+            "flat"
+          ],
+          "as": [
+            "key",
+            "share"
+          ]
+        },
+        {
+          "calculate": "datum.key == 'today' ? 'Today' : 'Flat tax'",
+          "as": "measure"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 120,
+        "opacity": 1,
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
       },
       "encoding": {
         "x": {
           "field": "share",
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              0,
-              1
-            ]
-          },
-          "axis": {
-            "format": ".0%",
-            "grid": true,
-            "title": "Homes in areas that would pay less",
-            "values": [
-              0,
-              0.25,
-              0.5,
-              0.75,
-              1
-            ]
-          }
+          "type": "quantitative"
         },
         "color": {
-          "field": "share",
-          "type": "quantitative",
+          "field": "measure",
+          "type": "nominal",
           "scale": {
-            "type": "threshold",
             "domain": [
-              0.1,
-              0.25,
-              0.4,
-              0.6,
-              0.75,
-              0.9
+              "Today",
+              "Flat tax"
             ],
             "range": [
-              "#b8431f",
-              "#d9785a",
-              "#f0b9a5",
-              "#eef0f2",
-              "#a9bfdf",
-              "#6b8fc4",
+              "#5b6068",
               "#2f5a99"
             ]
           },
-          "legend": null
+          "legend": {
+            "orient": "top",
+            "title": null,
+            "symbolType": "circle",
+            "symbolSize": 110,
+            "labelFontSize": 12,
+            "offset": 4
+          }
         },
         "tooltip": [
           {
@@ -194,29 +218,67 @@
             "title": "Areas"
           },
           {
+            "field": "measure",
+            "title": "Bill"
+          },
+          {
             "field": "share",
+            "type": "quantitative",
+            "format": ".1%",
+            "title": "Share of household income"
+          },
+          {
+            "field": "share_less",
             "type": "quantitative",
             "format": ".0%",
             "title": "Homes in areas that would pay less"
           },
           {
+            "field": "change",
+            "type": "quantitative",
+            "format": "+,.0f",
+            "title": "Change in average bill, £ a year"
+          },
+          {
             "field": "mean_income",
             "type": "quantitative",
             "format": ",.0f",
-            "title": "Mean household income, £ a year"
+            "title": "Mean net household income, £"
           }
         ]
       }
     },
     {
+      "transform": [
+        {
+          "fold": [
+            "today",
+            "flat"
+          ],
+          "as": [
+            "key",
+            "share"
+          ]
+        },
+        {
+          "calculate": "datum.key == 'today' ? 'Today' : 'Flat tax'",
+          "as": "measure"
+        },
+        {
+          "calculate": "(datum.key == 'flat') == (datum.flat >= datum.today) ? 'left' : 'right'",
+          "as": "side"
+        },
+        {
+          "filter": "datum.side == 'left'"
+        }
+      ],
       "mark": {
         "type": "text",
-        "align": "left",
         "baseline": "middle",
-        "dx": 4,
-        "fontSize": 12,
+        "fontSize": 11.5,
         "fontWeight": 600,
-        "color": "#16191d"
+        "align": "left",
+        "dx": 9
       },
       "encoding": {
         "x": {
@@ -226,67 +288,79 @@
         "text": {
           "field": "share",
           "type": "quantitative",
-          "format": ".0%"
+          "format": ".1%"
+        },
+        "color": {
+          "field": "measure",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Today",
+              "Flat tax"
+            ],
+            "range": [
+              "#5b6068",
+              "#2f5a99"
+            ]
+          }
         }
       }
     },
     {
       "transform": [
         {
-          "filter": "datum.income_group == 1"
-        }
-      ],
-      "mark": {
-        "type": "rule",
-        "color": "#16191d",
-        "strokeWidth": 1.2,
-        "strokeDash": [
-          4,
-          3
-        ]
-      },
-      "encoding": {
-        "x": {
-          "field": "england",
-          "type": "quantitative"
-        },
-        "y": {
-          "value": 0
-        },
-        "y2": {
-          "value": "height"
-        }
-      }
-    },
-    {
-      "transform": [
-        {
-          "filter": "datum.income_group == 1"
+          "fold": [
+            "today",
+            "flat"
+          ],
+          "as": [
+            "key",
+            "share"
+          ]
         },
         {
-          "calculate": "'England ' + format(datum.england, '.0%')",
-          "as": "label"
+          "calculate": "datum.key == 'today' ? 'Today' : 'Flat tax'",
+          "as": "measure"
+        },
+        {
+          "calculate": "(datum.key == 'flat') == (datum.flat >= datum.today) ? 'left' : 'right'",
+          "as": "side"
+        },
+        {
+          "filter": "datum.side == 'right'"
         }
       ],
       "mark": {
         "type": "text",
-        "align": "center",
-        "baseline": "bottom",
-        "dy": -6,
-        "fontSize": 12,
+        "baseline": "middle",
+        "fontSize": 11.5,
         "fontWeight": 600,
-        "color": "#16191d"
+        "align": "right",
+        "dx": -9
       },
       "encoding": {
         "x": {
-          "field": "england",
+          "field": "share",
           "type": "quantitative"
         },
-        "y": {
-          "value": 0
-        },
         "text": {
-          "field": "label"
+          "field": "share",
+          "type": "quantitative",
+          "format": ".1%"
+        },
+        "color": {
+          "field": "measure",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Today",
+              "Flat tax"
+            ],
+            "range": [
+              "#5b6068",
+              "#2f5a99"
+            ]
+          }
         }
       }
     }

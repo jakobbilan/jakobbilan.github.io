@@ -645,31 +645,54 @@
         return areaRows;
     }
 
-    function wireSlider(slider) {
-        const input = slider.querySelector("input[type=range]");
-        const output = slider.querySelector("output");
-        const note = slider.querySelector("[data-revenue]");
-        const lessNote = slider.querySelector("[data-less]");
+    // Figure 6 scenarios: each sets the rate and how revenue is shared, for the map, the income chart, the readout
+    // and the "Your council" box. "neutral" is the one rate that raises today's total; "local", each council's own
+    function wireScenarios(group) {
+        const charts = group.dataset.scenarios.split(/\s+/);
+        const controls = group.closest(".controls");
+        const output = controls.querySelector("[data-flat-rate]");
+        const note = controls.querySelector("[data-revenue]");
+        const lessNote = controls.querySelector("[data-less]");
+        const neutral = summary.england.revenue_neutral_rate;
+        const scenarios = {
+            neutral: { rate: neutral, local: false },
+            local: { rate: neutral, local: true },
+            fairer: { rate: 0.0048, local: false },
+        };
         let ticket = 0;
 
-        // homes in areas whose average bill would fall: the rate times the area's average value, against its bill
-        // without income data (the ONS source missing from a build), the income panel is hidden, not left empty
+        const sameTotal = group.querySelector('button[data-value="neutral"]');
+        if (sameTotal) sameTotal.textContent = "Same total as today (" + formatValue(neutral, "pct2") + ")";
+
+        // without income data in a build, the income chart is hidden rather than left empty
         loadAreas().then(function (rows) {
             const panel = document.getElementById("chart-6b");
-            if (panel && rows.length && rows[0].income_group == null) {
+            if (panel && rows.length && (rows[0].income_group == null || rows[0].net_income == null)) {
                 panel.parentElement.hidden = true;
                 panel.closest(".chart-pair").classList.add("is-single");
             }
         });
 
-        function showLess(rate, local) {
-            if (!lessNote) return;
+        function apply(key) {
+            const scenario = scenarios[key] || scenarios.neutral;
+            output.textContent = scenario.local ? "Varies" : formatValue(scenario.rate, "pct2");
+            note.textContent = scenario.local ? "Each council raises its current total"
+                : "Raises " + formatValue(scenario.rate / neutral, "pct0") + " of today’s bills";
+            charts.forEach(function (id) {
+                setSignal(id, "rate", scenario.rate);
+                setSignal(id, "mode", scenario.local ? "local" : "national");
+            });
+            flatState.rate = scenario.rate;
+            flatState.local = scenario.local;
+            showFlatReadout();
+
+            // homes in areas whose average bill would fall: the rate times the area's average value, against its bill
             const mine = ++ticket;
             loadAreas().then(function (rows) {
                 if (mine !== ticket) return;
                 let less = 0, homes = 0;
                 rows.forEach(function (row) {
-                    const applied = local ? row.r_local : rate;
+                    const applied = scenario.local ? row.r_local : scenario.rate;
                     homes += row.dwellings;
                     if (applied * row.value < row.bill) less += row.dwellings;
                 });
@@ -678,60 +701,12 @@
                 lessNote.textContent = "";
             });
         }
-        const neutral = summary.england.revenue_neutral_rate;
-        const min = Number(input.min);
-        const max = Number(input.max);
-        let local = false;
-        let pinned = null;
 
-        slider.querySelectorAll(".slider-marks button").forEach(function (mark) {
-            const rate = mark.dataset.rate === "neutral" ? neutral : Number(mark.dataset.rate);
-            mark.dataset.value = rate;
-            mark.style.setProperty("--at", (100 * (rate - min) / (max - min)).toFixed(2) + "%");
-            if (mark.dataset.rate === "neutral") mark.textContent = formatValue(rate, "pct2");
-            mark.addEventListener("click", function () {
-                input.value = rate;
-                pinned = rate;
-                update();
-            });
+        group.addEventListener("choice", function (event) {
+            apply(event.detail);
         });
-
-        function update() {
-            const value = Number(input.value);
-            const rate = pinned !== null && Math.abs(pinned - value) < 1e-5 ? pinned : value;
-            input.style.setProperty("--fill", (100 * (rate - min) / (max - min)).toFixed(2) + "%");
-            if (local) {
-                output.textContent = "Varies";
-                note.textContent = "Each council sets the rate that raises its current total";
-            } else {
-                output.textContent = formatValue(rate, "pct2");
-                note.textContent = "Raises " + formatValue(rate / neutral, "pct0") + " of today’s total";
-            }
-            input.disabled = local;
-            targets(input).forEach(function (id) {
-                setSignal(id, "rate", rate);
-            });
-            flatState.rate = rate;
-            flatState.local = local;
-            showFlatReadout();
-            showLess(rate, local);
-        }
-
-        let frame = 0;
-        input.addEventListener("input", function () {
-            pinned = null;
-            cancelAnimationFrame(frame);
-            frame = requestAnimationFrame(update);
-        });
-
-        const mode = document.querySelector('.segmented[data-signal="mode"]');
-        if (mode) {
-            mode.addEventListener("choice", function (event) {
-                local = event.detail === "local";
-                update();
-            });
-        }
-        update();
+        const pressed = group.querySelector('button[aria-pressed="true"]');
+        apply(pressed ? pressed.dataset.value : "neutral");
     }
 
     // Scroll-driven steps -----------------------------------------------------------------
@@ -903,7 +878,7 @@
                     console.error(error);
                 })
                 .then(function () {
-                    document.querySelectorAll(".slider").forEach(wireSlider);
+                    document.querySelectorAll("[data-scenarios]").forEach(wireScenarios);
                     lazyLoad();
                 });
         });

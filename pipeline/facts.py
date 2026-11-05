@@ -128,6 +128,12 @@ def flat_tax(msoa, neutral):
                 by_income[f"income{group}_less_neutral"] = (part.dwellings * (neutral * part.value < part.bill)).sum() / homes_in
                 by_income[f"income{group}_less_fs"] = (part.dwellings * (config.FAIRER_SHARE_RATE * part.value < part.bill)).sum() / homes_in
                 by_income[f"income{group}_mean"] = (part.income * part.dwellings).sum() / homes_in
+                if "net_income" in part:
+                    income_total = (part.net_income * part.dwellings).sum()
+                    if income_total:
+                        by_income[f"income{group}_burden_today"] = (part.bill * part.dwellings).sum() / income_total
+                        by_income[f"income{group}_burden_neutral"] = (neutral * part.value * part.dwellings).sum() / income_total
+                        by_income[f"income{group}_burden_fs"] = (config.FAIRER_SHARE_RATE * part.value * part.dwellings).sum() / income_total
     return {**by_income,"fs_rate": config.FAIRER_SHARE_RATE, "fs_revenue": fairer["revenue"], "fs_less": fairer["less"],
             "fs_councils_more": fairer["councils_more"], "neutral_rate": neutral, "neutral_less": flat["less"],
             "neutral_councils_more": flat["councils_more"], "local_less": local["less"],

@@ -78,7 +78,7 @@ def msoa_names(path):
     return frame.set_index(code)[names[0]]
 
 
-def add_income(msoa, path):
+def add_income(msoa, path, meta=None):
     """Each area's mean household income (ONS) and its fifth of areas by income; each fifth holds a fifth of homes."""
     msoa = msoa.reset_index(drop=True)
     if not path:
@@ -88,6 +88,8 @@ def add_income(msoa, path):
     except Exception as error:
         fetch.log(f"income estimates unreadable ({error}); the page shows no income panel")
         return msoa
+    if meta is not None:
+        meta.setdefault("income", {})["sheets"] = income.attrs.get("sheets")
     msoa = msoa.merge(income, on="msoa", how="left")
     order = msoa[msoa.income.notna()].sort_values("income")
     middle = (order.dwellings.cumsum() - order.dwellings / 2) / order.dwellings.sum()
@@ -132,7 +134,7 @@ def build_outputs(paths, meta):
         msoa["name"] = msoa.msoa.map(names).fillna(msoa["name"])
     msoa = msoa.dropna(subset=["bill", "value"])
     msoa["r_local"] = msoa.lad.map(compute.revenue_neutral(msoa, by="lad"))
-    msoa = add_income(msoa, paths.get("income"))
+    msoa = add_income(msoa, paths.get("income"), meta)
 
     # Council totals from their MSOAs
     weights = msoa.assign(bill_total=msoa.bill * msoa.dwellings, value_total=msoa.value * msoa.dwellings)
@@ -228,6 +230,7 @@ def write_outputs(tables, summary, results, geo):
         "value": (msoa.value / 100).round() * 100, "rate": msoa.rate.round(6),
         "sales": msoa.sales.astype(int), "r_local": msoa.r_local.round(6),
         **({"income": msoa.income.round(-2), "income_group": msoa.income_group.astype("Int64")} if "income" in msoa else {}),
+        **({"net_income": msoa.net_income.round(-2)} if "net_income" in msoa else {}),
     })
     out.sort_values("msoa").to_csv(config.OUT_DATA / "msoa.csv", index=False)
 

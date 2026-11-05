@@ -189,3 +189,20 @@ def test_build_survives_missing_income(tmp_path):
     assert "income" not in out
     out = build.add_income(msoa, tmp_path / "missing.xlsx")
     assert "income" not in out
+
+
+def test_income_reader_finds_both_measures(built):
+    (tables, summary, results, geo), truth = built
+    sheets = pd.read_excel(build.config.CACHE.parent / "ons-small-area-income.xlsx", sheet_name=None, header=None)
+    net = sheets["Net annual income"]
+    first = net[net[0].astype(str).str.match(r"^E02")].iloc[0]
+    row = tables["msoa"].set_index("msoa").loc[first[0]]
+    assert abs(row.net_income - round(float(first[6]), -2)) <= 100   # the unequivalised net sheet, not total or AHC
+    fig6 = summary["facts"]["fig6"]
+    for g in range(1, 6):
+        assert 0 < fig6[f"income{g}_burden_today"] < 0.5 and 0 < fig6[f"income{g}_burden_neutral"] < 0.5
+
+
+def test_income_sheets_recorded(built):
+    (tables, summary, results, geo), truth = built
+    assert summary["sources"]["income"]["sheets"] == {"income": "Net income before housing costs", "net_income": "Net annual income"}

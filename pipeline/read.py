@@ -336,19 +336,43 @@ NOT_ESTIMATE = ("confidence", "limit", "interval", "upper", "lower")
 
 
 def read_income(path):
-    """Mean equivalised household disposable income before housing costs, by MSOA.
+    """Two ONS measures by MSOA: equivalised net income before housing costs (to rank areas), and net annual
+    household income (the denominator for the bill as a share of income).
 
-    The workbook holds one sheet per income measure. The sheet is chosen by the words in its name and title rows,
-    the header by the first row of MSOA codes and the column by its label, so a changed layout is tolerated."""
+    The workbook holds one sheet per measure. Each is chosen by the words in its name (counted double) and title
+    rows, its header by the first row of MSOA codes and its column by the label, so a changed layout is tolerated.
+    The chosen sheet names are kept in .attrs so every build records which sheets it used."""
     sheets = pd.read_excel(path, sheet_name=None, header=None, dtype=str)
-    best = None
-    for name, sheet in sheets.items():
-        found = _income_table(name, sheet)
-        if found is not None and (best is None or found[1] > best[1]):
-            best = found
-    if best is None or best[1] < 2:
-        raise ValueError("no sheet of net income before housing costs by MSOA")
-    return best[0]
+    tables = [found for found in (_income_table(name, sheet) for name, sheet in sheets.items()) if found is not None]
+
+    def pick(score):
+        ranked = sorted(((2 * score(name) + score(rows), table, name) for table, name, rows in tables), key=lambda t: -t[0])
+        return (ranked[0][1], ranked[0][2]) if ranked and ranked[0][0] > 0 else (None, None)
+
+    ranking, ranking_sheet = pick(_score_equivalised_bhc)
+    household, household_sheet = pick(_score_net_household)
+    if ranking is None:
+        raise ValueError("no sheet of equivalised net income before housing costs by MSOA")
+    out = ranking.rename(columns={"value": "income"})
+    if household is not None and household_sheet != ranking_sheet:
+        out = out.merge(household.rename(columns={"value": "net_income"}), on="msoa", how="left")
+    out.attrs["sheets"] = {"income": ranking_sheet, "net_income": household_sheet}
+    return out
+
+
+EQUIVALISED = re.compile(r"\bequivalised\b")      # whole word: "unequivalised" does not count
+
+
+def _score_equivalised_bhc(text):
+    text = str(text).lower()
+    return (2 * ("before housing" in text or "bhc" in text) + bool(EQUIVALISED.search(text))
+            - 3 * ("after housing" in text or "ahc" in text) - 2 * ("total" in text))
+
+
+def _score_net_household(text):
+    text = str(text).lower()
+    return (2 * ("net" in text) + ("unequivalised" in text) - 3 * ("housing" in text)
+            - 2 * bool(EQUIVALISED.search(text)) - 3 * ("total" in text))
 
 
 def _income_table(name, sheet):
@@ -360,18 +384,13 @@ def _income_table(name, sheet):
     first = is_code[code_col].idxmax()
     above = sheet.iloc[:first].astype(str)
     header = above.apply(lambda col: " ".join(col).lower())
-    title = (str(name) + " " + " ".join(above.values.ravel())).lower()
-    score = 0
-    score += 2 if ("before housing" in title or "bhc" in title) else 0
-    score -= 3 if ("after housing" in title or "ahc" in title) else 0
-    score += 1 if "equivalised" in title else 0
-    score -= 2 if "total" in title else 0
+    rows_text = " ".join(above.values.ravel()).lower()
     rows = is_code[code_col]
     for column, text in header.items():
         if column == code_col or not ("income" in text or "£" in text) or any(w in text for w in NOT_ESTIMATE):
             continue
         values = to_number(sheet.loc[rows, column])
         if values.notna().mean() > 0.9 and values.median() > 1000:
-            out = pd.DataFrame({"msoa": sheet.loc[rows, code_col].str.strip().values, "income": values.values})
-            return out.dropna(), score
+            out = pd.DataFrame({"msoa": sheet.loc[rows, code_col].str.strip().values, "value": values.values})
+            return out.dropna(), str(name), rows_text
     return None

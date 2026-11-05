@@ -265,6 +265,7 @@ def _income(directory, msoas, lads, rng):
     with pd.ExcelWriter(path, engine="openpyxl") as writer:
         pd.DataFrame([["Contents"], ["Income estimates for small areas"]]).to_excel(writer, sheet_name="Contents", header=False, index=False)
         sheet("Total annual income", "Total annual income (£)", 1.6).to_excel(writer, sheet_name="Total annual income", header=False, index=False)
+        sheet("Net annual income (unequivalised)", "Net annual income (£)", 1.3).to_excel(writer, sheet_name="Net annual income", header=False, index=False)
         sheet("Net annual income before housing costs (equivalised)", "Net annual income before housing costs (£)", 1.0).to_excel(
             writer, sheet_name="Net income before housing costs", header=False, index=False)
         sheet("Net annual income after housing costs (equivalised)", "Net annual income after housing costs (£)", 0.7).to_excel(
