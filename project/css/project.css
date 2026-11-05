@@ -603,16 +603,18 @@ body.project-page > header {
 /* Rate slider for the flat-tax figure */
 .slider {
     flex: 1 1 100%;
-    max-width: 44rem;
+    max-width: 46rem;
     display: grid;
-    grid-template-columns: auto minmax(10rem, 1fr);
+    grid-template-columns: 14rem minmax(10rem, 1fr);
     gap: 0.35rem 1.25rem;
     align-items: center;
 }
 
+/* The readout keeps one size whatever it says, so the slider beside it never moves while it is dragged */
 .slider-readout {
     grid-row: span 2;
-    min-width: 7.5rem;
+    width: 14rem;
+    min-height: 6rem;
 }
 
 .slider-readout output {
@@ -945,6 +947,7 @@ body.project-page > header {
 
     .slider-readout {
         grid-row: auto;
+        width: auto;
     }
 }
 

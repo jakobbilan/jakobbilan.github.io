@@ -6,7 +6,7 @@ Personal website: plain HTML and CSS, served by GitHub Pages.
 
 `project.html` compares what each home in England pays in council tax with what it is worth today.
 Every number on the page is rebuilt from official open data by the code in `pipeline/`, which a
-GitHub Actions workflow runs on the 1st and 20th of each month.
+GitHub Actions workflow runs every day at 04:00 London time; a run that finds no new data changes no file and makes no commit.
 
 ### Layout
 

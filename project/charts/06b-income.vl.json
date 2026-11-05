@@ -194,14 +194,25 @@
           "field": "today",
           "type": "quantitative",
           "scale": {
+            "domain": [
+              0,
+              0.1
+            ],
             "zero": true,
-            "nice": true
+            "nice": false
           },
           "axis": {
             "format": ".0%",
-            "tickCount": 5,
             "grid": true,
-            "title": "Bill as a share of net household income"
+            "title": "Bill as a share of net household income",
+            "values": [
+              0,
+              0.02,
+              0.04,
+              0.06,
+              0.08,
+              0.1
+            ]
           }
         },
         "x2": {

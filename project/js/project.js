@@ -198,15 +198,18 @@
             });
     }
 
-    function setSignal(id, name, value) {
+    function setSignal(id, name, value, relayout) {
         const view = views.get(id);
         if (!view) {
             queued.set(id, Object.assign(queued.get(id) || {}, { [name]: value }));
             return;
         }
         try {
-            // resize() makes Vega re-measure axes and labels, so longer labels after a switch stay inside the chart
-            view.signal(name, value).resize().runAsync();
+            // after a switch, resize() makes Vega re-measure axes and labels so longer labels stay inside the chart;
+            // a slider being dragged skips it (relayout false): its charts keep fixed axes, and re-measuring every
+            // frame is slow
+            const updated = view.signal(name, value);
+            (relayout === false ? updated : updated.resize()).runAsync();
         } catch (error) {
             console.warn(id + ": no parameter " + name, error);
         }
@@ -691,6 +694,7 @@
         let ticket = 0;
         let frame = 0;
         let pinned = null;              // a mark's exact value, kept until the slider is moved by hand
+        let before = null;              // the slider's position before Fairer Share fixed it at proportional
 
         function times(theta) {
             return Math.pow(2, theta).toFixed(2) + "×";
@@ -723,15 +727,16 @@
             }
         });
 
+        // a mark's meaning shows only when the slider sits on it, so the text does not flicker while dragging past
         function describe(theta) {
-            const near = function (x) { return isFinite(x) && Math.abs(theta - x) < 0.015; };
-            if (near(marks.theta_today)) return "Today’s slope, with values brought up to date";
-            if (near(marks.theta_equal)) return "The same share of income in poorer and richer areas";
-            if (near(1)) return "In proportion to value: " + formatValue(neutral, "pct2") + " a year";
+            const on = function (x) { return isFinite(x) && Math.abs(theta - x) < 0.004; };
+            if (on(marks.theta_today)) return "Today’s slope, values brought up to date";
+            if (on(marks.theta_equal)) return "Same share of income in poorer and richer areas";
+            if (on(1)) return "In proportion to value: " + formatValue(neutral, "pct2") + " a year";
             return "Bill for a home worth twice as much";
         }
 
-        function update() {
+        function update(dragging) {
             const fairer = mode === "fairer";
             if (fairer) input.value = 1;          // Fairer Share's proposal is in proportion to value
             input.disabled = fairer;
@@ -742,8 +747,8 @@
             note.textContent = fairer ? "Raises " + formatValue(0.0048 / neutral, "pct0") + " of today’s bills"
                 : mode === "local" ? "Each council raises its current total" : describe(theta);
             charts.forEach(function (id) {
-                setSignal(id, "theta", theta);
-                setSignal(id, "mode", mode);
+                setSignal(id, "theta", theta, !dragging);
+                setSignal(id, "mode", mode, !dragging);
             });
             const mine = ++ticket;
             loadAreas().then(function (rows) {
@@ -761,10 +766,19 @@
         input.addEventListener("input", function () {
             pinned = null;
             cancelAnimationFrame(frame);
-            frame = requestAnimationFrame(update);
+            frame = requestAnimationFrame(function () { update(true); });
         });
         group.addEventListener("choice", function (event) {
+            const leaving = mode === "fairer" && event.detail !== "fairer";
+            if (event.detail === "fairer" && mode !== "fairer") {
+                before = pinned !== null ? pinned : Number(input.value);
+            }
             mode = event.detail;
+            if (leaving && before !== null) {
+                input.value = before;
+                pinned = before;
+                before = null;
+            }
             update();
         });
         update();
