@@ -113,17 +113,20 @@
     // On short windows and phones the title scrolls away first (--head-h), so the chart keeps its size.
     function layoutScrolly(section) {
         const graphic = section.querySelector(".scrolly-graphic");
-        const head = graphic.querySelector(".chart-head");
         const chart = graphic.querySelector(".chart-body");
+        const controls = graphic.querySelector(".controls") || chart;
+        // Distances are measured, not summed, so wrapped titles and collapsing margins are counted exactly
+        const top = graphic.getBoundingClientRect().top;
+        const headPart = controls.getBoundingClientRect().top - top;
+        const chartTop = chart.getBoundingClientRect().top - top;
         const room = window.innerHeight - navHeight() - 28;
-        const fixed = outerHeight(graphic.querySelector(".controls")) + extraFor(chart);
-        let height = room - outerHeight(head) - fixed;
+        let height = room - chartTop - extraFor(chart);
         const titleScrolls = narrow.matches || height < 320;
-        if (titleScrolls) height = room - fixed;
+        if (titleScrolls) height = room - (chartTop - headPart) - extraFor(chart);
         if (narrow.matches) height = Math.min(height, Math.round(0.45 * window.innerHeight));
         height = Math.round(Math.max(220, Math.min(baseHeight(chart), height)));
         section.classList.toggle("is-static", window.innerHeight < 480);
-        graphic.style.setProperty("--head-h", titleScrolls ? outerHeight(head) + "px" : "0px");
+        graphic.style.setProperty("--head-h", titleScrolls ? Math.round(headPart) + "px" : "0px");
         return height;
     }
 
@@ -163,7 +166,9 @@
                 });
             })
             .then(function (result) {
-                element.style.minHeight = "";
+                // the pinned figure is sized exactly; other charts keep their reserved space, so a chart that
+                // finishes loading while the reader jumps past it does not move the page
+                if (element.dataset.fit === "scrolly") element.style.minHeight = "";
                 views.set(id, result.view);
                 // a tap on a chart's empty space hides an open tooltip
                 result.view.addEventListener("touchstart", function (event, item) {
@@ -207,7 +212,18 @@
         }
     }
 
+    // Every chart's space is reserved as soon as the page loads, so a chart that loads later, as the reader
+    // scrolls or jumps past it, never pushes the rest of the page down
+    function reserveSpace() {
+        document.querySelectorAll(".chart-body[data-spec]").forEach(function (chart) {
+            if (views.has(chart.id)) return;
+            const height = heightFor(chart);
+            if (height) chart.style.minHeight = height + extraFor(chart) + "px";
+        });
+    }
+
     function lazyLoad() {
+        reserveSpace();
         const charts = Array.from(document.querySelectorAll(".chart-body[data-spec]"));
         if (!("IntersectionObserver" in window)) {
             charts.forEach(embed);
@@ -230,8 +246,11 @@
             layoutScrolly(section);
             section.dispatchEvent(new CustomEvent("relayout"));
         });
+        reserveSpace();
         views.forEach(function (view, id) {
-            const height = heightFor(document.getElementById(id));
+            const element = document.getElementById(id);
+            const height = heightFor(element);
+            element.style.minHeight = "";
             if (height && height !== view.height()) view.height(height).runAsync();
         });
     }
@@ -295,7 +314,8 @@
             if (!body) return;
             const graphic = body.querySelector(".scrolly-graphic");
             const titleHeight = parseFloat(getComputedStyle(graphic).getPropertyValue("--head-h")) || 0;
-            if (!titleHeight || target.classList.contains("is-static")) return;
+            // also when the title stays in view (titleHeight 0): the browser's own jump lands below the pinned position
+            if (target.classList.contains("is-static")) return;
             event.preventDefault();
             const top = body.getBoundingClientRect().top + window.scrollY + titleHeight - navHeight() - 12;
             window.scrollTo(0, Math.max(0, Math.round(top)));
@@ -828,6 +848,8 @@
                 return;
             }
             fillStats();
+            // live numbers can change a headline's length, so the pinned figure is laid out again
+            refit();
             document.querySelectorAll("[data-scrolly]").forEach(wireScrolly);
             return loadCouncils()
                 .then(function (rows) {
