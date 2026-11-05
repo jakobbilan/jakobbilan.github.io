@@ -197,7 +197,7 @@
 
         <section id="aims" aria-labelledby="aims-title">
             <h2 id="aims-title">Aims</h2>
-<p>England’s council tax bands are fixed by law at 1 April 1991 values and have never been revalued (<a href="https://www.legislation.gov.uk/ukpga/1992/14/section/5/data.html">Local Government Finance Act 1992</a>; <a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>). Since then, prices in London have risen faster than in any other English region, especially compared to the North East (<a href="#figure-1">figure 1</a>). Thus, bills have drifted from what homes are worth. In this project, I investigate and visualise whether a property’s bill still rises with its value, for each of <span data-stat="england.msoas" data-format="int">6,856</span> small areas in <span data-stat="sources.levels.year">2026-27</span> (<a href="#figure-2">figure 2</a>); earlier studies have found it does not (<a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>; <a href="https://www.resolutionfoundation.org/press-releases/its-time-to-properly-abolish-the-poll-tax-by-scrapping-council-tax/">Resolution Foundation 2018</a>; <a href="https://trustforlondon.org.uk/research/poor-tax-council-tax-london-time-reform/">IPPR 2018</a>). Further, I test four claims made this year: A ranking published by Mortgage Introducer in July, which puts Burnley’s rate at 16 times that of Westminster (<a href="https://www.mpamag.com/uk/news/general/council-tax-by-town-full-2026-rankings-vs-house-value/583878">Mortgage Introducer 2026</a>; <a href="#figure-3">figure 3</a>); HM Treasury’s, that its 2028 surcharge on £2m homes targets the largest inequalities (<a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge">HM Treasury 2026</a>; <a href="#figure-4">figure 4</a>); the Department for Energy Security and Net Zero’s, that its £100 payment to Bands A–D reaches 83% of fuel-stressed households (<a href="https://www.gov.uk/government/news/what-the-autumn-budget-2026-means-for-your-energy-bills">DESNZ 2026</a>; <a href="#figure-5">figure 5</a>); and the Fairer Share campaign’s estimate that under a flat 0.48% tax, 77% of households would pay less (<a href="https://www.lbc.co.uk/article/mansion-tax-broken-property-tax-system-budget-opinion-5HjdkRL_2/">Fairer Share 2026</a>; <a href="#figure-6">figure 6</a>).</p>
+<p>England’s council tax bands are fixed by law at 1 April 1991 values and have never been revalued (<a href="https://www.legislation.gov.uk/ukpga/1992/14/section/5/data.html">Local Government Finance Act 1992</a>; <a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>). Since then, prices in London have risen faster than in any other English region, especially compared to the North East (<a href="#figure-1">figure 1</a>). Thus, bills have drifted from what homes are worth. In this project, I investigate and visualise whether a property’s bill still rises with its value, for each of <span data-stat="england.msoas" data-format="int">6,856</span> small areas in <span data-stat="sources.levels.year">2026-27</span> (<a href="#figure-2">figure 2</a>); earlier studies have found it does not (<a href="https://ifs.org.uk/sites/default/files/output_url_files/Summary-Revaluation-and-reform-bringing-council-tax-in-England-into-the-21st-century.pdf">IFS 2020</a>; <a href="https://www.resolutionfoundation.org/press-releases/its-time-to-properly-abolish-the-poll-tax-by-scrapping-council-tax/">Resolution Foundation 2018</a>; <a href="https://trustforlondon.org.uk/research/poor-tax-council-tax-london-time-reform/">IPPR 2018</a>). Further, I test four claims made this year: Mortgage Introducer’s July ranking, which puts Burnley’s rate at 16 times Westminster’s (<a href="https://www.mpamag.com/uk/news/general/council-tax-by-town-full-2026-rankings-vs-house-value/583878">Mortgage Introducer 2026</a>; <a href="#figure-3">figure 3</a>); HM Treasury’s, that its 2028 surcharge on £2m homes targets the largest inequalities (<a href="https://www.gov.uk/government/publications/high-value-council-tax-surcharge/high-value-council-tax-surcharge">HM Treasury 2026</a>; <a href="#figure-4">figure 4</a>); the Department for Energy Security and Net Zero’s, that its £100 payment to Bands A–D reaches 83% of fuel-stressed households (<a href="https://www.gov.uk/government/news/what-the-autumn-budget-2026-means-for-your-energy-bills">DESNZ 2026</a>; <a href="#figure-5">figure 5</a>); and the Fairer Share campaign’s estimate that under a flat 0.48% tax, 77% of households would pay less (<a href="https://www.lbc.co.uk/article/mansion-tax-broken-property-tax-system-budget-opinion-5HjdkRL_2/">Fairer Share 2026</a>; <a href="#figure-6">figure 6</a>).</p>
         </section>
 
         <!-- Figure 1: regional prices since the valuation date -->
@@ -414,30 +414,45 @@
                         <div class="slider-readout">
                             <output for="rate">0.48%</output>
                             <small data-revenue>–</small>
+                            <small data-less>–</small>
                         </div>
                         <div class="slider-track">
                             <label class="visually-hidden" for="rate">Flat tax rate</label>
-                            <input id="rate" type="range" min="0.002" max="0.012" step="0.00001" value="0.0048" data-chart="chart-6">
+                            <input id="rate" type="range" min="0.002" max="0.012" step="0.00001" value="0.0048" data-chart="chart-6 chart-6b">
                             <div class="slider-marks">
                                 <button type="button" data-rate="0.0048">0.48%</button>
                                 <button type="button" data-rate="neutral">–</button>
                             </div>
                         </div>
                     </div>
-                    <div class="segmented" role="group" aria-label="Revenue" data-chart="chart-6" data-signal="mode">
+                    <div class="segmented" role="group" aria-label="Revenue" data-chart="chart-6 chart-6b" data-signal="mode">
                         <button type="button" data-value="national" aria-pressed="true">One rate for England</button>
                         <button type="button" data-value="local" aria-pressed="false">Each council keeps its revenue</button>
                     </div>
                 </div>
-                <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420" data-fit="screen"
-                    role="img" aria-label="Hexagon map of English councils shaded by the share of homes that would pay less under a flat tax on current value."></div>
-                <p class="council-readout" data-readout="flat" aria-live="polite" hidden></p>
+                <!-- Map by council, and the same flat tax by income: both follow the slider and the revenue switch -->
+                <div class="chart-pair">
+                    <div>
+                        <p class="panel-title">By council</p>
+                        <div class="chart-body" id="chart-6" data-spec="project/charts/06-flat-tax.vl.json" data-height="640 420" data-fit="screen"
+                            role="img" aria-label="Hexagon map of English councils shaded by the share of homes that would pay less under a flat tax on current value."></div>
+                        <p class="council-readout" data-readout="flat" aria-live="polite" hidden></p>
+                    </div>
+                    <div>
+                        <p class="panel-title">By income of the area</p>
+                        <div class="chart-body" id="chart-6b" data-spec="project/charts/06b-income.vl.json" data-height="300 260"
+                            role="img" aria-label="Bar chart: share of homes in areas that would pay less under a flat tax, for each fifth of areas ranked by household income, with the share for England as a line."></div>
+                    </div>
+                </div>
                 <footer class="chart-foot">
-                    <p>Sources: as figures 2 and 3. Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>
+                    <p class="chart-key">Income groups: fifths of areas by mean household income before housing costs, each holding a fifth of homes.</p>
+                    <p>Sources: as figures 2 and 3; ONS (Income estimates for small areas, <span data-stat="sources.income.year">financial year ending 2023</span>). Marked rates: Fairer Share’s proposed 0.48%, and the rate that raises today’s total.</p>
                     <p class="chart-actions">
                         <a href="project/data/msoa.csv" download>Data (CSV)</a>
-                        <a href="project/charts/06-flat-tax.vl.json">Chart specification</a>
-                        <button type="button" data-save="chart-6">Save image</button>
+                        <a href="project/charts/06-flat-tax.vl.json">Map specification</a>
+                        <a href="project/charts/06b-income.vl.json">Income chart specification</a>
+                        <button type="button" data-save="chart-6">Save map</button>
+                        <button type="button" data-save="chart-6b">Save income chart</button>
                     </p>
                     <details class="chart-notes">
                         <summary>Notes and method</summary>
@@ -467,6 +482,7 @@
                             <tr><td><a href="https://www.gov.uk/government/collections/fuel-poverty-sub-regional-statistics">Sub-regional fuel poverty</a></td><td>DESNZ</td><td>Fuel poverty by council and small area</td><td>OGL v3.0</td></tr>
                             <tr><td><a href="https://github.com/odileeds/hexmaps">Hexmaps: local authority districts 2025</a></td><td>Open Innovations</td><td>Hexagon map layout</td><td>MIT</td></tr>
                             <tr><td><a href="https://geoportal.statistics.gov.uk/">Local authority district boundaries</a> (December 2024), generalised</td><td>ONS, via Open Innovations</td><td>Real map in figure 3</td><td>OGL v3.0; OS rights</td></tr>
+                            <tr><td><a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales">Income estimates for small areas</a> (<span data-stat="sources.income.year">financial year ending 2023</span>)</td><td>ONS</td><td>Income groups in figure 6</td><td>OGL v3.0</td></tr>
                         </tbody>
                     </table>
                 </div>

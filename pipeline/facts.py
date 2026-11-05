@@ -119,7 +119,16 @@ def flat_tax(msoa, neutral):
                 "revenue": (rates * msoa.value * msoa.dwellings).sum() / bills}
 
     fairer, flat, local = outcome(config.FAIRER_SHARE_RATE), outcome(neutral), outcome(msoa.r_local)
-    return {"fs_rate": config.FAIRER_SHARE_RATE, "fs_revenue": fairer["revenue"], "fs_less": fairer["less"],
+    by_income = {}
+    if "income_group" in msoa:
+        for group in range(1, config.INCOME_GROUPS + 1):
+            part = msoa[msoa.income_group == group]
+            homes_in = part.dwellings.sum()
+            if homes_in:
+                by_income[f"income{group}_less_neutral"] = (part.dwellings * (neutral * part.value < part.bill)).sum() / homes_in
+                by_income[f"income{group}_less_fs"] = (part.dwellings * (config.FAIRER_SHARE_RATE * part.value < part.bill)).sum() / homes_in
+                by_income[f"income{group}_mean"] = (part.income * part.dwellings).sum() / homes_in
+    return {**by_income,"fs_rate": config.FAIRER_SHARE_RATE, "fs_revenue": fairer["revenue"], "fs_less": fairer["less"],
             "fs_councils_more": fairer["councils_more"], "neutral_rate": neutral, "neutral_less": flat["less"],
             "neutral_councils_more": flat["councils_more"], "local_less": local["less"],
             "local_councils_more": local["councils_more"], "councils": int(msoa.lad.nunique())}

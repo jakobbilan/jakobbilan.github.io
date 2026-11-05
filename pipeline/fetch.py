@@ -11,7 +11,8 @@ import sys
 import time
 from datetime import date
 from pathlib import Path
-from urllib.parse import urlparse
+from html import unescape
+from urllib.parse import unquote, urljoin, urlparse
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -168,3 +169,16 @@ def postcode_lookup(refresh=False):
         return download(url, f"postcode-lookup-{item['id']}.zip", refresh), item["title"], url
     url = config.ARCGIS_ITEM_DATA.format(item=config.ONSPD_FALLBACK_ITEM)
     return download(url, "onspd.zip", refresh), "ONS Postcode Directory", url
+
+
+def latest_ons_edition(page_url, contains="smallareaincomeestimates"):
+    """The newest workbook on an ONS dataset page, which lists its editions newest first."""
+    response = session().get(page_url, timeout=60)
+    response.raise_for_status()
+    links = [unescape(link) for link in re.findall(r'href="([^"]*file\?uri=[^"]*\.xlsx?)"', response.text)]
+    links = [link for link in links if contains in unquote(link)]
+    if not links:
+        raise ValueError(f"no workbook found on {page_url}")
+    url = urljoin(page_url, links[0])
+    edition = re.search(r"financialyearending(\d{4})", unquote(url))
+    return url, (f"financial year ending {edition.group(1)}" if edition else None)

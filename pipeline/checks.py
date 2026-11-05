@@ -48,6 +48,12 @@ def run(councils, msoa, england, sales_stats, fiscal_year, hpi_march_2026=None):
     results.append(_result("msoa_coverage", covered >= 6500, f"{covered:,} MSOAs with a value"))
 
     r_star = england["revenue_neutral_rate"]
+    if "income" in msoa:
+        matched = msoa.income.notna().mean()
+        results.append(_result("income_matched", matched >= 0.99,
+                               f"{matched:.1%} of areas matched to ONS income estimates", warn_only=True))
+    else:
+        results.append(_result("income_matched", False, "ONS income estimates unavailable; no income panel", warn_only=True))
     results.append(_result("revenue_neutral_rate", 0.003 <= r_star <= 0.012, f"{r_star:.3%}"))
 
     return results

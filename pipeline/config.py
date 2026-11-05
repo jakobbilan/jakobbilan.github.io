@@ -80,3 +80,8 @@ PAIR = ("E07000117", "E09000033")            # Burnley, Westminster
 SURCHARGE_COUNCIL = "E09000033"              # Band H home in Westminster
 COMPARE_COUNCIL = "E07000117"                # against the average home in Burnley
 SURCHARGE_VALUES = (2_000_000, 5_000_000, 10_000_000)
+
+# ONS: model-based income estimates for small areas (MSOAs). Editions are listed newest first on this page
+INCOME_PAGE = ("https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/"
+               "smallareaincomeestimatesformiddlelayersuperoutputareasenglandandwales")
+INCOME_GROUPS = 5            # fifths of areas by income, each holding a fifth of homes

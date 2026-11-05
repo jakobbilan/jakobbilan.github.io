@@ -102,6 +102,7 @@ def make_sources(directory, hexjson_path, fixture_path, msoas_per_council=3, sal
     paths["ppd"] = _ppd(directory, sale_rows)
     paths["lookup"] = _lookup(directory, postcode_rows)
     paths["fuel_poverty"] = _fuel_poverty(directory, lads, msoas, lsoas, rng)
+    paths["income"] = _income(directory, msoas, lads, rng)
     paths["hexjson"] = Path(hexjson_path)
     return paths, msoas
 
@@ -246,4 +247,26 @@ def _fuel_poverty(directory, lads, msoas, lsoas, rng):
         pd.DataFrame([["Contents"]]).to_excel(writer, sheet_name="Contents", header=False, index=False)
         pd.DataFrame(table2).to_excel(writer, sheet_name="Table 2", header=False, index=False)
         pd.DataFrame(table4).to_excel(writer, sheet_name="Table 4", header=False, index=False)
+    return path
+
+
+def _income(directory, msoas, lads, rng):
+    """ONS-style small area income workbook: contents, then one sheet per income measure, each with title rows."""
+    path = directory / "ons-small-area-income.xlsx"
+    price = lads.set_index("lad").price
+    header = ["MSOA code", "MSOA name", "Local authority code", "Local authority name", "Region code", "Region name"]
+    def sheet(title, label, scale):
+        rows = [[title], ["Financial year ending 2023"], [""], header + [label, "Upper confidence limit (£)",
+                                                                       "Lower confidence limit (£)", "Confidence interval (£)"]]
+        for m in msoas.itertuples():
+            income = round(scale * (24_000 + 0.05 * price[m.lad]) * rng.uniform(0.8, 1.2), -2)
+            rows.append([m.msoa, m.name, m.lad, "", "", "", income, income * 1.1, income * 0.9, income * 0.2])
+        return pd.DataFrame(rows)
+    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+        pd.DataFrame([["Contents"], ["Income estimates for small areas"]]).to_excel(writer, sheet_name="Contents", header=False, index=False)
+        sheet("Total annual income", "Total annual income (£)", 1.6).to_excel(writer, sheet_name="Total annual income", header=False, index=False)
+        sheet("Net annual income before housing costs (equivalised)", "Net annual income before housing costs (£)", 1.0).to_excel(
+            writer, sheet_name="Net income before housing costs", header=False, index=False)
+        sheet("Net annual income after housing costs (equivalised)", "Net annual income after housing costs (£)", 0.7).to_excel(
+            writer, sheet_name="Net income after housing costs", header=False, index=False)
     return path

@@ -254,6 +254,11 @@ body.project-page > header {
     }
 }
 
+/* A pair with its second panel hidden (no income data in a build) gives the first the full row */
+.chart-pair.is-single {
+    grid-template-columns: minmax(0, 1fr);
+}
+
 /* Section links, pinned under the top edge once the reader passes the opening */
 .contents {
     position: sticky;

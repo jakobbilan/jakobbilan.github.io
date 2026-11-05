@@ -1,0 +1,294 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Share of homes in areas that would pay less under a flat tax on current value, for each fifth of areas ranked by mean household income (ONS small area income estimates), with the share for England as a dashed line. Follows the rate slider and the revenue switch of the map beside it.",
+  "width": "container",
+  "height": 260,
+  "padding": {
+    "top": 24,
+    "right": 8,
+    "bottom": 4,
+    "left": 4
+  },
+  "data": {
+    "url": "project/data/msoa.csv",
+    "format": {
+      "parse": {
+        "dwellings": "number",
+        "bill": "number",
+        "value": "number",
+        "r_local": "number",
+        "income": "number",
+        "income_group": "number"
+      }
+    }
+  },
+  "params": [
+    {
+      "name": "rate",
+      "value": 0.0048
+    },
+    {
+      "name": "mode",
+      "value": "national"
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "mode == 'local' ? datum.r_local : rate",
+      "as": "applied"
+    },
+    {
+      "calculate": "datum.applied * datum.value < datum.bill ? datum.dwellings : 0",
+      "as": "less"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "less",
+          "as": "less_all"
+        },
+        {
+          "op": "sum",
+          "field": "dwellings",
+          "as": "homes_all"
+        }
+      ]
+    },
+    {
+      "filter": "isValid(datum.income_group) && isValid(datum.income)"
+    },
+    {
+      "calculate": "datum.income * datum.dwellings",
+      "as": "income_weighted"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "less",
+          "as": "less"
+        },
+        {
+          "op": "sum",
+          "field": "dwellings",
+          "as": "homes"
+        },
+        {
+          "op": "sum",
+          "field": "income_weighted",
+          "as": "income_weighted"
+        },
+        {
+          "op": "max",
+          "field": "less_all",
+          "as": "less_all"
+        },
+        {
+          "op": "max",
+          "field": "homes_all",
+          "as": "homes_all"
+        }
+      ],
+      "groupby": [
+        "income_group"
+      ]
+    },
+    {
+      "calculate": "datum.less / datum.homes",
+      "as": "share"
+    },
+    {
+      "calculate": "datum.less_all / datum.homes_all",
+      "as": "england"
+    },
+    {
+      "calculate": "datum.income_weighted / datum.homes",
+      "as": "mean_income"
+    },
+    {
+      "calculate": "['Lowest-income fifth', 'Second fifth', 'Middle fifth', 'Fourth fifth', 'Highest-income fifth'][datum.income_group - 1]",
+      "as": "group"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "group",
+      "type": "nominal",
+      "sort": [
+        "Lowest-income fifth",
+        "Second fifth",
+        "Middle fifth",
+        "Fourth fifth",
+        "Highest-income fifth"
+      ],
+      "title": null,
+      "axis": {
+        "labelLimit": 170,
+        "ticks": false,
+        "domain": false,
+        "labelPadding": 8
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "height": {
+          "band": 0.62
+        },
+        "cornerRadiusEnd": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "share",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          },
+          "axis": {
+            "format": ".0%",
+            "grid": true,
+            "title": "Homes in areas that would pay less",
+            "values": [
+              0,
+              0.25,
+              0.5,
+              0.75,
+              1
+            ]
+          }
+        },
+        "color": {
+          "field": "share",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              0.1,
+              0.25,
+              0.4,
+              0.6,
+              0.75,
+              0.9
+            ],
+            "range": [
+              "#b8431f",
+              "#d9785a",
+              "#f0b9a5",
+              "#eef0f2",
+              "#a9bfdf",
+              "#6b8fc4",
+              "#2f5a99"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "title": "Areas"
+          },
+          {
+            "field": "share",
+            "type": "quantitative",
+            "format": ".0%",
+            "title": "Homes in areas that would pay less"
+          },
+          {
+            "field": "mean_income",
+            "type": "quantitative",
+            "format": ",.0f",
+            "title": "Mean household income, £ a year"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 4,
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "x": {
+          "field": "share",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "share",
+          "type": "quantitative",
+          "format": ".0%"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.income_group == 1"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#16191d",
+        "strokeWidth": 1.2,
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "england",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": "height"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.income_group == 1"
+        },
+        {
+          "calculate": "'England ' + format(datum.england, '.0%')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -6,
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "x": {
+          "field": "england",
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 0
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ]
+}

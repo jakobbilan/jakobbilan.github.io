@@ -633,10 +633,51 @@
 
     // Flat-tax slider -----------------------------------------------------------------------
 
+    // The small-area table, loaded once (the browser already holds it for the charts), for the share of homes
+    // in areas that would pay less at the slider's rate
+    let areaRows = null;
+    function loadAreas() {
+        if (!areaRows) {
+            areaRows = fetch("project/data/msoa.csv")
+                .then(function (response) { return response.text(); })
+                .then(function (text) { return vega.read(text, { type: "csv", parse: "auto" }); });
+        }
+        return areaRows;
+    }
+
     function wireSlider(slider) {
         const input = slider.querySelector("input[type=range]");
         const output = slider.querySelector("output");
         const note = slider.querySelector("[data-revenue]");
+        const lessNote = slider.querySelector("[data-less]");
+        let ticket = 0;
+
+        // homes in areas whose average bill would fall: the rate times the area's average value, against its bill
+        // without income data (the ONS source missing from a build), the income panel is hidden, not left empty
+        loadAreas().then(function (rows) {
+            const panel = document.getElementById("chart-6b");
+            if (panel && rows.length && rows[0].income_group == null) {
+                panel.parentElement.hidden = true;
+                panel.closest(".chart-pair").classList.add("is-single");
+            }
+        });
+
+        function showLess(rate, local) {
+            if (!lessNote) return;
+            const mine = ++ticket;
+            loadAreas().then(function (rows) {
+                if (mine !== ticket) return;
+                let less = 0, homes = 0;
+                rows.forEach(function (row) {
+                    const applied = local ? row.r_local : rate;
+                    homes += row.dwellings;
+                    if (applied * row.value < row.bill) less += row.dwellings;
+                });
+                lessNote.textContent = "Homes in areas paying less: " + formatValue(less / homes, "pct0");
+            }).catch(function () {
+                lessNote.textContent = "";
+            });
+        }
         const neutral = summary.england.revenue_neutral_rate;
         const min = Number(input.min);
         const max = Number(input.max);
@@ -673,6 +714,7 @@
             flatState.rate = rate;
             flatState.local = local;
             showFlatReadout();
+            showLess(rate, local);
         }
 
         let frame = 0;

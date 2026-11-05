@@ -158,3 +158,34 @@ def test_figure_5_estimate_lies_within_its_bounds(built):
     shares = [fig5[f"lab{k}_share_ad"] for k in range(1, 6)]
     assert shares == sorted(shares)
     assert 0 < fig5["top10_outside_share"] <= 1
+
+
+def test_income_groups(built, tmp_path):
+    (tables, summary, results, geo), truth = built
+    msoa = tables["msoa"]
+    assert msoa.income.notna().all()
+    shares = msoa.groupby("income_group").dwellings.sum() / msoa.dwellings.sum()
+    assert list(shares.index) == [1, 2, 3, 4, 5]
+    assert (abs(shares - 0.2) < 0.06).all()                          # each group holds about a fifth of homes
+    means = msoa.groupby("income_group").income.mean()
+    assert means.is_monotonic_increasing
+    fig6 = summary["facts"]["fig6"]
+    assert 0 <= fig6["income1_less_neutral"] <= 1 and 0 <= fig6["income5_less_fs"] <= 1
+    assert {r["check"]: r["status"] for r in results}["income_matched"] == "pass"
+
+
+def test_income_reader_picks_before_housing_costs(built):
+    (tables, summary, results, geo), truth = built
+    sheets = pd.read_excel(build.config.CACHE.parent / "ons-small-area-income.xlsx", sheet_name=None, header=None)
+    bhc = sheets["Net income before housing costs"]
+    first = bhc[bhc[0].astype(str).str.match(r"^E02")].iloc[0]
+    row = tables["msoa"].set_index("msoa").loc[first[0]]
+    assert abs(row.income - round(float(first[6]), -2)) <= 100
+
+
+def test_build_survives_missing_income(tmp_path):
+    msoa = pd.DataFrame({"msoa": ["E02000001"], "dwellings": [100.0]})
+    out = build.add_income(msoa, None)
+    assert "income" not in out
+    out = build.add_income(msoa, tmp_path / "missing.xlsx")
+    assert "income" not in out

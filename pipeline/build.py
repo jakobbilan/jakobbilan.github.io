@@ -40,6 +40,13 @@ def resolve_sources(today, refresh=False):
     paths["fuel_poverty"] = fetch.download(url, refresh=refresh)
     meta["fuel_poverty"] = {"url": url, "page": page}
 
+    try:
+        url, edition = fetch.latest_ons_edition(config.INCOME_PAGE)
+        paths["income"] = fetch.download(url, "ons-small-area-income.xlsx", refresh=refresh)
+        meta["income"] = {"url": url, "page": config.INCOME_PAGE, "year": edition}
+    except Exception as error:
+        fetch.log(f"income estimates unavailable ({error}); the page shows no income panel")
+
     url, month = fetch.latest_hpi_url(today)
     paths["hpi"] = fetch.download(url, refresh=refresh)
     meta["hpi"] = {"url": url, "month": month}
@@ -69,6 +76,24 @@ def msoa_names(path):
     code = next(c for c in frame.columns if c.startswith("msoa21cd"))
     names = [c for c in frame.columns if "hcl" in c and c.endswith("nm")] or [c for c in frame.columns if c.endswith("nm")]
     return frame.set_index(code)[names[0]]
+
+
+def add_income(msoa, path):
+    """Each area's mean household income (ONS) and its fifth of areas by income; each fifth holds a fifth of homes."""
+    msoa = msoa.reset_index(drop=True)
+    if not path:
+        return msoa
+    try:
+        income = read.read_income(path)
+    except Exception as error:
+        fetch.log(f"income estimates unreadable ({error}); the page shows no income panel")
+        return msoa
+    msoa = msoa.merge(income, on="msoa", how="left")
+    order = msoa[msoa.income.notna()].sort_values("income")
+    middle = (order.dwellings.cumsum() - order.dwellings / 2) / order.dwellings.sum()
+    groups = config.INCOME_GROUPS
+    msoa.loc[order.index, "income_group"] = (middle * groups).astype(int).clip(0, groups - 1) + 1
+    return msoa
 
 
 def build_outputs(paths, meta):
@@ -107,6 +132,7 @@ def build_outputs(paths, meta):
         msoa["name"] = msoa.msoa.map(names).fillna(msoa["name"])
     msoa = msoa.dropna(subset=["bill", "value"])
     msoa["r_local"] = msoa.lad.map(compute.revenue_neutral(msoa, by="lad"))
+    msoa = add_income(msoa, paths.get("income"))
 
     # Council totals from their MSOAs
     weights = msoa.assign(bill_total=msoa.bill * msoa.dwellings, value_total=msoa.value * msoa.dwellings)
@@ -201,6 +227,7 @@ def write_outputs(tables, summary, results, geo):
         "dwellings": msoa.dwellings.round().astype(int), "bill": msoa.bill.round(0),
         "value": (msoa.value / 100).round() * 100, "rate": msoa.rate.round(6),
         "sales": msoa.sales.astype(int), "r_local": msoa.r_local.round(6),
+        **({"income": msoa.income.round(-2), "income_group": msoa.income_group.astype("Int64")} if "income" in msoa else {}),
     })
     out.sort_values("msoa").to_csv(config.OUT_DATA / "msoa.csv", index=False)
 

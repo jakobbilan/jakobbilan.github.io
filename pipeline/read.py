@@ -327,3 +327,51 @@ def _fuel_poverty_table(sheet):
     })
     out["rate"] = (to_number(rows[share]).values / 100) if share is not None else out.fuel_poor / out.households
     return out.dropna(subset=["households", "fuel_poor"])
+
+
+# ONS: income estimates for small areas --------------------------------------------------
+
+MSOA_CODE = re.compile(r"^[EW]02\d{6}$")
+NOT_ESTIMATE = ("confidence", "limit", "interval", "upper", "lower")
+
+
+def read_income(path):
+    """Mean equivalised household disposable income before housing costs, by MSOA.
+
+    The workbook holds one sheet per income measure. The sheet is chosen by the words in its name and title rows,
+    the header by the first row of MSOA codes and the column by its label, so a changed layout is tolerated."""
+    sheets = pd.read_excel(path, sheet_name=None, header=None, dtype=str)
+    best = None
+    for name, sheet in sheets.items():
+        found = _income_table(name, sheet)
+        if found is not None and (best is None or found[1] > best[1]):
+            best = found
+    if best is None or best[1] < 2:
+        raise ValueError("no sheet of net income before housing costs by MSOA")
+    return best[0]
+
+
+def _income_table(name, sheet):
+    sheet = sheet.fillna("")
+    is_code = sheet.apply(lambda col: col.astype(str).str.strip().str.match(MSOA_CODE))
+    if is_code.values.sum() < 100:
+        return None
+    code_col = is_code.sum().idxmax()
+    first = is_code[code_col].idxmax()
+    above = sheet.iloc[:first].astype(str)
+    header = above.apply(lambda col: " ".join(col).lower())
+    title = (str(name) + " " + " ".join(above.values.ravel())).lower()
+    score = 0
+    score += 2 if ("before housing" in title or "bhc" in title) else 0
+    score -= 3 if ("after housing" in title or "ahc" in title) else 0
+    score += 1 if "equivalised" in title else 0
+    score -= 2 if "total" in title else 0
+    rows = is_code[code_col]
+    for column, text in header.items():
+        if column == code_col or not ("income" in text or "£" in text) or any(w in text for w in NOT_ESTIMATE):
+            continue
+        values = to_number(sheet.loc[rows, column])
+        if values.notna().mean() > 0.9 and values.median() > 1000:
+            out = pd.DataFrame({"msoa": sheet.loc[rows, code_col].str.strip().values, "income": values.values})
+            return out.dropna(), score
+    return None
