@@ -94,6 +94,18 @@ body.project-page > header {
     grid-template-columns: subgrid;
 }
 
+/* Safeguard: a section left unclosed traps every later section inside it. As subgrids they still reach the
+   wide column, so figures keep their full width (.project .wide outranks these rules) */
+.project section section {
+    grid-column: full;
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+.project section section > * {
+    grid-column: content;
+}
+
 .project .wide,
 .project > section > .wide {
     grid-column: wide;
