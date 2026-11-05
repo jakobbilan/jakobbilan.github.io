@@ -206,3 +206,26 @@ def test_income_reader_finds_both_measures(built):
 def test_income_sheets_recorded(built):
     (tables, summary, results, geo), truth = built
     assert summary["sources"]["income"]["sheets"] == {"income": "Net income before housing costs", "net_income": "Net annual income"}
+
+
+def test_slope_marks(built):
+    (tables, summary, results, geo), truth = built
+    fig6 = summary["facts"]["fig6"]
+    assert 0 <= fig6["theta_today"] < 1                                # bills rise less than proportionally with value
+    if "theta_equal" in fig6:
+        assert fig6["theta_today"] < fig6["theta_equal"] < 2
+
+
+def test_unchanged_build_writes_nothing(built, tmp_path):
+    (tables, summary, results, geo), truth = built
+    out_data, out_geo = config.OUT_DATA, config.OUT_GEO
+    config.OUT_DATA, config.OUT_GEO = tmp_path / "data", tmp_path / "geo"
+    try:
+        first = build.write_outputs(tables, {**summary, "built": "2026-11-01T04:00Z"}, results, geo)
+        assert "summary.json" in first
+        again = build.write_outputs(tables, {**summary, "built": "2026-11-02T04:00Z"}, results, geo)
+        assert again == []                                                  # nothing changed, nothing written
+        kept = json.loads((tmp_path / "data" / "summary.json").read_text())
+        assert kept["built"] == "2026-11-01T04:00Z"                          # the date the data last changed
+    finally:
+        config.OUT_DATA, config.OUT_GEO = out_data, out_geo

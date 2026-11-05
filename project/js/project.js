@@ -493,7 +493,7 @@
 
     // The council chosen on the maps, by name or by location, read out under figures 3 and 6
     let chosen = null;
-    const flatState = { rate: null, local: false };
+    const flatState = { average: null, mode: "national" };
 
     function readout(kind) {
         return document.querySelector('[data-readout="' + kind + '"]');
@@ -550,25 +550,24 @@
         const box = readout("flat");
         if (!box) return;
         const council = chosen && councilRow(chosen);
-        if (!council || !isFinite(council.bill) || !isFinite(council.value) || flatState.rate === null) {
+        if (!council || !isFinite(council.bill) || !isFinite(council.value) || !flatState.average) {
             box.hidden = true;
             return;
         }
         box.innerHTML = "";
         box.appendChild(element("b", null, council.name));
-        if (flatState.local) {
-            box.appendChild(document.createTextNode(": its own rate would be " + formatValue(council.rate_mix, "pct2") +
-                " of value, so its average bill stays at " + formatValue(council.bill, "gbp") +
+        if (flatState.mode === "local") {
+            box.appendChild(document.createTextNode(": its average bill stays at " + formatValue(council.bill, "gbp") +
                 "; the change runs between its own areas."));
         } else {
-            const flat = flatState.rate * council.value;
+            const flat = flatState.average[council.lad];
             const ratio = flat / council.bill;
             const change = ratio >= 2 ? ratio.toFixed(1) + " times today’s"
                 : ratio >= 1 ? formatValue(ratio - 1, "pct0") + " more"
                 : formatValue(1 - ratio, "pct0") + " less";
             box.appendChild(document.createTextNode(": average bill " + formatValue(council.bill, "gbp") +
                 " today, before discounts; about " + formatValue(Math.round(flat / 10) * 10, "gbp") +
-                " at " + formatValue(flatState.rate, "pct2") + " (" + change + ")."));
+                (flatState.mode === "fairer" ? " at 0.48% of value" : " with this reform") + " (" + change + ")."));
         }
         box.hidden = false;
     }
@@ -645,24 +644,75 @@
         return areaRows;
     }
 
-    // Figure 6 scenarios: each sets the rate and how revenue is shared, for the map, the income chart, the readout
-    // and the "Your council" box. "neutral" is the one rate that raises today's total; "local", each council's own
-    function wireScenarios(group) {
+    // Figure 6: a tax on current value. theta sets how steeply bills rise with value: a home worth twice as much
+    // pays 2^theta times as much. The bill raises today's total for England ("national") or for each council
+    // ("local"); "fairer" is Fairer Share's 0.48% of value. Same arithmetic as the chart specs.
+    function reform(rows, theta, mode) {
+        let bills = 0, powers = 0;
+        const councils = {};
+        rows.forEach(function (row) {
+            row.pv = Math.pow(row.value, theta);
+            const c = councils[row.lad] || (councils[row.lad] = { bills: 0, powers: 0, homes: 0, total: 0 });
+            c.bills += row.dwellings * row.bill;
+            c.powers += row.dwellings * row.pv;
+            c.homes += row.dwellings;
+            bills += row.dwellings * row.bill;
+            powers += row.dwellings * row.pv;
+        });
+        let less = 0, homes = 0;
+        rows.forEach(function (row) {
+            const c = councils[row.lad];
+            const bill = mode === "fairer" ? 0.0048 * row.value
+                : (mode === "local" ? c.bills / c.powers : bills / powers) * row.pv;
+            homes += row.dwellings;
+            if (bill < row.bill) less += row.dwellings;
+            c.total += row.dwellings * bill;
+        });
+        const average = {};
+        Object.keys(councils).forEach(function (code) {
+            average[code] = councils[code].total / councils[code].homes;
+        });
+        return { less: less / homes, average: average };
+    }
+
+    function wireReform(group) {
         const charts = group.dataset.scenarios.split(/\s+/);
         const controls = group.closest(".controls");
-        const output = controls.querySelector("[data-flat-rate]");
+        const input = controls.querySelector("input[type=range]");
+        const output = controls.querySelector("[data-steepness]");
         const note = controls.querySelector("[data-revenue]");
         const lessNote = controls.querySelector("[data-less]");
+        const marks = (summary.facts && summary.facts.fig6) || {};
         const neutral = summary.england.revenue_neutral_rate;
-        const scenarios = {
-            neutral: { rate: neutral, local: false },
-            local: { rate: neutral, local: true },
-            fairer: { rate: 0.0048, local: false },
-        };
+        const min = Number(input.min);
+        const max = Number(input.max);
+        const pressed = group.querySelector('button[aria-pressed="true"]');
+        let mode = pressed ? pressed.dataset.value : "national";
         let ticket = 0;
+        let frame = 0;
+        let pinned = null;              // a mark's exact value, kept until the slider is moved by hand
 
-        const sameTotal = group.querySelector('button[data-value="neutral"]');
-        if (sameTotal) sameTotal.textContent = "Same total as today (" + formatValue(neutral, "pct2") + ")";
+        function times(theta) {
+            return Math.pow(2, theta).toFixed(2) + "×";
+        }
+
+        controls.querySelectorAll(".slider-marks button").forEach(function (mark) {
+            const key = mark.dataset.theta;
+            const theta = key === "today" ? marks.theta_today : key === "equal" ? marks.theta_equal : Number(key);
+            if (!isFinite(theta)) {
+                mark.hidden = true;
+                return;
+            }
+            mark.style.setProperty("--at", (100 * (theta - min) / (max - min)).toFixed(2) + "%");
+            mark.title = (key === "today" ? "Today’s slope"
+                : key === "equal" ? "The same share of household income in the poorest and richest fifths of areas"
+                : "In proportion to value") + ": a home worth twice as much pays " + times(theta) + " as much";
+            mark.addEventListener("click", function () {
+                input.value = theta;
+                pinned = theta;
+                update();
+            });
+        });
 
         // without income data in a build, the income chart is hidden rather than left empty
         loadAreas().then(function (rows) {
@@ -673,40 +723,51 @@
             }
         });
 
-        function apply(key) {
-            const scenario = scenarios[key] || scenarios.neutral;
-            output.textContent = scenario.local ? "Varies" : formatValue(scenario.rate, "pct2");
-            note.textContent = scenario.local ? "Each council raises its current total"
-                : "Raises " + formatValue(scenario.rate / neutral, "pct0") + " of today’s bills";
-            charts.forEach(function (id) {
-                setSignal(id, "rate", scenario.rate);
-                setSignal(id, "mode", scenario.local ? "local" : "national");
-            });
-            flatState.rate = scenario.rate;
-            flatState.local = scenario.local;
-            showFlatReadout();
+        function describe(theta) {
+            const near = function (x) { return isFinite(x) && Math.abs(theta - x) < 0.015; };
+            if (near(marks.theta_today)) return "Today’s slope, with values brought up to date";
+            if (near(marks.theta_equal)) return "The same share of income in poorer and richer areas";
+            if (near(1)) return "In proportion to value: " + formatValue(neutral, "pct2") + " a year";
+            return "Bill for a home worth twice as much";
+        }
 
-            // homes in areas whose average bill would fall: the rate times the area's average value, against its bill
+        function update() {
+            const fairer = mode === "fairer";
+            if (fairer) input.value = 1;          // Fairer Share's proposal is in proportion to value
+            input.disabled = fairer;
+            const value = Number(input.value);
+            const theta = fairer ? 1 : pinned !== null && Math.abs(pinned - value) < 0.006 ? pinned : value;
+            input.style.setProperty("--fill", (100 * (theta - min) / (max - min)).toFixed(2) + "%");
+            output.textContent = fairer ? formatValue(0.0048, "pct2") : times(theta);
+            note.textContent = fairer ? "Raises " + formatValue(0.0048 / neutral, "pct0") + " of today’s bills"
+                : mode === "local" ? "Each council raises its current total" : describe(theta);
+            charts.forEach(function (id) {
+                setSignal(id, "theta", theta);
+                setSignal(id, "mode", mode);
+            });
             const mine = ++ticket;
             loadAreas().then(function (rows) {
                 if (mine !== ticket) return;
-                let less = 0, homes = 0;
-                rows.forEach(function (row) {
-                    const applied = scenario.local ? row.r_local : scenario.rate;
-                    homes += row.dwellings;
-                    if (applied * row.value < row.bill) less += row.dwellings;
-                });
-                lessNote.textContent = "Homes in areas paying less: " + formatValue(less / homes, "pct0");
+                const result = reform(rows, theta, mode);
+                lessNote.textContent = "Homes in areas paying less: " + formatValue(result.less, "pct0");
+                flatState.average = result.average;
+                flatState.mode = mode;
+                showFlatReadout();
             }).catch(function () {
                 lessNote.textContent = "";
             });
         }
 
-        group.addEventListener("choice", function (event) {
-            apply(event.detail);
+        input.addEventListener("input", function () {
+            pinned = null;
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(update);
         });
-        const pressed = group.querySelector('button[aria-pressed="true"]');
-        apply(pressed ? pressed.dataset.value : "neutral");
+        group.addEventListener("choice", function (event) {
+            mode = event.detail;
+            update();
+        });
+        update();
     }
 
     // Scroll-driven steps -----------------------------------------------------------------
@@ -878,7 +939,7 @@
                     console.error(error);
                 })
                 .then(function () {
-                    document.querySelectorAll("[data-scenarios]").forEach(wireScenarios);
+                    document.querySelectorAll("[data-scenarios]").forEach(wireReform);
                     lazyLoad();
                 });
         });

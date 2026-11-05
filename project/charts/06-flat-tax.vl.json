@@ -1,12 +1,12 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Share of homes in each council that would pay less under a flat tax on current value, for a chosen rate.",
+  "description": "Share of homes in each council in areas that would pay less under a tax on current value that raises today's total, with bills rising with value as set by the slider (or Fairer Share's 0.48% of value).",
   "width": "container",
   "height": 600,
   "params": [
     {
-      "name": "rate",
-      "value": 0.0048
+      "name": "theta",
+      "value": 1
     },
     {
       "name": "mode",
@@ -38,15 +38,58 @@
       },
       "transform": [
         {
-          "calculate": "mode == 'local' ? datum.r_local : rate",
-          "as": "r"
+          "calculate": "pow(datum.value, theta)",
+          "as": "pv"
         },
         {
-          "calculate": "datum.r * datum.value < datum.bill ? datum.dwellings : 0",
+          "calculate": "datum.dwellings * datum.pv",
+          "as": "w_pv"
+        },
+        {
+          "calculate": "datum.dwellings * datum.bill",
+          "as": "w_bill"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "w_pv",
+              "as": "pv_all"
+            },
+            {
+              "op": "sum",
+              "field": "w_bill",
+              "as": "bill_all"
+            }
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "w_pv",
+              "as": "pv_lad"
+            },
+            {
+              "op": "sum",
+              "field": "w_bill",
+              "as": "bill_lad"
+            }
+          ],
+          "groupby": [
+            "lad"
+          ]
+        },
+        {
+          "calculate": "mode == 'fairer' ? 0.0048 * datum.value : (mode == 'local' ? datum.bill_lad / datum.pv_lad : datum.bill_all / datum.pv_all) * datum.pv",
+          "as": "new_bill"
+        },
+        {
+          "calculate": "datum.new_bill < datum.bill ? datum.dwellings : 0",
           "as": "less"
         },
         {
-          "calculate": "datum.r * datum.value * datum.dwellings",
+          "calculate": "datum.new_bill * datum.dwellings",
           "as": "new_total"
         },
         {
@@ -178,7 +221,7 @@
           },
           {
             "field": "bill_flat",
-            "title": "Average bill at the flat rate",
+            "title": "Average bill under the reform",
             "type": "quantitative",
             "format": "$,.0f"
           },
@@ -223,15 +266,58 @@
       },
       "transform": [
         {
-          "calculate": "mode == 'local' ? datum.r_local : rate",
-          "as": "r"
+          "calculate": "pow(datum.value, theta)",
+          "as": "pv"
         },
         {
-          "calculate": "datum.r * datum.value < datum.bill ? datum.dwellings : 0",
+          "calculate": "datum.dwellings * datum.pv",
+          "as": "w_pv"
+        },
+        {
+          "calculate": "datum.dwellings * datum.bill",
+          "as": "w_bill"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "w_pv",
+              "as": "pv_all"
+            },
+            {
+              "op": "sum",
+              "field": "w_bill",
+              "as": "bill_all"
+            }
+          ]
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "w_pv",
+              "as": "pv_lad"
+            },
+            {
+              "op": "sum",
+              "field": "w_bill",
+              "as": "bill_lad"
+            }
+          ],
+          "groupby": [
+            "lad"
+          ]
+        },
+        {
+          "calculate": "mode == 'fairer' ? 0.0048 * datum.value : (mode == 'local' ? datum.bill_lad / datum.pv_lad : datum.bill_all / datum.pv_all) * datum.pv",
+          "as": "new_bill"
+        },
+        {
+          "calculate": "datum.new_bill < datum.bill ? datum.dwellings : 0",
           "as": "less"
         },
         {
-          "calculate": "datum.r * datum.value * datum.dwellings",
+          "calculate": "datum.new_bill * datum.dwellings",
           "as": "new_total"
         },
         {

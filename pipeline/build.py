@@ -222,6 +222,14 @@ def build_outputs(paths, meta):
 def write_outputs(tables, summary, results, geo):
     config.OUT_DATA.mkdir(parents=True, exist_ok=True)
     config.OUT_GEO.mkdir(parents=True, exist_ok=True)
+    changed = []
+
+    def save(path, text):
+        """Write a file only if its content differs, so an unchanged build leaves nothing to commit."""
+        if path.exists() and path.read_text(encoding="utf-8") == text:
+            return
+        path.write_text(text, encoding="utf-8")
+        changed.append(path.name)
 
     msoa = tables["msoa"]
     out = pd.DataFrame({
@@ -232,12 +240,12 @@ def write_outputs(tables, summary, results, geo):
         **({"income": msoa.income.round(-2), "income_group": msoa.income_group.astype("Int64")} if "income" in msoa else {}),
         **({"net_income": msoa.net_income.round(-2)} if "net_income" in msoa else {}),
     })
-    out.sort_values("msoa").to_csv(config.OUT_DATA / "msoa.csv", index=False)
+    save(config.OUT_DATA / "msoa.csv", out.sort_values("msoa").to_csv(index=False))
 
     bins = tables["bins"].copy()
     bins["value"] = bins.value.round(-2)
     bins[["rate_p25", "rate", "rate_p75"]] = bins[["rate_p25", "rate", "rate_p75"]].round(6)
-    bins.to_csv(config.OUT_DATA / "msoa_bins.csv", index=False)
+    save(config.OUT_DATA / "msoa_bins.csv", bins.to_csv(index=False))
 
     c = tables["councils"]
     columns = {"lad": None, "name": None, "region": None, "dwellings": 0, "band_d": 2, "bill": 0, "value": -2,
@@ -245,16 +253,15 @@ def write_outputs(tables, summary, results, geo):
                "fp_rate": 4, "fp_outside_ad": 0, "fp_outside_ad_min": 0, "fp_outside_ad_max": 0, "sales_2m": 0, "sales_all": 0, "r_local": 6}
     council_out = pd.DataFrame({k: (c[k].round(d) if d is not None else c[k]) for k, d in columns.items()
                                 if k in c})
-    council_out.sort_values("lad").to_csv(config.OUT_DATA / "councils.csv", index=False)
+    save(config.OUT_DATA / "councils.csv", council_out.sort_values("lad").to_csv(index=False))
 
     regions = tables["regions"].copy()
     regions["date"] = regions.date.dt.strftime("%Y-%m-%d")
     regions["price"] = regions.price.round(0)
     regions["multiple"] = regions.multiple.round(4)
-    regions[["region", "code", "date", "price", "multiple"]].to_csv(config.OUT_DATA / "regions.csv", index=False)
+    save(config.OUT_DATA / "regions.csv", regions[["region", "code", "date", "price", "multiple"]].to_csv(index=False))
 
-    tables["references"].assign(rate=lambda f: f.rate.round(6)).to_csv(
-        config.OUT_DATA / "reference_rates.csv", index=False)
+    save(config.OUT_DATA / "reference_rates.csv", tables["references"].assign(rate=lambda f: f.rate.round(6)).to_csv(index=False))
 
     def clean(value):
         if isinstance(value, (np.floating, float)):
@@ -269,11 +276,18 @@ def write_outputs(tables, summary, results, geo):
             return value.isoformat()
         return value
 
+    save(config.OUT_GEO / "hex-lad-2025.geojson", json.dumps(geo, separators=(",", ":")))
     summary = clean({**summary, "checks": results})
-    with open(config.OUT_DATA / "summary.json", "w", encoding="utf-8") as handle:
-        json.dump(summary, handle, indent=2, ensure_ascii=False)
-    with open(config.OUT_GEO / "hex-lad-2025.geojson", "w", encoding="utf-8") as handle:
-        json.dump(geo, handle, separators=(",", ":"))
+    path = config.OUT_DATA / "summary.json"
+    if path.exists() and not changed:
+        try:
+            previous = json.loads(path.read_text(encoding="utf-8"))
+            if {k: v for k, v in previous.items() if k != "built"} == {k: v for k, v in summary.items() if k != "built"}:
+                summary["built"] = previous.get("built", summary.get("built"))   # nothing new: keep the date the data last changed
+        except ValueError:
+            pass
+    save(path, json.dumps(summary, indent=2, ensure_ascii=False))
+    return changed
 
 
 def main(argv=None):

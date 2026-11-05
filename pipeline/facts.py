@@ -5,6 +5,7 @@ stay in step with the charts after each rebuild. Values keep full precision here
 rounding happens on the page through data-format.
 """
 
+import numpy as np
 import pandas as pd
 
 from . import compute, config
@@ -119,7 +120,7 @@ def flat_tax(msoa, neutral):
                 "revenue": (rates * msoa.value * msoa.dwellings).sum() / bills}
 
     fairer, flat, local = outcome(config.FAIRER_SHARE_RATE), outcome(neutral), outcome(msoa.r_local)
-    by_income = {}
+    by_income = slope_marks(msoa)
     if "income_group" in msoa:
         for group in range(1, config.INCOME_GROUPS + 1):
             part = msoa[msoa.income_group == group]
@@ -161,3 +162,28 @@ def collect(tables, summary, results):
         "fig5": energy(councils, england),
         "fig6": flat_tax(tables["msoa"], england["revenue_neutral_rate"]),
     }
+
+
+def slope_marks(msoa):
+    """How steeply bills rise with value. theta_today: the elasticity of the average bill with respect to the average
+    value across areas (weighted by homes). theta_equal: the elasticity at which a bill raising today's total, in
+    proportion to value**theta, takes the same share of household income in the poorest and richest fifths of areas."""
+    w, lv, lb = msoa.dwellings, np.log(msoa.value), np.log(msoa.bill)
+    mv, mb = np.average(lv, weights=w), np.average(lb, weights=w)
+    marks = {"theta_today": float(np.average((lv - mv) * (lb - mb), weights=w) / np.average((lv - mv) ** 2, weights=w))}
+    denominator = "net_income" if "net_income" in msoa else ("income" if "income" in msoa else None)
+    if denominator and "income_group" in msoa:
+        total = (w * msoa.bill).sum()
+        top = msoa.income_group.max()
+        def gap(theta):
+            raw = msoa.value ** theta
+            new = raw * total / (w * raw).sum()
+            share = lambda part: (new[part.index] * part.dwellings).sum() / (part[denominator] * part.dwellings).sum()
+            return share(msoa[msoa.income_group == 1]) - share(msoa[msoa.income_group == top])
+        lo, hi = 0.0, 2.0
+        if gap(lo) > 0 > gap(hi):
+            for _ in range(50):
+                mid = (lo + hi) / 2
+                lo, hi = (mid, hi) if gap(mid) > 0 else (lo, mid)
+            marks["theta_equal"] = (lo + hi) / 2
+    return marks
