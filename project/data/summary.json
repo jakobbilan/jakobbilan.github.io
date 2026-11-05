@@ -1,5 +1,5 @@
 {
-  "built": "2026-11-05T17:14Z",
+  "built": "2026-11-05T22:57Z",
   "price_month": "2026-08",
   "sales_window": [
     "2024-01-01",
@@ -173,11 +173,11 @@
       "rate_10m_now": 0.00020991,
       "rate_10m_with": 0.00095991,
       "compare_vs_top": 12.907751957279393,
-      "sales_2m": 20117,
-      "london_share": 0.4865536610826664,
+      "sales_2m": 10815,
+      "london_share": 0.6732316227461859,
       "top_name": "Westminster",
-      "top_sales": 1963,
-      "top_share": 0.09757916190286822
+      "top_sales": 1489,
+      "top_share": 0.13767914932963476
     },
     "fig5": {
       "share_ad": 0.8078817847942268,
