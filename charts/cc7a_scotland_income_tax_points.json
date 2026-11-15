@@ -2,11 +2,11 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Point map of Scotland's 32 councils. Each circle sits at the council's coordinates; its area shows how much more income tax a person on the council's 2024 annual pay figure owes under Scotland's 2024-25 bands than under the rest of the UK's, and its colour shows the pay figure.",
   "title": {
-    "text": "Scotland: extra income tax on typical pay",
+    "text": "Scotland: extra tax on typical pay",
     "subtitle": "Scottish minus rest-of-UK bands, 2024–25, £ a year"
   },
   "width": "container",
-  "height": 520,
+  "height": 600,
   "projection": {
     "type": "mercator"
   },
@@ -63,7 +63,7 @@
               100,
               200
             ],
-            "orient": "right"
+            "orient": "top-left"
           }
         },
         "color": {
@@ -75,7 +75,7 @@
           },
           "legend": {
             "format": ",.0f",
-            "orient": "right"
+            "orient": "top-left"
           }
         },
         "tooltip": [
@@ -107,8 +107,35 @@
             "title": "Difference (£)",
             "format": ",.0f"
           }
-        ]
-      }
+        ],
+        "stroke": {
+          "condition": {
+            "param": "hp",
+            "empty": false,
+            "value": "#B42318"
+          },
+          "value": "#1B2A41"
+        },
+        "strokeWidth": {
+          "condition": {
+            "param": "hp",
+            "empty": false,
+            "value": 2
+          },
+          "value": 0.6
+        }
+      },
+      "params": [
+        {
+          "name": "hp",
+          "select": {
+            "type": "point",
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ]
     },
     {
       "data": {
@@ -134,7 +161,7 @@
         "type": "text",
         "align": "left",
         "dx": 11,
-        "fontSize": 10.5,
+        "fontSize": 11.5,
         "fontWeight": 600,
         "stroke": "white",
         "strokeWidth": 3,
@@ -178,7 +205,7 @@
         "type": "text",
         "align": "left",
         "dx": 11,
-        "fontSize": 10.5,
+        "fontSize": 11.5,
         "fontWeight": 600,
         "color": "#1B2A41"
       },
@@ -218,7 +245,7 @@
         "type": "text",
         "align": "right",
         "dx": -11,
-        "fontSize": 10.5,
+        "fontSize": 11.5,
         "fontWeight": 600,
         "stroke": "white",
         "strokeWidth": 3,
@@ -260,7 +287,7 @@
         "type": "text",
         "align": "right",
         "dx": -11,
-        "fontSize": 10.5,
+        "fontSize": 11.5,
         "fontWeight": 600,
         "color": "#1B2A41"
       },
@@ -288,19 +315,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -308,13 +337,26 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
+    }
+  },
+  "usermeta": {
+    "compactDropLayers": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "compactLegend": {
+      "orient": "bottom",
+      "direction": "horizontal"
     }
   }
 }

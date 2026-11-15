@@ -18,10 +18,7 @@
   <header class="masthead">
     <h1>[Headline]</h1>
     <p class="standfirst">[Standfirst]</p>
-    <p class="byline">Devolution dashboard, PP434 portfolio (CC6). <a href="portfolio.html#cc6">Back to the portfolio</a>. ... <a href="https://colab.research.google.com/drive/1u_sDdEF_oGuNeZIoCYr9Q37NAkil97ks?usp=sharing" class="notebook">Colab notebook: downloading the six series with a loop</a></p>
-    <svg class="brackets" viewBox="0 0 920 34" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M0 32 H150 V27 H300 V21 H470 V14 H640 V6 H920" fill="none" stroke="#B42318" stroke-width="2" vector-effect="non-scaling-stroke"/>
-    </svg>
+    <p class="byline">Devolution dashboard, PP434 portfolio (CC6). <a href="portfolio.html#cc6">Back to the portfolio</a>. <a href="https://colab.research.google.com/drive/1u_sDdEF_oGuNeZIoCYr9Q37NAkil97ks?usp=sharing" class="notebook">Colab notebook: downloading the six series with a loop</a></p>
   </header>
 
   <p class="legend-line">
@@ -51,31 +48,34 @@
 
 <script>
   // 1. WHERE THE SIX JSON FILES ARE: raw GitHub links to the files saved by the Python loop,
-  //    with the local data folder as a fallback until they are pushed.
+  //    with the local data folder as a fallback.
   const RAW_BASE = "https://raw.githubusercontent.com/jakobbilan/jakobbilan.github.io/main/data/devolution/";
   const LOCAL_BASE = "data/devolution/";
 
   // 2. THE LIST TO LOOP OVER: one entry per chart
   const SERIES = [
-    { file: "gva_per_head.json",         title: "Economic output (GVA) per resident",    unit: "£, current prices",       fmt: ",.0f" },
-    { file: "pay_fulltime.json",         title: "Median full-time pay of residents",     unit: "£ a year",                fmt: ",.0f" },
-    { file: "employment_rate.json",      title: "Employment rate, ages 16 to 64",        unit: "% of residents",          fmt: ".0f"  },
-    { file: "life_expectancy_male.json", title: "Male life expectancy at birth",         unit: "years, 3-year average",   fmt: ".0f"  },
-    { file: "old_age_dependency.json",   title: "People aged 65+ per 100 aged 16 to 64", unit: "old-age dependency ratio", fmt: ".0f" },
-    { file: "emissions_per_head.json",   title: "Greenhouse gas emissions per resident", unit: "tonnes CO2 equivalent",   fmt: ".0f"  }
+    { file: "gva_per_head.json",         title: "Economic output (GVA) per resident",    unit: "£, current prices" },
+    { file: "pay_fulltime.json",         title: "Median full-time pay of residents",     unit: "£ a year" },
+    { file: "employment_rate.json",      title: "Employment rate, ages 16 to 64",        unit: "% of residents" },
+    { file: "life_expectancy_male.json", title: "Male life expectancy at birth",         unit: "years, 3-year average" },
+    { file: "old_age_dependency.json",   title: "People aged 65+ per 100 aged 16 to 64", unit: "old-age dependency ratio" },
+    { file: "emissions_per_head.json",   title: "Greenhouse gas emissions per resident", unit: "tonnes CO2 equivalent" }
   ];
 
-  // 3. A TEMPLATE CHART: identical for every series except the data link, titles and number format
+  // 3. A TEMPLATE CHART: identical for every series except the data link and the titles
   const TEMPLATE = {
     "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-    "description": "Line chart of one indicator for England's strategic authorities, with Greater Manchester highlighted, Greater London dashed, and a marker at 2017, the year of the first Greater Manchester mayoral election.",
+    "description": "Line chart of one indicator for England's strategic authorities, with Greater Manchester highlighted, Greater London dashed, and a marker at 2017, the year of the first Greater Manchester mayoral election. Hovering shows Greater Manchester, Greater London and the median authority for the nearest year.",
     "width": "container",
-    "height": 190,
-    "title": { "text": "", "subtitle": "", "anchor": "start" },
+    "height": 200,
+    "title": { "text": "", "subtitle": "", "anchor": "start", "frame": "group" },
     "data": { "url": "", "format": { "type": "json", "property": "data" } },
     "encoding": {
-      "x": { "field": "year", "type": "quantitative", "title": null, "scale": { "zero": false, "nice": false }, "axis": { "format": "d", "tickCount": 5, "grid": false } },
-      "y": { "field": "value", "type": "quantitative", "title": null, "scale": { "zero": false }, "axis": { "format": ",.0f", "tickCount": 5 } }
+      "x": { "field": "year", "type": "quantitative", "title": null, "scale": { "zero": false, "nice": false },
+             "axis": { "format": "d", "tickCount": 5, "grid": false } },
+      "y": { "field": "value", "type": "quantitative", "title": null, "scale": { "zero": false },
+             "axis": { "labelExpr": "abs(datum.value) >= 10000 ? format(datum.value / 1000, ',.0f') + 'k' : format(datum.value, ',')",
+                       "tickCount": 5, "minExtent": 36 } }
     },
     "layer": [
       { "data": { "values": [{ "year": 2017 }] },
@@ -86,17 +86,26 @@
       { "transform": [{ "filter": "datum.geo_id == 'MSA022'" }],
         "mark": { "type": "line", "strokeWidth": 1.6, "strokeDash": [4, 3], "color": "#2F5D8C" } },
       { "transform": [{ "filter": "datum.geo_id == 'MSA001'" }],
-        "mark": { "type": "line", "strokeWidth": 2.6, "color": "#B42318", "point": { "filled": true, "size": 16, "color": "#B42318" } },
-        "encoding": { "tooltip": [
-          { "field": "name", "title": "Area" },
-          { "field": "date", "title": "Year or period" },
-          { "field": "value", "type": "quantitative", "title": "Value", "format": ",.1f" } ] } }
+        "mark": { "type": "line", "strokeWidth": 2.6, "color": "#B42318", "point": { "filled": true, "size": 16, "color": "#B42318" } } },
+      { "transform": [
+          { "joinaggregate": [{ "op": "median", "field": "value", "as": "median" }], "groupby": ["year"] },
+          { "filter": "datum.geo_id == 'MSA001' || datum.geo_id == 'MSA022'" },
+          { "pivot": "geo_id", "value": "value", "groupby": ["year", "date", "median"] }],
+        "mark": { "type": "rule", "color": "#1B2A41", "strokeWidth": 1 },
+        "params": [{ "name": "hover", "select": { "type": "point", "fields": ["year"], "nearest": true, "on": "pointerover", "clear": "pointerout" } }],
+        "encoding": { "y": null,
+                      "opacity": { "condition": { "param": "hover", "empty": false, "value": 0.6 }, "value": 0 },
+                      "tooltip": [
+                        { "field": "date", "title": "Year or period" },
+                        { "field": "MSA001", "type": "quantitative", "title": "Greater Manchester", "format": ",.1f" },
+                        { "field": "MSA022", "type": "quantitative", "title": "Greater London", "format": ",.1f" },
+                        { "field": "median", "type": "quantitative", "title": "Median authority", "format": ",.1f" }] } }
     ],
     "config": {
       "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
       "view": { "stroke": null },
-      "title": { "anchor": "start", "color": "#1B2A41", "fontSize": 13.5, "fontWeight": 600, "subtitleColor": "#5B6472", "subtitleFontSize": 11 },
-      "axis": { "labelColor": "#5B6472", "gridColor": "#D5DAE1", "domainColor": "#AEB6C1", "tickColor": "#AEB6C1", "labelFontSize": 10.5 }
+      "title": { "anchor": "start", "color": "#1B2A41", "fontSize": 15, "fontWeight": 600, "subtitleColor": "#5B6472", "subtitleFontSize": 12.5, "offset": 10 },
+      "axis": { "labelColor": "#5B6472", "gridColor": "#D5DAE1", "domainColor": "#AEB6C1", "tickColor": "#AEB6C1", "labelFontSize": 12 }
     }
   };
 
@@ -116,12 +125,13 @@
   async function drawDashboard() {
     const base = await pickBase();
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    const narrow = document.getElementById("c1").clientWidth < 360;      // phones: slightly smaller text
     for (let i = 0; i < SERIES.length; i++) {
       const spec = structuredClone(TEMPLATE);              // a fresh copy for each chart
       spec.data.url = base + SERIES[i].file;
       spec.title.text = SERIES[i].title;
       spec.title.subtitle = SERIES[i].unit;
-      spec.encoding.y.axis.format = SERIES[i].fmt;
+      if (narrow) { spec.config.title.fontSize = 14; spec.config.axis.labelFontSize = 11; }
       vegaEmbed(`#c${i + 1}`, spec, OPTS).catch(err => console.error(`chart ${i + 1}`, err));
     }
   }

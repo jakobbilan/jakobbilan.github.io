@@ -2,11 +2,11 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Interactive step chart of the marginal income tax rate by gross income under Scotland's bands and the rest of the UK's. A menu chooses the tax year (2024-25 to 2026-27) and a slider chooses an income; a vertical line marks it and a readout gives the tax under each system and the difference.",
   "title": {
-    "text": "Marginal income tax rate: Scotland vs rest of UK",
-    "subtitle": "Choose a tax year and an income below the chart"
+    "text": "Income tax: Scotland vs rest of UK",
+    "subtitle": "Marginal rate on the next £1; choose a year and an income below"
   },
   "width": "container",
-  "height": 320,
+  "height": 340,
   "params": [
     {
       "name": "year",
@@ -115,7 +115,7 @@
           "scale": {
             "domain": [
               0,
-              0.7
+              0.85
             ]
           },
           "axis": {
@@ -184,6 +184,89 @@
     },
     {
       "data": {
+        "sequence": {
+          "start": 0,
+          "stop": 160100,
+          "step": 100,
+          "as": "gross"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "max(0, datum.gross - (datum.gross <= 100000 ? 12570 : max(0, 12570 - (datum.gross - 100000) / 2)))",
+          "as": "t"
+        },
+        {
+          "calculate": "(datum.t <= 0 ? 0 : datum.t <= L1 ? 0.19 : datum.t <= L2 ? 0.20 : datum.t <= 31092 ? 0.21 : datum.t <= 62430 ? 0.42 : datum.t <= 125140 ? 0.45 : 0.48) * (datum.gross > 100000 && datum.gross < 125140 ? 1.5 : 1)",
+          "as": "Scotland"
+        },
+        {
+          "calculate": "(datum.t <= 0 ? 0 : datum.t <= 37700 ? 0.20 : datum.t <= 125140 ? 0.40 : 0.45) * (datum.gross > 100000 && datum.gross < 125140 ? 1.5 : 1)",
+          "as": "Rest of UK"
+        },
+        {
+          "calculate": "'£' + format(datum.gross, ',')",
+          "as": "income_label"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 1,
+        "strokeDash": [
+          2,
+          2
+        ],
+        "color": "#5B6472"
+      },
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "gross"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "encoding": {
+        "x": {
+          "field": "gross",
+          "type": "quantitative"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.8
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "income_label",
+            "title": "Gross income"
+          },
+          {
+            "field": "Scotland",
+            "type": "quantitative",
+            "title": "Scotland, next £1",
+            "format": ".1%"
+          },
+          {
+            "field": "Rest of UK",
+            "type": "quantitative",
+            "title": "Rest of UK, next £1",
+            "format": ".1%"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
         "values": [
           {}
         ]
@@ -215,7 +298,7 @@
       "mark": {
         "type": "rect",
         "x": 2,
-        "x2": 262,
+        "x2": 290,
         "y": 0,
         "y2": 58,
         "fill": "white",
@@ -260,10 +343,10 @@
         "align": "left",
         "baseline": "top",
         "x": 10,
-        "y": 6,
+        "y": 5,
         "lineBreak": "\n",
-        "lineHeight": 16,
-        "fontSize": 12,
+        "lineHeight": 17,
+        "fontSize": 13,
         "fontWeight": 500,
         "color": "#1B2A41"
       },
@@ -283,19 +366,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -303,13 +388,14 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
     }
   }
 }

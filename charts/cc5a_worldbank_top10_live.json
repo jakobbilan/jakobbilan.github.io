@@ -52,7 +52,7 @@
       "scale": {
         "domain": [
           20,
-          55
+          60
         ]
       }
     },
@@ -101,8 +101,8 @@
     {
       "mark": {
         "type": "point",
-        "size": 60,
-        "opacity": 0
+        "filled": true,
+        "size": 70
       },
       "encoding": {
         "tooltip": [
@@ -120,8 +120,27 @@
             "title": "Top 10% share (%)",
             "format": ".1f"
           }
-        ]
-      }
+        ],
+        "opacity": {
+          "condition": {
+            "param": "hp",
+            "empty": false,
+            "value": 1
+          },
+          "value": 0
+        }
+      },
+      "params": [
+        {
+          "name": "hp",
+          "select": {
+            "type": "point",
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ]
     }
   ],
   "config": {
@@ -133,19 +152,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -153,13 +174,19 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
+    }
+  },
+  "usermeta": {
+    "compactLegend": {
+      "columns": 2
     }
   }
 }

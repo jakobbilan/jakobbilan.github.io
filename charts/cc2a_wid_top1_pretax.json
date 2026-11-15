@@ -76,21 +76,83 @@
       "mark": {
         "type": "point",
         "filled": true,
-        "size": 28,
-        "opacity": 0
+        "size": 55
       },
       "encoding": {
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 1
+          },
+          "value": 0
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "pivot": "country",
+          "value": "share",
+          "groupby": [
+            "year"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 1
+      },
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "year"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "encoding": {
+        "y": null,
+        "color": {
+          "value": "#5B6472"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.7
+          },
+          "value": 0
+        },
         "tooltip": [
           {
-            "field": "country"
-          },
-          {
-            "field": "year"
-          },
-          {
-            "field": "share",
+            "field": "year",
             "type": "quantitative",
-            "title": "Top 1% share (%)",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "United States",
+            "type": "quantitative",
+            "title": "United States (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "United Kingdom",
+            "type": "quantitative",
+            "title": "United Kingdom (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "France",
+            "type": "quantitative",
+            "title": "France (%)",
             "format": ".1f"
           }
         ]
@@ -208,19 +270,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -228,13 +292,32 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
     }
+  },
+  "usermeta": {
+    "compactDropLayers": [
+      3,
+      4,
+      5
+    ],
+    "compactSet": [
+      [
+        "encoding.color.legend",
+        {
+          "orient": "top",
+          "direction": "horizontal",
+          "title": null,
+          "symbolType": "stroke"
+        }
+      ]
+    ]
   }
 }

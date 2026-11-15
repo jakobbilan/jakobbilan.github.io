@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "description": "Horizontal stacked bars of total effective tax rates in the United States, 2018-20, for the full population and the wealthiest 400 households, split by type of tax. A reference line marks the roughly 45% rate of top labour-income earners.",
   "title": {
-    "text": "Effective tax rate by wealth group, US",
+    "text": "Total tax rate by wealth group, US",
     "subtitle": "All taxes as % of economic income, 2018–20"
   },
   "width": "container",
@@ -15,15 +15,16 @@
       "field": "group",
       "type": "nominal",
       "sort": [
-        "Full population",
-        "Next 300",
+        "Top 100",
         "Top 400",
-        "Top 100"
+        "Next 300",
+        "Full population"
       ],
       "title": null,
       "axis": {
         "labelLimit": 300,
-        "labelFontSize": 11.5
+        "labelFontSize": 11.5,
+        "labelExpr": "datum.label == 'Top 400' ? 'Top 400 overall' : datum.label"
       }
     }
   },
@@ -191,7 +192,7 @@
         "dx": -4,
         "dy": 2,
         "y": 0,
-        "fontSize": 10.5,
+        "fontSize": 12.0,
         "color": "#1B2A41"
       },
       "encoding": {
@@ -215,19 +216,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -235,13 +238,19 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
+    }
+  },
+  "usermeta": {
+    "compactLegend": {
+      "columns": 1
     }
   }
 }

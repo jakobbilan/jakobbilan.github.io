@@ -31,7 +31,7 @@ code { font-size: 0.86em; background: #E9EDF1; padding: 0.1em 0.3em; border-radi
 .standfirst { font-family: var(--serif); font-size: clamp(1.15rem, 2.2vw, 1.35rem); line-height: 1.45;
               margin: 0 0 1rem; max-width: 58ch; }
 .byline { color: var(--graphite); font-size: 0.9rem; margin: 0; max-width: 80ch; }
-.brackets { display: block; width: 100%; height: 34px; margin-top: 1.5rem; }
+.masthead::after { content: ""; display: block; width: 56px; height: 4px; background: var(--red); margin-top: 1.6rem; border-radius: 2px; }
 
 
 /* Contents: wraps on wide screens, scrolls sideways on phones */
@@ -98,5 +98,18 @@ footer.sources li { margin-bottom: 0.3rem; max-width: 95ch; }
 .vega-bindings select, .vega-bindings input { font: inherit; }
 .vega-bindings select { padding: 0.2rem 0.3rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--sheet); color: var(--ink); max-width: 70vw; }
 .vega-bindings input[type="range"] { width: min(260px, 55vw); accent-color: var(--red); }
+
+/* Chart tooltips (vega-tooltip): page font, readable size */
+#vg-tooltip-element { font-family: var(--sans); font-size: 13px; color: var(--ink); background: rgba(255, 255, 255, 0.97);
+                      border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 4px 14px rgba(27, 42, 65, 0.12); padding: 7px 10px; }
+#vg-tooltip-element table tr td.key { color: var(--graphite); font-weight: 500; padding-right: 8px; }
+#vg-tooltip-element table tr td.value { font-variant-numeric: tabular-nums; }
+
+/* Phones: more width for the charts */
+@media (max-width: 560px) {
+  .page { padding: 1.75rem 0.85rem 3rem; }
+  figure.chart { padding: 0.65rem 0.45rem 0.35rem; }
+  section.cc { padding-top: 1.9rem; }
+}
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

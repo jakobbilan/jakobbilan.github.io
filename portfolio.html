@@ -23,9 +23,6 @@
     <h1>[Headline]</h1>
     <p class="standfirst">[Standfirst]</p>
     <p class="byline">Jakob Kilian Bilan, LSE School of Public Policy. PP434 Automated Data Visualisation for Policymaking, 2026/27. Updated [Date].</p>
-    <svg class="brackets" viewBox="0 0 920 34" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M0 32 H150 V27 H300 V21 H470 V14 H640 V6 H920" fill="none" stroke="#B42318" stroke-width="2" vector-effect="non-scaling-stroke"/>
-    </svg>
   </header>
 
   <nav class="toc" aria-label="Coding challenges">
@@ -52,7 +49,7 @@
     <p class="note">[Note]</p>
     <figure class="chart">
       <div id="cc1a"></div>
-      <figcaption>Chart: Richard Davies, e4e chart collection (<a href="https://github.com/RDeconomist/RDeconomist.github.io/blob/main/charts/e4e/ch3_Work/chart3_X_inequalityGINImapSlider.json">specification</a>). Data: World Inequality Database.</figcaption>
+      <figcaption>Chart: Richard Davies, e4e chart collection (<a href="https://github.com/RDeconomist/RDeconomist.github.io/blob/main/charts/e4e/ch3_Work/chart3_X_inequalityGINImapSlider.json">specification</a>), embedded with its colour scale fixed across years so colours compare between years. Data: World Inequality Database.</figcaption>
     </figure>
     <figure class="chart">
       <div id="cc1b"></div>
@@ -185,7 +182,7 @@
     </figure>
     <figure class="chart">
       <div id="cc9b"></div>
-      <figcaption>Interactive: menus for the indicator and the authority. Data: PP434 course files, as in CC6 (<a href="data/cc9_strategic_authorities.csv">tidy CSV</a>).</figcaption>
+      <figcaption>Interactive: menus for the indicator and the authority. Red: the chosen authority; dashed: the median authority; grey: the others. Data: PP434 course files, as in CC6 (<a href="data/cc9_strategic_authorities.csv">tidy CSV</a>).</figcaption>
     </figure>
   </section>
 
@@ -222,10 +219,54 @@
   const OPTS = { renderer: "svg", actions: { export: true, source: true, compiled: false, editor: true } };
   const DAVIES = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/main/charts/e4e/ch3_Work/";
 
-  // Every chart on the page: where it goes, its specification, and (for files made by a notebook) what it needs
+  // Text styles shared with the portfolio's own charts; applied to the two found charts in CC1
+  const FOUND_CONFIG = {
+    font: "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    view: { stroke: null },
+    title: { anchor: "start", color: "#1B2A41", fontSize: 17, fontWeight: 600, subtitleColor: "#5B6472", subtitleFontSize: 13, offset: 14 },
+    axis: { labelColor: "#5B6472", titleColor: "#5B6472", labelFontSize: 12.5, titleFontSize: 12.5, titleFontWeight: 500, gridColor: "#D5DAE1" },
+    legend: { labelColor: "#5B6472", titleColor: "#5B6472", labelFontSize: 12.5, titleFontSize: 12.5, titleFontWeight: 500 }
+  };
+
+  // CC1, found chart 1 (Davies): fixed colour scale so a colour means the same Gini in every year,
+  // country borders (the source's stroke colour "gbp(...)" is invalid), one tooltip entry per field, full width
+  function fixGiniMap(s) {
+    const v = s.vconcat ? s.vconcat[0] : s;
+    const out = Object.assign({ "$schema": s.$schema, params: s.params }, v);
+    out.width = "container";
+    out.height = 300;
+    out.title = { text: v.title.text, subtitle: "Source: WID" };
+    out.mark = Object.assign({}, v.mark, { stroke: "white", strokeWidth: 0.3 });
+    out.encoding = Object.assign({}, v.encoding, {
+      color: Object.assign({}, v.encoding.color, { scale: { scheme: "reds", domain: [0.2, 0.8] } }),
+      tooltip: [{ field: "name", title: "Country" },
+                { field: "Value_N", type: "quantitative", title: "Gini coefficient", format: ".2f" },
+                { field: "Year", title: "Year" }]
+    });
+    out.config = FOUND_CONFIG;
+    return out;
+  }
+
+  // CC1, found chart 2 (Davies): full width, and a tooltip from the nearest point (no need to hit the dot)
+  function fixIncomes(s) {
+    s.width = "container";
+    s.title = { text: s.title.text, subtitle: s.title.subtitle.filter(Boolean), anchor: "start" };
+    const L = s.layer[0];
+    s.layer.push({
+      transform: L.transform,
+      params: [{ name: "hp", select: { type: "point", nearest: true, on: "pointerover", clear: "pointerout" } }],
+      mark: { type: "point", filled: true, size: 70 },
+      encoding: { x: L.encoding.x, y: L.encoding.y, color: L.encoding.color, tooltip: L.encoding.tooltip,
+                  opacity: { condition: { param: "hp", empty: false, value: 1 }, value: 0 } }
+    });
+    s.config = FOUND_CONFIG;
+    return s;
+  }
+
+  // Every chart on the page: where it goes, its specification, and (for files made later) what it needs
   const CHARTS = [
-    { id: "cc1a", spec: DAVIES + "chart3_X_inequalityGINImapSlider.json" },
-    { id: "cc1b", spec: DAVIES + "chart3_12_usIncomesOverTime.json" },
+    { id: "cc1a", spec: DAVIES + "chart3_X_inequalityGINImapSlider.json", fix: fixGiniMap },
+    { id: "cc1b", spec: DAVIES + "chart3_12_usIncomesOverTime.json", fix: fixIncomes },
     { id: "cc2a", spec: "charts/cc2a_wid_top1_pretax.json", needs: "data/cc2a_wid_top1_pretax.csv" },
     { id: "cc2b", spec: "charts/cc2b_uk_marginal_rates.json" },
     { id: "cc3a", spec: "charts/cc3a_bsyz_components.json" },
@@ -244,15 +285,48 @@
 
   const exists = url => fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
 
+  // Narrow screens (phones): slightly smaller text, long subtitles on two lines, optional labels dropped
+  function compact(spec) {
+    const c = spec.config = spec.config || {};
+    c.title = Object.assign({}, c.title, { fontSize: 15, subtitleFontSize: 12 });
+    c.axis = Object.assign({}, c.axis, { labelFontSize: 11.5, titleFontSize: 11.5 });
+    c.legend = Object.assign({}, c.legend, { labelFontSize: 11.5, titleFontSize: 11.5 });
+    const t = spec.title;
+    if (t && (typeof t.subtitle === "string" || Array.isArray(t.subtitle))) {
+      t.subtitle = [].concat(t.subtitle).flatMap(line => {
+        if (typeof line !== "string" || line.length <= 40) return [line];
+        const cut = line.lastIndexOf(" ", Math.ceil(line.length / 2));
+        return cut > 0 ? [line.slice(0, cut), line.slice(cut + 1)] : [line];
+      });
+    }
+    const legendFix = spec.usermeta && spec.usermeta.compactLegend;
+    if (legendFix) (function walk(o) {
+      if (!o || typeof o !== "object") return;
+      if (o.legend && typeof o.legend === "object") Object.assign(o.legend, legendFix);
+      Object.values(o).forEach(walk);
+    })(spec.layer || spec.encoding);
+    ((spec.usermeta && spec.usermeta.compactSet) || []).forEach(([where, value]) => {   // e.g. a legend instead of end labels
+      const keys = where.split("."); let o = spec;
+      keys.slice(0, -1).forEach(k => { o = o[k] = o[k] || {}; });
+      o[keys[keys.length - 1]] = value;
+    });
+    const drop = spec.usermeta && spec.usermeta.compactDropLayers;
+    if (drop && spec.layer) spec.layer = spec.layer.filter((_, i) => !drop.includes(i));
+    return spec;
+  }
+
   async function embed(chart) {
     const el = document.getElementById(chart.id);
     if (chart.needs && !(await exists(chart.needs))) {
       console.info(`${chart.id}: waiting for ${chart.needs}`);
       return;                                            // the placeholder text stays in place
     }
-    if (document.fonts && document.fonts.ready) await document.fonts.ready;   // measure labels with the page font
     try {
-      await vegaEmbed("#" + chart.id, chart.spec, OPTS);
+      let spec = await fetch(chart.spec).then(r => { if (!r.ok) throw new Error(`${r.status} ${chart.spec}`); return r.json(); });
+      if (chart.fix) spec = chart.fix(spec);
+      if (el.clientWidth < 560) spec = compact(spec);
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;   // measure labels with the page font
+      await vegaEmbed("#" + chart.id, spec, OPTS);
       el.classList.remove("slot");
     } catch (err) {
       console.error(chart.id, err);
@@ -279,7 +353,7 @@
     slot.innerHTML = '<img src="img/cc4_original.png" alt="Original chart replicated in CC4">';
   });
 
-  // Console checks: bracketed placeholders still on the page, and the brief's 25-word limits
+  // Console checks: bracketed placeholders still on the page, and the brief's word limits
   if (typeof document.createTreeWalker === "function") {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const left = [];

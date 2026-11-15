@@ -1,52 +1,91 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "description": "Stacked step-area chart of the marginal rate on an extra pound of earnings in the UK, split into income tax, National Insurance, the personal allowance taper, child benefit withdrawal and student loan repayments. The source file stores cumulative rates; the transforms turn them into one layer per component.",
+  "description": "Stacked step-area chart of the marginal rate on an extra pound of earnings in the UK by gross earnings: income tax and its personal allowance taper, National Insurance, child benefit withdrawal, and student loan repayments for graduates on top in a lighter shade. A bold line marks the total without student loans; peaks are labelled.",
   "title": {
     "text": "Marginal rate on the next £1, UK",
-    "subtitle": "By gross annual earnings, stacked by component"
+    "subtitle": "Bold line and labels: total without student loans"
   },
   "width": "container",
-  "height": 300,
+  "height": 320,
   "data": {
     "url": "https://raw.githubusercontent.com/EconomicsObservatory/ECOvisualisations/main/articles/2025-11-19-why-do-some-people-in-britain-face-marginal-tax-rates-of-over-60-percent/data/fig1_marginal_rates.csv"
+  },
+  "transform": [
+    {
+      "pivot": "type",
+      "value": "rate",
+      "groupby": [
+        "income"
+      ]
+    },
+    {
+      "calculate": "datum.income_tax",
+      "as": "Income tax"
+    },
+    {
+      "calculate": "datum.plus_PA_withdrawl - datum.plus_nics",
+      "as": "Personal allowance taper"
+    },
+    {
+      "calculate": "datum.plus_nics - datum.income_tax",
+      "as": "National Insurance"
+    },
+    {
+      "calculate": "datum.plus_child_benefit_withdrawal - datum.plus_PA_withdrawl",
+      "as": "Child benefit withdrawal"
+    },
+    {
+      "calculate": "datum.plus_student_loans - datum.plus_child_benefit_withdrawal",
+      "as": "Student loans (graduates only)"
+    },
+    {
+      "calculate": "datum.plus_child_benefit_withdrawal",
+      "as": "total_core"
+    },
+    {
+      "calculate": "datum.plus_student_loans",
+      "as": "total_with_loans"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "income",
+      "type": "quantitative",
+      "title": "Gross annual earnings",
+      "scale": {
+        "domain": [
+          0,
+          160000
+        ],
+        "nice": false
+      },
+      "axis": {
+        "values": [
+          0,
+          20000,
+          40000,
+          60000,
+          80000,
+          100000,
+          120000,
+          140000,
+          160000
+        ],
+        "labelExpr": "datum.value == 0 ? '£0' : '£' + format(datum.value / 1000, ',.0f') + 'k'",
+        "grid": false
+      }
+    }
   },
   "layer": [
     {
       "transform": [
         {
-          "pivot": "type",
-          "value": "rate",
-          "groupby": [
-            "income"
-          ]
-        },
-        {
-          "calculate": "datum.income_tax",
-          "as": "Income tax"
-        },
-        {
-          "calculate": "datum.plus_nics - datum.income_tax",
-          "as": "National Insurance"
-        },
-        {
-          "calculate": "datum.plus_PA_withdrawl - datum.plus_nics",
-          "as": "Personal allowance taper"
-        },
-        {
-          "calculate": "datum.plus_child_benefit_withdrawal - datum.plus_PA_withdrawl",
-          "as": "Child benefit withdrawal"
-        },
-        {
-          "calculate": "datum.plus_student_loans - datum.plus_child_benefit_withdrawal",
-          "as": "Student loan repayments"
-        },
-        {
           "fold": [
             "Income tax",
-            "National Insurance",
             "Personal allowance taper",
+            "National Insurance",
             "Child benefit withdrawal",
-            "Student loan repayments"
+            "Student loans (graduates only)"
           ],
           "as": [
             "component",
@@ -54,12 +93,8 @@
           ]
         },
         {
-          "calculate": "indexof([\"Income tax\", \"National Insurance\", \"Personal allowance taper\", \"Child benefit withdrawal\", \"Student loan repayments\"], datum.component)",
+          "calculate": "indexof([\"Income tax\", \"Personal allowance taper\", \"National Insurance\", \"Child benefit withdrawal\", \"Student loans (graduates only)\"], datum.component)",
           "as": "stack_order"
-        },
-        {
-          "calculate": "datum.plus_student_loans",
-          "as": "total_rate"
         }
       ],
       "mark": {
@@ -67,33 +102,6 @@
         "interpolate": "step-after"
       },
       "encoding": {
-        "x": {
-          "field": "income",
-          "type": "quantitative",
-          "title": "Gross annual earnings",
-          "scale": {
-            "domain": [
-              0,
-              160000
-            ],
-            "nice": false
-          },
-          "axis": {
-            "values": [
-              0,
-              20000,
-              40000,
-              60000,
-              80000,
-              100000,
-              120000,
-              140000,
-              160000
-            ],
-            "labelExpr": "datum.value == 0 ? '£0' : '£' + format(datum.value / 1000, ',.0f') + 'k'",
-            "grid": false
-          }
-        },
         "y": {
           "field": "marginal_rate",
           "type": "quantitative",
@@ -102,7 +110,7 @@
           "scale": {
             "domain": [
               0,
-              0.9
+              0.85
             ]
           },
           "axis": {
@@ -122,25 +130,25 @@
           "title": null,
           "sort": [
             "Income tax",
-            "National Insurance",
             "Personal allowance taper",
+            "National Insurance",
             "Child benefit withdrawal",
-            "Student loan repayments"
+            "Student loans (graduates only)"
           ],
           "scale": {
             "domain": [
               "Income tax",
-              "National Insurance",
               "Personal allowance taper",
+              "National Insurance",
               "Child benefit withdrawal",
-              "Student loan repayments"
+              "Student loans (graduates only)"
             ],
             "range": [
               "#2F5D8C",
-              "#8FB3D9",
               "#B42318",
+              "#8FB3D9",
               "#B7791F",
-              "#9AA3AE"
+              "#D3D8DF"
             ]
           },
           "legend": {
@@ -173,12 +181,32 @@
             "format": ".1%"
           },
           {
-            "field": "total_rate",
+            "field": "total_core",
             "type": "quantitative",
-            "title": "All components",
+            "title": "Total without student loans",
+            "format": ".1%"
+          },
+          {
+            "field": "total_with_loans",
+            "type": "quantitative",
+            "title": "Total with student loans",
             "format": ".1%"
           }
         ]
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "interpolate": "step-after",
+        "color": "#1B2A41",
+        "strokeWidth": 2.2
+      },
+      "encoding": {
+        "y": {
+          "field": "total_core",
+          "type": "quantitative"
+        }
       }
     },
     {
@@ -186,30 +214,59 @@
         "values": [
           {
             "income": 70000,
-            "marginal_rate": 0.6826,
+            "rate": 0.5326,
+            "label": "53%"
+          },
+          {
+            "income": 112570,
+            "rate": 0.62,
+            "label": "62%"
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "dy": -9,
+        "fontWeight": 700,
+        "fontSize": 14,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "y": {
+          "field": "rate",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "income": 70000,
+            "rate": 0.6826,
             "label": "68%"
           },
           {
             "income": 112570,
-            "marginal_rate": 0.77,
+            "rate": 0.77,
             "label": "77%"
           }
         ]
       },
+      "transform": [],
       "mark": {
         "type": "text",
-        "dy": -8,
-        "fontWeight": 600,
+        "dy": -9,
         "fontSize": 12,
-        "color": "#1B2A41"
+        "color": "#5B6472"
       },
       "encoding": {
-        "x": {
-          "field": "income",
-          "type": "quantitative"
-        },
         "y": {
-          "field": "marginal_rate",
+          "field": "rate",
           "type": "quantitative"
         },
         "text": {
@@ -227,19 +284,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -247,13 +306,22 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
+    }
+  },
+  "usermeta": {
+    "compactDropLayers": [
+      3
+    ],
+    "compactLegend": {
+      "columns": 1
     }
   }
 }

@@ -6,8 +6,9 @@
       "expr": "indicator == 'life_expectancy_male' ? 'Male life expectancy at birth' : indicator == 'pay_fulltime' ? 'Median full-time pay of residents' : indicator == 'gva_per_head' ? 'Economic output (GVA) per resident' : indicator == 'employment_rate' ? 'Employment rate, ages 16 to 64' : indicator == 'old_age_dependency' ? 'People aged 65+ per 100 aged 16 to 64' : 'Greenhouse gas emissions per resident'"
     },
     "subtitle": {
-      "expr": "'Highlighted: chosen authority. Dashed: median authority. Unit: ' + (indicator == 'life_expectancy_male' ? 'years, 3-year average' : indicator == 'pay_fulltime' ? '£ a year' : indicator == 'gva_per_head' ? '£, current prices' : indicator == 'employment_rate' ? '% of residents' : indicator == 'old_age_dependency' ? 'old-age dependency ratio' : 'tonnes CO2 equivalent')"
-    }
+      "expr": "(indicator == 'life_expectancy_male' ? 'years, 3-year average' : indicator == 'pay_fulltime' ? '£ a year' : indicator == 'gva_per_head' ? '£, current prices' : indicator == 'employment_rate' ? '% of residents' : indicator == 'old_age_dependency' ? 'old-age dependency ratio' : 'tonnes CO2 equivalent')"
+    },
+    "frame": "group"
   },
   "width": "container",
   "height": 320,
@@ -124,7 +125,8 @@
         "zero": false
       },
       "axis": {
-        "labelExpr": "format(datum.value, ',')"
+        "labelExpr": "abs(datum.value) >= 10000 ? format(datum.value / 1000, ',.0f') + 'k' : format(datum.value, ',')",
+        "minExtent": 50
       }
     }
   },
@@ -205,6 +207,77 @@
     {
       "transform": [
         {
+          "joinaggregate": [
+            {
+              "op": "median",
+              "field": "value",
+              "as": "median"
+            }
+          ],
+          "groupby": [
+            "year"
+          ]
+        },
+        {
+          "filter": "datum.geo_id == area"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 1,
+        "color": "#5B6472"
+      },
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "year"
+            ],
+            "nearest": true,
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "encoding": {
+        "y": null,
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": false,
+            "value": 0.7
+          },
+          "value": 0
+        },
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Authority"
+          },
+          {
+            "field": "date",
+            "title": "Year or period"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Value",
+            "format": ",.1f"
+          },
+          {
+            "field": "median",
+            "type": "quantitative",
+            "title": "Median authority",
+            "format": ",.1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
           "filter": "datum.geo_id == area"
         },
         {
@@ -231,9 +304,54 @@
       "mark": {
         "type": "text",
         "align": "right",
-        "dy": -10,
+        "dy": -12,
         "fontWeight": 600,
-        "color": "#B42318"
+        "dx": -4,
+        "fontSize": 13,
+        "stroke": "white",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "text": {
+          "field": "name"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.geo_id == area"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "argmax",
+              "field": "year",
+              "as": "last"
+            }
+          ],
+          "groupby": [
+            "name"
+          ]
+        },
+        {
+          "calculate": "datum.last.year",
+          "as": "year"
+        },
+        {
+          "calculate": "datum.last.value",
+          "as": "value"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dy": -12,
+        "fontWeight": 600,
+        "color": "#B42318",
+        "dx": -4,
+        "fontSize": 13
       },
       "encoding": {
         "text": {
@@ -251,19 +369,21 @@
     "title": {
       "anchor": "start",
       "color": "#1B2A41",
-      "fontSize": 15,
+      "fontSize": 17,
       "fontWeight": 600,
       "subtitleColor": "#5B6472",
-      "subtitleFontSize": 11.5,
-      "offset": 12,
-      "subtitlePadding": 4
+      "subtitleFontSize": 13,
+      "offset": 14,
+      "subtitlePadding": 5
     },
     "axis": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
       "titleFontWeight": 500,
-      "labelFontSize": 11,
-      "titleFontSize": 11,
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "labelPadding": 4,
+      "titlePadding": 8,
       "gridColor": "#D5DAE1",
       "domainColor": "#AEB6C1",
       "tickColor": "#AEB6C1"
@@ -271,13 +391,20 @@
     "legend": {
       "labelColor": "#5B6472",
       "titleColor": "#5B6472",
-      "labelFontSize": 11,
-      "titleFontSize": 11,
-      "titleFontWeight": 500
+      "labelFontSize": 12.5,
+      "titleFontSize": 12.5,
+      "titleFontWeight": 500,
+      "symbolSize": 110
     },
     "text": {
       "color": "#1B2A41",
-      "fontSize": 11
+      "fontSize": 12.5
     }
+  },
+  "padding": {
+    "left": 6,
+    "right": 12,
+    "top": 6,
+    "bottom": 6
   }
 }
