@@ -1,0 +1,701 @@
+jurisdiction,wealth_tax,tax,top_rate_pct
+Afghanistan,Not listed,corporate,20.0
+Afghanistan,Not listed,income_top,20.0
+Afghanistan,Not listed,vat,0.0
+Albania,Not listed,capital_gains,15.0
+Albania,Not listed,corporate,15.0
+Albania,Not listed,income_top,23.0
+Albania,Not listed,vat,20.0
+Algeria,Not listed,capital_gains,15.0
+Algeria,Not listed,corporate,26.0
+Algeria,Not listed,income_top,35.0
+Algeria,Not listed,vat,19.0
+American Samoa,Not listed,corporate,34.0
+American Samoa,Not listed,income_top,6.0
+American Samoa,Not listed,vat,0.0
+Andorra,Not listed,corporate,10.0
+Andorra,Not listed,income_top,10.0
+Andorra,Not listed,vat,4.5
+Angola,Not listed,capital_gains,10.0
+Angola,Not listed,corporate,30.0
+Angola,Not listed,income_top,17.0
+Angola,Not listed,vat,14.0
+Anguilla,Not listed,corporate,0.0
+Anguilla,Not listed,income_top,0.0
+Anguilla,Not listed,vat,0.0
+Antigua and Barbuda,Not listed,corporate,25.0
+Antigua and Barbuda,Not listed,income_top,0.0
+Antigua and Barbuda,Not listed,vat,15.0
+Argentina,Not listed,capital_gains,15.0
+Argentina,Not listed,corporate,35.0
+Argentina,Not listed,income_top,35.0
+Argentina,Not listed,vat,21.0
+Armenia,Not listed,capital_gains,20.0
+Armenia,Not listed,corporate,18.0
+Armenia,Not listed,income_top,22.0
+Armenia,Not listed,vat,20.0
+Aruba,Not listed,corporate,25.0
+Aruba,Not listed,income_top,58.95
+Aruba,Not listed,vat,1.5
+Australia,No,capital_gains,45.0
+Australia,No,corporate,30.0
+Australia,No,income_top,45.0
+Australia,No,inheritance,0.0
+Australia,No,vat,10.0
+Austria,No,capital_gains,27.5
+Austria,No,corporate,23.0
+Austria,No,income_top,55.0
+Austria,No,inheritance,0.0
+Austria,No,vat,20.0
+Azerbaijan,Not listed,corporate,20.0
+Azerbaijan,Not listed,income_top,25.0
+Azerbaijan,Not listed,vat,18.0
+Azores,Not listed,corporate,13.6
+Azores,Not listed,income_top,36.2
+Azores,Not listed,vat,16.0
+Bahamas,Not listed,corporate,0.0
+Bahamas,Not listed,income_top,8.8
+Bahamas,Not listed,vat,12.0
+Bahrain,Not listed,corporate,0.0
+Bahrain,Not listed,income_top,0.0
+Bahrain,Not listed,vat,10.0
+Bangladesh,Not listed,corporate,32.5
+Bangladesh,Not listed,income_top,25.0
+Bangladesh,Not listed,vat,15.0
+Barbados,Not listed,corporate,5.5
+Barbados,Not listed,income_top,38.0
+Barbados,Not listed,vat,17.5
+Belarus,Not listed,corporate,20.0
+Belarus,Not listed,income_top,43.37
+Belarus,Not listed,vat,20.0
+Belgium,No,capital_gains,10.0
+Belgium,No,corporate,25.0
+Belgium,No,income_top,60.45
+Belgium,No,inheritance,80.0
+Belgium,No,vat,21.0
+Belize,No,capital_gains,0.0
+Belize,No,corporate,25.0
+Belize,No,income_top,25.0
+Belize,No,vat,12.5
+Benin,Not listed,corporate,35.0
+Benin,Not listed,income_top,35.0
+Benin,Not listed,vat,18.0
+Bermuda,Not listed,corporate,0.0
+Bermuda,Not listed,income_top,0.0
+Bermuda,Not listed,vat,0.0
+Bhutan,Not listed,corporate,26.0
+Bhutan,Not listed,income_top,25.0
+Bolivia,Not listed,corporate,29.0
+Bolivia,Not listed,income_top,25.0
+Bolivia,Not listed,vat,13.0
+Bosnia and Herzegovina,Not listed,corporate,10.0
+Bosnia and Herzegovina,Not listed,income_top,10.0
+Bosnia and Herzegovina,Not listed,vat,17.0
+Botswana,Not listed,capital_gains,25.0
+Botswana,Not listed,corporate,22.0
+Botswana,Not listed,income_top,25.0
+Botswana,Not listed,vat,14.0
+Brazil,Not listed,capital_gains,22.5
+Brazil,Not listed,corporate,40.0
+Brazil,Not listed,income_top,27.5
+Brazil,Not listed,inheritance,8.0
+Brazil,Not listed,vat,30.7
+British Virgin Islands,Not listed,corporate,0.0
+British Virgin Islands,Not listed,income_top,0.0
+Brunei,Not listed,capital_gains,0.0
+Brunei,Not listed,corporate,1.0
+Brunei,Not listed,income_top,0.0
+Bulgaria,Not listed,corporate,10.0
+Bulgaria,Not listed,income_top,10.0
+Bulgaria,Not listed,vat,20.0
+Burkina Faso,Not listed,corporate,27.5
+Burkina Faso,Not listed,income_top,25.0
+Burkina Faso,Not listed,vat,18.0
+Burundi,Not listed,corporate,35.0
+Burundi,Not listed,income_top,35.0
+Burundi,Not listed,vat,18.0
+Cambodia,Not listed,corporate,20.0
+Cambodia,Not listed,income_top,20.0
+Cambodia,Not listed,vat,10.0
+Cameroon,Not listed,corporate,31.5
+Cameroon,Not listed,income_top,35.0
+Cameroon,Not listed,vat,19.25
+Canada,No,capital_gains,27.4
+Canada,No,corporate,31.0
+Canada,No,income_top,54.8
+Canada,No,inheritance,0.0
+Canada,No,vat,5.0
+Cape Verde,Not listed,corporate,25.0
+Cape Verde,Not listed,income_top,27.5
+Cape Verde,Not listed,vat,15.0
+Cayman Islands,Not listed,corporate,0.0
+Cayman Islands,Not listed,income_top,0.0
+Cayman Islands,Not listed,vat,0.0
+Central African Republic,Not listed,corporate,30.0
+Central African Republic,Not listed,income_top,50.0
+Central African Republic,Not listed,vat,19.0
+Chad,Not listed,corporate,20.0
+Chile,No,capital_gains,10.0
+Chile,No,corporate,27.0
+Chile,No,income_top,40.0
+Chile,No,inheritance,25.0
+Chile,No,vat,19.0
+China,Not listed,capital_gains,20.0
+China,Not listed,corporate,25.0
+China,Not listed,income_top,45.0
+China,Not listed,inheritance,0.0
+China,Not listed,vat,13.0
+Colombia,Yes,capital_gains,10.0
+Colombia,Yes,corporate,35.0
+Colombia,Yes,income_top,35.0
+Colombia,Yes,vat,19.0
+Comoros,Not listed,corporate,35.0
+Congo,Not listed,corporate,30.0
+Congo,Not listed,vat,18.9
+Cook Islands,Not listed,corporate,30.0
+Cook Islands,Not listed,income_top,30.0
+Cook Islands,Not listed,vat,15.0
+Costa Rica,No,corporate,30.0
+Costa Rica,No,income_top,25.0
+Costa Rica,No,vat,13.0
+Croatia,Not listed,capital_gains,10.0
+Croatia,Not listed,corporate,18.0
+Croatia,Not listed,income_top,40.0
+Croatia,Not listed,inheritance,5.0
+Croatia,Not listed,vat,25.0
+Cuba,Not listed,corporate,30.0
+Cuba,Not listed,income_top,50.0
+Cuba,Not listed,vat,20.0
+Curaçao,Not listed,corporate,22.0
+Curaçao,Not listed,income_top,46.5
+Curaçao,Not listed,vat,6.0
+Cyprus,Not listed,capital_gains,20.0
+Cyprus,Not listed,corporate,15.0
+Cyprus,Not listed,income_top,35.0
+Cyprus,Not listed,vat,19.0
+Czech Republic,No,capital_gains,15.0
+Czech Republic,No,corporate,21.0
+Czech Republic,No,income_top,45.7
+Czech Republic,No,vat,21.0
+DR Congo,Not listed,corporate,35.0
+DR Congo,Not listed,income_top,40.0
+DR Congo,Not listed,vat,20.0
+Denmark,No,capital_gains,42.0
+Denmark,No,corporate,25.0
+Denmark,No,income_top,52.07
+Denmark,No,inheritance,15.0
+Denmark,No,vat,25.0
+Djibouti,Not listed,corporate,25.0
+Dominica,Not listed,corporate,25.0
+Dominica,Not listed,income_top,35.0
+Dominica,Not listed,vat,15.0
+Dominican Republic,Not listed,capital_gains,27.0
+Dominican Republic,Not listed,corporate,27.0
+Dominican Republic,Not listed,income_top,25.0
+Dominican Republic,Not listed,vat,18.0
+Ecuador,Not listed,capital_gains,35.0
+Ecuador,Not listed,corporate,25.0
+Ecuador,Not listed,income_top,35.0
+Ecuador,Not listed,inheritance,35.0
+Ecuador,Not listed,vat,12.0
+Egypt,Not listed,corporate,22.5
+Egypt,Not listed,income_top,27.5
+Egypt,Not listed,vat,14.0
+El Salvador,Not listed,corporate,30.0
+El Salvador,Not listed,income_top,30.0
+El Salvador,Not listed,vat,13.0
+Equatorial Guinea,Not listed,corporate,35.0
+Equatorial Guinea,Not listed,income_top,35.0
+Equatorial Guinea,Not listed,vat,15.0
+Eritrea,Not listed,corporate,34.0
+Estonia,No,capital_gains,20.0
+Estonia,No,corporate,0.0
+Estonia,No,income_top,23.6
+Estonia,No,inheritance,0.0
+Estonia,No,vat,24.0
+Eswatini (Swaziland),Not listed,corporate,27.5
+Eswatini (Swaziland),Not listed,income_top,33.0
+Eswatini (Swaziland),Not listed,vat,15.0
+Ethiopia,Not listed,corporate,30.0
+Ethiopia,Not listed,income_top,35.0
+Falkland Islands,Not listed,capital_gains,15.0
+Falkland Islands,Not listed,corporate,26.0
+Falkland Islands,Not listed,income_top,26.0
+Falkland Islands,Not listed,vat,0.0
+Faroe Islands,Not listed,corporate,18.0
+Faroe Islands,Not listed,income_top,20.0
+Federated States of Micronesia,Not listed,corporate,21.0
+Fiji,Not listed,corporate,20.0
+Fiji,Not listed,income_top,20.0
+Fiji,Not listed,vat,9.0
+Finland,No,capital_gains,34.0
+Finland,No,corporate,20.0
+Finland,No,income_top,53.61
+Finland,No,inheritance,33.0
+Finland,No,vat,25.5
+France,Yes,capital_gains,31.4
+France,Yes,corporate,25.0
+France,Yes,income_top,55.34
+France,Yes,inheritance,60.0
+France,Yes,vat,20.0
+French Polynesia,Not listed,corporate,25.0
+Gabon,Not listed,corporate,35.0
+Gabon,Not listed,income_top,35.0
+Gabon,Not listed,vat,18.0
+Gambia,Not listed,corporate,31.0
+Gambia,Not listed,income_top,30.0
+Georgia,Not listed,corporate,0.0
+Georgia,Not listed,income_top,20.0
+Georgia,Not listed,inheritance,0.0
+Georgia,Not listed,vat,18.0
+Germany,Inactive,capital_gains,25.0
+Germany,Inactive,corporate,30.0
+Germany,Inactive,income_top,45.0
+Germany,Inactive,inheritance,50.0
+Germany,Inactive,vat,19.0
+Ghana,Not listed,corporate,25.0
+Ghana,Not listed,income_top,25.0
+Ghana,Not listed,vat,3.0
+Gibraltar,Not listed,corporate,10.0
+Gibraltar,Not listed,income_top,40.0
+Gibraltar,Not listed,vat,0.0
+Greece,No,capital_gains,15.0
+Greece,No,corporate,22.0
+Greece,No,income_top,44.0
+Greece,No,inheritance,20.0
+Greece,No,vat,24.0
+Greenland,Not listed,corporate,25.0
+Greenland,Not listed,income_top,44.0
+Greenland,Not listed,vat,0.0
+Grenada,Not listed,corporate,28.0
+Guatemala,Not listed,corporate,25.0
+Guatemala,Not listed,income_top,7.0
+Guatemala,Not listed,vat,12.0
+Guernsey,Not listed,corporate,0.0
+Guernsey,Not listed,income_top,20.0
+Guernsey,Not listed,vat,0.0
+Guinea,Not listed,corporate,35.0
+Guinea-Bissau,Not listed,corporate,35.0
+Guyana,Not listed,corporate,30.0
+Guyana,Not listed,income_top,35.0
+Guyana,Not listed,vat,14.0
+Haiti,Not listed,corporate,30.0
+Haiti,Not listed,income_top,30.0
+Haiti,Not listed,vat,10.0
+Honduras,Not listed,corporate,25.0
+Hong Kong,Not listed,corporate,16.5
+Hong Kong,Not listed,income_top,15.0
+Hong Kong,Not listed,inheritance,0.0
+Hong Kong,Not listed,vat,0.0
+Hungary,No,capital_gains,15.0
+Hungary,No,corporate,9.0
+Hungary,No,income_top,15.0
+Hungary,No,inheritance,18.0
+Hungary,No,vat,27.0
+Iceland,No,capital_gains,22.0
+Iceland,No,corporate,20.0
+Iceland,No,income_top,46.28
+Iceland,No,inheritance,10.0
+Iceland,No,vat,24.0
+India,Not listed,capital_gains,12.5
+India,Not listed,corporate,22.0
+India,Not listed,income_top,39.0
+India,Not listed,inheritance,0.0
+India,Not listed,vat,18.0
+Indonesia,Not listed,corporate,22.0
+Indonesia,Not listed,income_top,35.0
+Indonesia,Not listed,vat,11.0
+Iran,Not listed,corporate,25.0
+Iran,Not listed,income_top,35.0
+Iran,Not listed,vat,9.0
+Iraq,Not listed,corporate,15.0
+Iraq,Not listed,income_top,15.0
+Ireland,No,capital_gains,33.0
+Ireland,No,corporate,12.5
+Ireland,No,income_top,52.1
+Ireland,No,inheritance,33.0
+Ireland,No,vat,23.0
+Isle of Man,Not listed,corporate,0.0
+Isle of Man,Not listed,income_top,21.0
+Isle of Man,Not listed,vat,20.0
+Israel,No,capital_gains,25.0
+Israel,No,corporate,23.0
+Israel,No,income_top,50.0
+Israel,No,inheritance,0.0
+Israel,No,vat,18.0
+Italy,No,capital_gains,26.0
+Italy,No,corporate,27.9
+Italy,No,income_top,43.0
+Italy,No,inheritance,4.0
+Italy,No,vat,22.0
+Ivory Coast,Not listed,corporate,25.0
+Jamaica,Not listed,corporate,33.3
+Jamaica,Not listed,income_top,30.0
+Jamaica,Not listed,vat,20.0
+Japan,No,capital_gains,20.315
+Japan,No,corporate,29.74
+Japan,No,income_top,50.5
+Japan,No,inheritance,55.0
+Japan,No,vat,10.0
+Jersey,Not listed,corporate,0.0
+Jersey,Not listed,income_top,20.0
+Jersey,Not listed,vat,5.0
+Jordan,Not listed,corporate,20.0
+Jordan,Not listed,income_top,25.0
+Jordan,Not listed,vat,16.0
+Kazakhstan,Not listed,corporate,20.0
+Kazakhstan,Not listed,income_top,10.0
+Kazakhstan,Not listed,vat,16.0
+Kenya,Not listed,corporate,30.0
+Kenya,Not listed,income_top,35.0
+Kenya,Not listed,vat,16.0
+Kiribati,Not listed,corporate,35.0
+Kosovo,Not listed,corporate,10.0
+Kosovo,Not listed,income_top,10.0
+Kosovo,Not listed,vat,0.0
+Kuwait,Not listed,corporate,16.0
+Kuwait,Not listed,income_top,0.0
+Kuwait,Not listed,vat,0.0
+Kyrgyzstan,Not listed,corporate,10.0
+Kyrgyzstan,Not listed,income_top,10.0
+Kyrgyzstan,Not listed,vat,12.0
+Laos,Not listed,corporate,35.0
+Latvia,No,capital_gains,20.0
+Latvia,No,corporate,0.0
+Latvia,No,income_top,31.4
+Latvia,No,vat,21.0
+Lebanon,Not listed,corporate,17.0
+Lebanon,Not listed,income_top,25.0
+Lebanon,Not listed,vat,11.0
+Lesotho,Not listed,corporate,25.0
+Liberia,Not listed,corporate,25.0
+Libya,Not listed,corporate,24.5
+Liechtenstein,Not listed,capital_gains,0.0
+Liechtenstein,Not listed,corporate,12.5
+Liechtenstein,Not listed,income_top,22.4
+Liechtenstein,Not listed,vat,8.1
+Lithuania,No,capital_gains,15.0
+Lithuania,No,corporate,15.0
+Lithuania,No,income_top,42.77
+Lithuania,No,vat,21.0
+Luxembourg,No,corporate,28.69
+Luxembourg,No,income_top,44.2
+Luxembourg,No,inheritance,0.0
+Luxembourg,No,vat,17.0
+Macau,Not listed,corporate,12.0
+Macau,Not listed,income_top,12.0
+Macau,Not listed,vat,0.0
+Madagascar,Not listed,corporate,20.0
+Madeira,Not listed,corporate,5.0
+Madeira,Not listed,income_top,45.1
+Madeira,Not listed,vat,22.0
+Malawi,Not listed,corporate,30.0
+Malawi,Not listed,income_top,35.0
+Malaysia,Not listed,capital_gains,10.0
+Malaysia,Not listed,corporate,24.0
+Malaysia,Not listed,income_top,30.0
+Malaysia,Not listed,vat,10.0
+Maldives,Not listed,corporate,15.0
+Maldives,Not listed,income_top,0.0
+Maldives,Not listed,vat,6.0
+Mali,Not listed,corporate,30.0
+Malta,Not listed,corporate,35.0
+Malta,Not listed,income_top,35.0
+Malta,Not listed,inheritance,0.0
+Malta,Not listed,vat,18.0
+Marshall Islands,Not listed,corporate,3.0
+Marshall Islands,Not listed,income_top,12.0
+Marshall Islands,Not listed,vat,4.0
+Mauritania,Not listed,corporate,25.0
+Mauritius,Not listed,corporate,15.0
+Mauritius,Not listed,income_top,15.0
+Mauritius,Not listed,vat,15.0
+Mexico,No,corporate,30.0
+Mexico,No,income_top,35.0
+Mexico,No,inheritance,0.0
+Mexico,No,vat,16.0
+Moldova,Not listed,corporate,12.0
+Moldova,Not listed,income_top,12.0
+Moldova,Not listed,vat,20.0
+Monaco,Not listed,corporate,0.0
+Monaco,Not listed,income_top,0.0
+Monaco,Not listed,vat,20.0
+Mongolia,Not listed,corporate,10.0
+Mongolia,Not listed,income_top,10.0
+Mongolia,Not listed,vat,10.0
+Montenegro,Not listed,corporate,9.0
+Montenegro,Not listed,income_top,12.65
+Montenegro,Not listed,vat,21.0
+Montserrat,Not listed,corporate,20.0
+Morocco,Not listed,corporate,31.0
+Morocco,Not listed,income_top,38.0
+Morocco,Not listed,vat,20.0
+Mozambique,Not listed,corporate,32.0
+Myanmar,Not listed,corporate,22.0
+Namibia,Not listed,corporate,32.0
+Namibia,Not listed,income_top,37.0
+Namibia,Not listed,vat,15.0
+Nauru,Not listed,corporate,25.0
+Nepal,Not listed,corporate,30.0
+Nepal,Not listed,income_top,36.0
+Nepal,Not listed,vat,13.0
+Netherlands,No,capital_gains,36.0
+Netherlands,No,corporate,25.8
+Netherlands,No,income_top,49.5
+Netherlands,No,inheritance,40.0
+Netherlands,No,vat,21.0
+New Caledonia,Not listed,corporate,30.0
+New Caledonia,Not listed,income_top,40.0
+New Zealand,No,corporate,28.0
+New Zealand,No,income_top,39.0
+New Zealand,No,inheritance,0.0
+New Zealand,No,vat,15.0
+Nicaragua,Not listed,corporate,30.0
+Niger,Not listed,corporate,30.0
+Niger,Not listed,vat,7.0
+Nigeria,Not listed,corporate,30.0
+Nigeria,Not listed,income_top,24.0
+Nigeria,Not listed,vat,7.5
+Niue,Not listed,corporate,0.0
+Niue,Not listed,vat,12.5
+Norfolk Island,Not listed,corporate,0.0
+North Korea,Not listed,corporate,25.0
+North Korea,Not listed,income_top,20.0
+North Korea,Not listed,vat,10.0
+North Macedonia,Not listed,corporate,10.0
+North Macedonia,Not listed,income_top,18.0
+North Macedonia,Not listed,vat,18.0
+Norway,Yes,capital_gains,37.84
+Norway,Yes,corporate,22.0
+Norway,Yes,income_top,47.4
+Norway,Yes,inheritance,0.0
+Norway,Yes,vat,25.0
+Oman,Not listed,corporate,15.0
+Oman,Not listed,income_top,0.0
+Oman,Not listed,vat,5.0
+Pakistan,Not listed,capital_gains,15.0
+Pakistan,Not listed,corporate,1.25
+Pakistan,Not listed,income_top,45.0
+Pakistan,Not listed,inheritance,0.0
+Pakistan,Not listed,vat,18.0
+Palau,Not listed,corporate,12.0
+Palestine,Not listed,corporate,15.0
+Palestine,Not listed,income_top,15.0
+Palestine,Not listed,vat,14.5
+Panama,Not listed,corporate,25.0
+Panama,Not listed,income_top,27.0
+Panama,Not listed,vat,7.0
+Papua New Guinea,Not listed,corporate,30.0
+Paraguay,No,corporate,10.0
+Paraguay,No,income_top,10.0
+Paraguay,No,vat,10.0
+Peru,Not listed,corporate,30.0
+Peru,Not listed,income_top,30.0
+Peru,Not listed,vat,16.0
+Philippines,Not listed,capital_gains,10.0
+Philippines,Not listed,corporate,30.0
+Philippines,Not listed,income_top,35.0
+Philippines,Not listed,inheritance,6.0
+Philippines,Not listed,vat,12.0
+Pitcairn Islands,Not listed,corporate,0.0
+Pitcairn Islands,Not listed,income_top,0.0
+Pitcairn Islands,Not listed,vat,0.0
+Poland,No,capital_gains,19.0
+Poland,No,corporate,19.0
+Poland,No,income_top,41.0
+Poland,No,inheritance,7.0
+Poland,No,vat,23.0
+Portugal,No,capital_gains,28.0
+Portugal,No,corporate,20.0
+Portugal,No,income_top,56.03
+Portugal,No,inheritance,0.0
+Portugal,No,vat,23.0
+Puerto Rico,Not listed,corporate,20.0
+Puerto Rico,Not listed,income_top,33.34
+Puerto Rico,Not listed,vat,11.5
+Qatar,Not listed,corporate,10.0
+Qatar,Not listed,income_top,0.0
+Qatar,Not listed,vat,0.0
+Romania,Not listed,capital_gains,10.0
+Romania,Not listed,corporate,16.0
+Romania,Not listed,income_top,45.0
+Romania,Not listed,vat,19.0
+Russia,Not listed,corporate,20.0
+Russia,Not listed,income_top,22.0
+Russia,Not listed,inheritance,0.0
+Russia,Not listed,vat,22.0
+Rwanda,Not listed,corporate,30.0
+Rwanda,Not listed,income_top,30.0
+Rwanda,Not listed,vat,18.0
+Saint Barthélemy,Not listed,corporate,0.0
+Saint Barthélemy,Not listed,income_top,0.0
+Saint Barthélemy,Not listed,vat,0.0
+Saint Kitts and Nevis,Not listed,corporate,33.0
+Saint Kitts and Nevis,Not listed,income_top,0.0
+Saint Lucia,Not listed,corporate,30.0
+Saint Martin,Not listed,corporate,20.0
+Saint Pierre and Miquelon,Not listed,corporate,33.3
+Saint Vincent and the Grenadines,Not listed,corporate,30.0
+Samoa,Not listed,corporate,27.0
+San Marino,Not listed,corporate,17.0
+San Marino,Not listed,income_top,35.0
+San Marino,Not listed,vat,0.0
+Sark,Other,capital_gains,0.0
+Sark,Other,corporate,0.0
+Sark,Other,income_top,0.0
+Sark,Other,vat,0.0
+Saudi Arabia,Not listed,corporate,2.5
+Saudi Arabia,Not listed,income_top,0.0
+Saudi Arabia,Not listed,vat,15.0
+Senegal,Not listed,corporate,25.0
+Senegal,Not listed,income_top,50.0
+Senegal,Not listed,vat,20.0
+Serbia,Not listed,capital_gains,15.0
+Serbia,Not listed,corporate,15.0
+Serbia,Not listed,income_top,25.0
+Serbia,Not listed,inheritance,0.0
+Serbia,Not listed,vat,20.0
+Seychelles,Not listed,corporate,33.0
+Seychelles,Not listed,income_top,15.0
+Seychelles,Not listed,vat,15.0
+Sierra Leone,Not listed,corporate,25.0
+Singapore,Not listed,corporate,17.0
+Singapore,Not listed,income_top,22.0
+Singapore,Not listed,inheritance,0.0
+Singapore,Not listed,vat,9.0
+Sint Maarten,Not listed,corporate,34.5
+Sint Maarten,Not listed,income_top,47.5
+Sint Maarten,Not listed,vat,5.0
+Slovakia,No,capital_gains,25.0
+Slovakia,No,corporate,21.0
+Slovakia,No,income_top,25.0
+Slovakia,No,inheritance,0.0
+Slovakia,No,vat,23.0
+Slovenia,No,capital_gains,27.5
+Slovenia,No,corporate,19.0
+Slovenia,No,income_top,50.0
+Slovenia,No,inheritance,0.0
+Slovenia,No,vat,22.0
+Solomon Islands,Not listed,corporate,30.0
+Somalia,Not listed,corporate,30.0
+Somalia,Not listed,income_top,18.0
+Somalia,Not listed,vat,0.0
+South Africa,Not listed,capital_gains,18.0
+South Africa,Not listed,corporate,28.0
+South Africa,Not listed,income_top,45.0
+South Africa,Not listed,inheritance,25.0
+South Africa,Not listed,vat,15.0
+South Georgia and the South Sandwich Islands,Other,income_top,7.0
+South Korea,No,corporate,24.2
+South Korea,No,income_top,53.4
+South Korea,No,inheritance,50.0
+South Korea,No,vat,10.0
+South Sudan,Not listed,corporate,30.0
+Spain,Yes,capital_gains,26.0
+Spain,Yes,corporate,25.0
+Spain,Yes,income_top,52.3
+Spain,Yes,inheritance,34.0
+Spain,Yes,vat,21.0
+Sri Lanka,Not listed,capital_gains,10.0
+Sri Lanka,Not listed,corporate,30.0
+Sri Lanka,Not listed,income_top,36.0
+Sri Lanka,Not listed,vat,12.0
+Sudan,Not listed,corporate,5.0
+Suriname,Not listed,corporate,36.0
+Suriname,Not listed,income_top,38.0
+Svalbard,Not listed,capital_gains,0.0
+Svalbard,Not listed,corporate,16.0
+Svalbard,Not listed,income_top,22.0
+Svalbard,Not listed,inheritance,0.0
+Svalbard,Not listed,vat,0.0
+Sweden,No,capital_gains,30.0
+Sweden,No,corporate,20.6
+Sweden,No,income_top,48.0
+Sweden,No,inheritance,0.0
+Sweden,No,vat,25.0
+Switzerland,Yes,corporate,17.92
+Switzerland,Yes,income_top,62.855
+Switzerland,Yes,inheritance,0.0
+Switzerland,Yes,vat,8.1
+Syria,Not listed,corporate,22.0
+Syria,Not listed,income_top,15.0
+São Tomé and Príncipe,Not listed,corporate,25.0
+Taiwan,Not listed,corporate,20.0
+Taiwan,Not listed,income_top,40.0
+Taiwan,Not listed,inheritance,20.0
+Taiwan,Not listed,vat,5.0
+Tajikistan,Not listed,corporate,13.0
+Tajikistan,Not listed,income_top,13.0
+Tajikistan,Not listed,vat,18.0
+Tanzania,Not listed,corporate,30.0
+Tanzania,Not listed,income_top,30.0
+Tanzania,Not listed,vat,14.0
+Thailand,Not listed,corporate,20.0
+Thailand,Not listed,income_top,35.0
+Thailand,Not listed,vat,7.0
+Timor-Leste,Not listed,corporate,10.0
+Togo,Not listed,corporate,27.0
+Tokelau,Not listed,corporate,0.0
+Tonga,Not listed,corporate,25.0
+Trinidad and Tobago,Not listed,corporate,30.0
+Trinidad and Tobago,Not listed,income_top,25.0
+Trinidad and Tobago,Not listed,vat,12.5
+Tunisia,Not listed,corporate,30.0
+Tunisia,Not listed,income_top,35.0
+Tunisia,Not listed,vat,18.0
+Turkey,No,corporate,25.0
+Turkey,No,income_top,40.0
+Turkey,No,inheritance,30.0
+Turkey,No,vat,20.0
+Turkmenistan,Not listed,corporate,8.0
+Turks and Caicos Islands,Not listed,corporate,0.0
+Tuvalu,Not listed,corporate,30.0
+U.S. Virgin Islands,Not listed,corporate,38.5
+Uganda,Not listed,corporate,30.0
+Uganda,Not listed,vat,18.0
+Ukraine,Not listed,corporate,18.0
+Ukraine,Not listed,income_top,18.0
+Ukraine,Not listed,inheritance,18.0
+Ukraine,Not listed,vat,2.0
+United Arab Emirates,Not listed,capital_gains,0.0
+United Arab Emirates,Not listed,corporate,0.0
+United Arab Emirates,Not listed,income_top,0.0
+United Arab Emirates,Not listed,vat,5.0
+United Kingdom,No,capital_gains,24.0
+United Kingdom,No,corporate,25.0
+United Kingdom,No,income_top,47.0
+United Kingdom,No,inheritance,40.0
+United Kingdom,No,vat,20.0
+United States,No,capital_gains,20.0
+United States,No,corporate,21.0
+United States,No,income_top,51.776
+United States,No,inheritance,40.0
+United States,No,vat,11.5
+Uruguay,Not listed,corporate,25.0
+Uruguay,Not listed,income_top,36.0
+Uruguay,Not listed,vat,22.0
+Uzbekistan,Not listed,corporate,12.0
+Uzbekistan,Not listed,income_top,12.0
+Uzbekistan,Not listed,vat,15.0
+Vanuatu,Not listed,corporate,0.0
+Vanuatu,Not listed,income_top,0.0
+Vanuatu,Not listed,vat,15.0
+Venezuela,Not listed,corporate,34.0
+Venezuela,Not listed,income_top,34.0
+Venezuela,Not listed,vat,16.0
+Vietnam,Not listed,corporate,20.0
+Vietnam,Not listed,income_top,35.0
+Vietnam,Not listed,inheritance,10.0
+Vietnam,Not listed,vat,10.0
+Wallis and Futuna,Not listed,corporate,0.0
+Wallis and Futuna,Not listed,income_top,0.0
+Wallis and Futuna,Not listed,vat,0.0
+Yemen,Not listed,corporate,20.0
+Yemen,Not listed,income_top,15.0
+Yemen,Not listed,vat,2.0
+Zambia,Not listed,corporate,30.0
+Zambia,Not listed,income_top,30.0
+Zambia,Not listed,vat,16.0
+Zimbabwe,Not listed,corporate,25.0
+Zimbabwe,Not listed,income_top,45.0
+Zimbabwe,Not listed,vat,15.0

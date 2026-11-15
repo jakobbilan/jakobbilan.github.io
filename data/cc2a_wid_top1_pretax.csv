@@ -1,0 +1,260 @@
+country,code,year,share
+France,FRA,1910,22.73
+France,FRA,1915,19.89
+France,FRA,1916,22.93
+France,FRA,1917,22.66
+France,FRA,1918,20.14
+France,FRA,1919,21.04
+France,FRA,1920,20.13
+France,FRA,1921,19.19
+France,FRA,1922,21.0
+France,FRA,1923,23.34
+France,FRA,1924,21.64
+France,FRA,1925,21.02
+France,FRA,1926,20.65
+France,FRA,1927,21.35
+France,FRA,1928,21.49
+France,FRA,1929,20.12
+France,FRA,1930,17.33
+France,FRA,1931,16.55
+France,FRA,1932,16.96
+France,FRA,1933,17.75
+France,FRA,1934,17.72
+France,FRA,1935,18.47
+France,FRA,1936,17.39
+France,FRA,1937,17.55
+France,FRA,1938,16.61
+France,FRA,1939,16.51
+France,FRA,1940,16.88
+France,FRA,1941,16.12
+France,FRA,1942,14.75
+France,FRA,1943,11.92
+France,FRA,1944,10.06
+France,FRA,1945,8.54
+France,FRA,1946,10.51
+France,FRA,1947,10.79
+France,FRA,1948,9.99
+France,FRA,1949,10.35
+France,FRA,1950,10.43
+France,FRA,1951,10.79
+France,FRA,1952,11.05
+France,FRA,1953,10.94
+France,FRA,1954,11.14
+France,FRA,1955,11.36
+France,FRA,1956,11.06
+France,FRA,1957,11.33
+France,FRA,1958,10.46
+France,FRA,1959,11.32
+France,FRA,1960,11.53
+France,FRA,1961,11.65
+France,FRA,1962,11.05
+France,FRA,1963,10.82
+France,FRA,1964,10.94
+France,FRA,1965,11.03
+France,FRA,1966,10.82
+France,FRA,1967,10.81
+France,FRA,1968,10.26
+France,FRA,1969,10.0
+France,FRA,1970,9.76
+France,FRA,1971,9.78
+France,FRA,1972,9.6
+France,FRA,1973,10.2
+France,FRA,1974,9.84
+France,FRA,1975,9.2
+France,FRA,1976,9.22
+France,FRA,1977,8.65
+France,FRA,1978,8.4
+France,FRA,1979,8.75
+France,FRA,1980,7.54
+France,FRA,1981,7.34
+France,FRA,1982,7.03
+France,FRA,1983,6.98
+France,FRA,1984,7.01
+France,FRA,1985,7.27
+France,FRA,1986,7.84
+France,FRA,1987,8.22
+France,FRA,1988,8.44
+France,FRA,1989,8.91
+France,FRA,1990,8.97
+France,FRA,1991,9.03
+France,FRA,1992,8.72
+France,FRA,1993,8.66
+France,FRA,1994,9.13
+France,FRA,1995,9.29
+France,FRA,1996,10.22
+France,FRA,1997,10.67
+France,FRA,1998,11.18
+France,FRA,1999,11.05
+France,FRA,2000,11.33
+France,FRA,2001,11.5
+France,FRA,2002,11.08
+France,FRA,2003,11.2
+France,FRA,2004,11.71
+France,FRA,2005,11.52
+France,FRA,2006,11.17
+France,FRA,2007,11.85
+France,FRA,2008,12.09
+France,FRA,2009,10.36
+France,FRA,2010,11.02
+France,FRA,2011,11.24
+France,FRA,2012,10.24
+France,FRA,2013,9.55
+France,FRA,2014,9.79
+France,FRA,2015,10.34
+France,FRA,2016,10.39
+France,FRA,2017,10.79
+France,FRA,2018,11.75
+France,FRA,2019,11.39
+France,FRA,2020,11.15
+France,FRA,2021,12.72
+France,FRA,2022,12.1
+United Kingdom,GBR,1982,6.92
+United Kingdom,GBR,1983,6.88
+United Kingdom,GBR,1984,7.15
+United Kingdom,GBR,1985,7.31
+United Kingdom,GBR,1986,7.43
+United Kingdom,GBR,1987,7.65
+United Kingdom,GBR,1988,8.3
+United Kingdom,GBR,1989,8.32
+United Kingdom,GBR,1990,9.1
+United Kingdom,GBR,1991,9.54
+United Kingdom,GBR,1992,9.24
+United Kingdom,GBR,1993,9.72
+United Kingdom,GBR,1994,9.96
+United Kingdom,GBR,1995,10.12
+United Kingdom,GBR,1996,11.59
+United Kingdom,GBR,1997,12.08
+United Kingdom,GBR,1998,12.98
+United Kingdom,GBR,1999,12.15
+United Kingdom,GBR,2000,11.73
+United Kingdom,GBR,2001,11.64
+United Kingdom,GBR,2002,12.0
+United Kingdom,GBR,2003,13.14
+United Kingdom,GBR,2004,12.97
+United Kingdom,GBR,2005,14.28
+United Kingdom,GBR,2006,14.67
+United Kingdom,GBR,2007,14.69
+United Kingdom,GBR,2008,14.07
+United Kingdom,GBR,2009,14.27
+United Kingdom,GBR,2010,12.29
+United Kingdom,GBR,2011,13.17
+United Kingdom,GBR,2012,12.76
+United Kingdom,GBR,2015,12.3
+United Kingdom,GBR,2016,12.48
+United Kingdom,GBR,2017,13.44
+United Kingdom,GBR,2018,13.07
+United Kingdom,GBR,2019,12.7
+United Kingdom,GBR,2020,12.7
+United Kingdom,GBR,2021,12.91
+United States,USA,1913,20.43
+United States,USA,1914,20.91
+United States,USA,1915,20.29
+United States,USA,1916,21.36
+United States,USA,1917,21.31
+United States,USA,1918,19.68
+United States,USA,1919,21.64
+United States,USA,1920,18.77
+United States,USA,1921,19.15
+United States,USA,1922,18.58
+United States,USA,1923,17.7
+United States,USA,1924,18.47
+United States,USA,1925,20.68
+United States,USA,1926,21.94
+United States,USA,1927,21.26
+United States,USA,1928,22.29
+United States,USA,1929,22.18
+United States,USA,1930,19.06
+United States,USA,1931,16.76
+United States,USA,1932,16.51
+United States,USA,1933,17.51
+United States,USA,1934,19.06
+United States,USA,1935,19.33
+United States,USA,1936,20.94
+United States,USA,1937,20.67
+United States,USA,1938,18.64
+United States,USA,1939,19.57
+United States,USA,1940,20.48
+United States,USA,1941,21.58
+United States,USA,1942,20.59
+United States,USA,1943,18.59
+United States,USA,1944,15.35
+United States,USA,1945,14.25
+United States,USA,1946,14.28
+United States,USA,1947,14.97
+United States,USA,1948,16.31
+United States,USA,1949,15.72
+United States,USA,1950,16.39
+United States,USA,1951,16.0
+United States,USA,1952,14.97
+United States,USA,1953,14.01
+United States,USA,1954,13.95
+United States,USA,1955,14.61
+United States,USA,1956,13.84
+United States,USA,1957,13.53
+United States,USA,1958,12.68
+United States,USA,1959,13.21
+United States,USA,1960,12.43
+United States,USA,1961,12.53
+United States,USA,1962,12.84
+United States,USA,1963,12.98
+United States,USA,1964,13.11
+United States,USA,1965,13.03
+United States,USA,1966,12.97
+United States,USA,1967,12.37
+United States,USA,1968,12.61
+United States,USA,1969,11.6
+United States,USA,1970,10.7
+United States,USA,1971,11.05
+United States,USA,1972,11.08
+United States,USA,1973,10.88
+United States,USA,1974,10.37
+United States,USA,1975,10.43
+United States,USA,1976,10.36
+United States,USA,1977,10.58
+United States,USA,1978,10.35
+United States,USA,1979,10.86
+United States,USA,1980,10.42
+United States,USA,1981,10.67
+United States,USA,1982,10.99
+United States,USA,1983,11.5
+United States,USA,1984,12.15
+United States,USA,1985,12.27
+United States,USA,1986,11.98
+United States,USA,1987,13.24
+United States,USA,1988,15.21
+United States,USA,1989,14.69
+United States,USA,1990,14.71
+United States,USA,1991,13.65
+United States,USA,1992,14.68
+United States,USA,1993,14.15
+United States,USA,1994,14.02
+United States,USA,1995,14.52
+United States,USA,1996,15.25
+United States,USA,1997,16.0
+United States,USA,1998,16.32
+United States,USA,1999,16.76
+United States,USA,2000,17.34
+United States,USA,2001,16.59
+United States,USA,2002,16.1
+United States,USA,2003,16.32
+United States,USA,2004,17.06
+United States,USA,2005,18.06
+United States,USA,2006,18.52
+United States,USA,2007,18.38
+United States,USA,2008,17.93
+United States,USA,2009,16.7
+United States,USA,2010,17.89
+United States,USA,2011,18.08
+United States,USA,2012,19.49
+United States,USA,2013,18.46
+United States,USA,2014,18.97
+United States,USA,2015,18.89
+United States,USA,2016,18.66
+United States,USA,2017,19.05
+United States,USA,2018,19.24
+United States,USA,2019,19.04
+United States,USA,2020,18.17
+United States,USA,2021,19.88
+United States,USA,2022,20.73
+United States,USA,2023,20.73
+United States,USA,2024,20.73
