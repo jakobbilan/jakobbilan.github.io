@@ -77,26 +77,10 @@
         "opacity": 1
       },
       "encoding": {
-        "tooltip": [
-          {
-            "field": "estimate",
-            "title": "Estimate"
-          },
-          {
-            "field": "group",
-            "title": "Group"
-          },
-          {
-            "field": "rate_share",
-            "type": "quantitative",
-            "title": "Total tax rate",
-            "format": ".1%"
-          },
-          {
-            "field": "note",
-            "title": "Method"
-          }
-        ],
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        },
         "size": {
           "condition": {
             "param": "hp",
@@ -115,6 +99,12 @@
             "on": "pointerover",
             "clear": "pointerout"
           }
+        }
+      ],
+      "transform": [
+        {
+          "calculate": "{'title': datum.group + ', ' + datum.estimate, 'Total tax rate': format(datum['rate'], '.1f') + '%'}",
+          "as": "tt"
         }
       ]
     },

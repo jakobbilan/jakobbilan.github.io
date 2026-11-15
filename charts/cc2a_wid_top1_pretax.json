@@ -55,8 +55,8 @@
         ],
         "range": [
           "#c4532d",
-          "#b7a57a",
-          "#1f4e8c"
+          "#1f4e8c",
+          "#7f8fa6"
         ]
       }
     }
@@ -93,6 +93,10 @@
           "groupby": [
             "year"
           ]
+        },
+        {
+          "calculate": "{'title': toString(datum.year), 'United States': isValid(datum['United States']) ? format(datum['United States'], '.1f') + '%' : 'no estimate', 'United Kingdom': isValid(datum['United Kingdom']) ? format(datum['United Kingdom'], '.1f') + '%' : 'no estimate', 'France': isValid(datum['France']) ? format(datum['France'], '.1f') + '%' : 'no estimate'}",
+          "as": "tt"
         }
       ],
       "mark": {
@@ -126,29 +130,10 @@
           },
           "value": 0
         },
-        "tooltip": [
-          {
-            "field": "year",
-            "type": "quantitative",
-            "title": "Year",
-            "format": "d"
-          },
-          {
-            "field": "United States",
-            "type": "quantitative",
-            "format": ".1f"
-          },
-          {
-            "field": "United Kingdom",
-            "type": "quantitative",
-            "format": ".1f"
-          },
-          {
-            "field": "France",
-            "type": "quantitative",
-            "format": ".1f"
-          }
-        ]
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
       }
     },
     {

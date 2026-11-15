@@ -52,6 +52,10 @@
         {
           "calculate": "isValid(datum.decile) ? toString(datum.decile) : 'No data'",
           "as": "decile_label"
+        },
+        {
+          "calculate": "{'title': datum.properties.name, 'Deprivation decile': datum.decile_label + (datum.decile == 1 ? ', most deprived 10%' : datum.decile == 10 ? ', least deprived 10%' : '')}",
+          "as": "tt"
         }
       ],
       "mark": {
@@ -99,16 +103,10 @@
             "symbolSize": 140
           }
         },
-        "tooltip": [
-          {
-            "field": "properties.name",
-            "title": "Neighbourhood"
-          },
-          {
-            "field": "decile_label",
-            "title": "Deprivation decile"
-          }
-        ]
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
       }
     },
     {

@@ -90,28 +90,10 @@
           "field": "component_order",
           "type": "quantitative"
         },
-        "tooltip": [
-          {
-            "field": "group",
-            "title": "Group"
-          },
-          {
-            "field": "component",
-            "title": "Tax"
-          },
-          {
-            "field": "rate_share",
-            "type": "quantitative",
-            "title": "Share of economic income",
-            "format": ".1%"
-          },
-          {
-            "field": "total_share",
-            "type": "quantitative",
-            "title": "All taxes",
-            "format": ".1%"
-          }
-        ]
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
       },
       "transform": [
         {
@@ -121,6 +103,10 @@
         {
           "calculate": "datum.total / 100",
           "as": "total_share"
+        },
+        {
+          "calculate": "{'title': datum.component + ', ' + (datum.group == 'Top 400' ? 'Top 400 overall' : datum.group), 'Share of income': format(datum['rate'], '.1f') + '%', 'All taxes': format(datum['total'], '.1f') + '%'}",
+          "as": "tt"
         }
       ]
     },

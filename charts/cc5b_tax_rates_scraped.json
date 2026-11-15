@@ -99,34 +99,6 @@
             "labelLimit": 400
           }
         },
-        "tooltip": [
-          {
-            "field": "jurisdiction",
-            "title": "Jurisdiction"
-          },
-          {
-            "field": "income_share",
-            "type": "quantitative",
-            "title": "Top income tax rate",
-            "format": ".1%"
-          },
-          {
-            "field": "vat_share",
-            "type": "quantitative",
-            "title": "VAT or sales tax",
-            "format": ".1%"
-          },
-          {
-            "field": "inheritance_share",
-            "type": "quantitative",
-            "title": "Inheritance tax",
-            "format": ".1%"
-          },
-          {
-            "field": "wealth_tax",
-            "title": "Net wealth tax"
-          }
-        ],
         "size": {
           "condition": {
             "param": "hp",
@@ -142,6 +114,10 @@
             "value": "#16191d"
           },
           "value": "white"
+        },
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
         }
       },
       "params": [
@@ -153,6 +129,12 @@
             "on": "pointerover",
             "clear": "pointerout"
           }
+        }
+      ],
+      "transform": [
+        {
+          "calculate": "{'title': datum.jurisdiction, 'Top income tax rate': format(datum['income_top'], '.1~f') + '%', 'VAT or sales tax': format(datum['vat'], '.1~f') + '%', 'Net wealth tax': datum.wealth_tax}",
+          "as": "tt"
         }
       ]
     },

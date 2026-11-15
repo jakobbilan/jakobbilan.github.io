@@ -47,37 +47,59 @@
             delete out.title;
             out.width = "container";
             out.mark = Object.assign({}, v.mark, { stroke: "white", strokeWidth: 0.3 });
+            // five classes in the project's map blues: neighbouring countries' differences show, and a colour
+            // means the same Gini in every year
             out.encoding = Object.assign({}, v.encoding, {
                 color: Object.assign({}, v.encoding.color, {
-                    scale: { domain: [0.2, 0.8], range: ["#f0b9a5", "#b8431f"] },
-                    legend: { orient: "left", direction: "vertical", title: "Gini", format: ".1f", gradientLength: 140 }
+                    scale: { type: "threshold", domain: [0.4, 0.5, 0.6, 0.7],
+                             range: ["#d2deee", "#a3bbdc", "#6f93c6", "#3c66a3", "#173c72"] },
+                    legend: { orient: "left", direction: "vertical", title: "Gini", format: ".1f", symbolType: "square", symbolSize: 140 }
                 }),
-                tooltip: [{ field: "name", title: "Country" },
-                    { field: "Value_N", type: "quantitative", title: "Gini coefficient", format: ".2f" },
-                    { field: "Year", title: "Year" }]
+                tooltip: { field: "card", type: "nominal" }
             });
+            out.transform = out.transform.concat([{ calculate: "{'title': datum.name, 'Gini coefficient': format(datum.Value_N, '.2f')}", as: "card" }]);
             if (!csv) return out;
             return fetch(csv).then(function (r) { return r.text(); }).then(function (text) {
                 lookup.from.data = { values: vega.read(text.replace(/^\uFEFF/, ""), { type: "csv" }) };
                 return out;
             });
         },
-        // Full width, title in the page, and a tooltip from the nearest point (no need to hit the dot)
+        // Full width, title in the page. Each series' colour comes from the data (percentiles as an ordered blue
+        // ramp, the median in red, other views in the page's categorical colours), so the legend lists only the
+        // series on screen. Hover cards from the nearest point; dollars written out (the page's currency is £).
         incomes: function (s) {
             delete s.title;
             s.width = "container";
             const L = s.layer[0];
-            L.encoding.y.axis = { title: null };
-            L.encoding.tooltip = [{ field: "Series", title: "Series" },
-                { field: "Year", type: "temporal", title: "Year", format: "%Y" },
-                { field: "Income", type: "quantitative", title: "Household income", format: "$,.0f" }];
-            L.mark = { type: "line", point: { filled: true, size: 22 }, strokeWidth: 2 };
+            const names = ["20th", "40th", "60th", "80th", "95th", "Median",
+                "All Races", "White, Not Hispanic", "Black", "Asian", "Hispanic (any race)",
+                "United States", "Northeast", "Midwest", "South", "West"];
+            const colours = ["#a3bbdc", "#7f9fcd", "#5279b5", "#2f5a99", "#173c72", "#c4532d",
+                "#16191d", "#1f4e8c", "#c4532d", "#b7a57a", "#5e8c6a",
+                "#16191d", "#1f4e8c", "#7f8fa6", "#c4532d", "#b7a57a"];
+            const list = function (a) { return "[" + a.map(function (v) { return "'" + v + "'"; }).join(", ") + "]"; };
+            L.transform = (L.transform || []).concat([
+                { calculate: list(colours) + "[indexof(" + list(names) + ", datum.Series)]", as: "hex" },
+                { calculate: "{'title': datum.Series + ', ' + timeFormat(datum.Year, '%Y'), 'Household income': '$' + format(datum.Income, ',.0f')}", as: "card" }
+            ]);
+            L.encoding.y = Object.assign({}, L.encoding.y, { axis: { title: null } });
+            // colours read from the data: the legend's order and the colours both follow the series names (A to Z),
+            // so each series keeps its colour in every view
+            L.encoding.color = { field: "Series", type: "nominal", title: null, scale: { range: { field: "hex" } } };
+            L.encoding.tooltip = { field: "card", type: "nominal" };
+            L.mark = { type: "line", strokeWidth: 2 };
+            // the dots on the lines as their own layer, sharing the line's colour scale (one colour range, no conflict)
+            s.layer.push({
+                transform: L.transform,
+                mark: { type: "point", filled: true, size: 22, opacity: 1 },
+                encoding: { x: L.encoding.x, y: L.encoding.y, color: { field: "Series", type: "nominal" } }
+            });
             s.layer.push({
                 transform: L.transform,
                 params: [{ name: "hp", select: { type: "point", nearest: true, on: "pointerover", clear: "pointerout" } }],
-                mark: { type: "point", filled: true, size: 70 },
-                encoding: { x: L.encoding.x, y: L.encoding.y, color: L.encoding.color, tooltip: L.encoding.tooltip,
-                    opacity: { condition: { param: "hp", empty: false, value: 1 }, value: 0 } }
+                mark: { type: "point", filled: true, size: 70, color: "#16191d" },
+                encoding: { x: L.encoding.x, y: L.encoding.y, tooltip: L.encoding.tooltip,
+                            opacity: { condition: { param: "hp", empty: false, value: 0.9 }, value: 0 } }
             });
             return s;
         }

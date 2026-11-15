@@ -173,7 +173,7 @@
                 ],
                 "range": [
                   "#ffffff",
-                  "#c4532d"
+                  "#1f4e8c"
                 ]
               },
               "legend": {
@@ -197,7 +197,7 @@
                 ],
                 "range": [
                   "#5b636d",
-                  "#c4532d"
+                  "#1f4e8c"
                 ]
               },
               "title": null
@@ -226,55 +226,17 @@
               "field": "capital_share_2019",
               "type": "quantitative"
             },
-            "tooltip": [
-              {
-                "field": "country",
-                "title": "Country"
-              },
-              {
-                "field": "s2006",
-                "type": "quantitative",
-                "title": "Capital taxes, share of revenue, 2006",
-                "format": ".1%"
-              },
-              {
-                "field": "s2019",
-                "type": "quantitative",
-                "title": "Capital taxes, share of revenue, 2019",
-                "format": ".1%"
-              },
-              {
-                "field": "change",
-                "type": "quantitative",
-                "title": "Change, percentage points",
-                "format": "+.1f"
-              },
-              {
-                "field": "g2006",
-                "type": "quantitative",
-                "title": "Capital taxes, % of GDP, 2006",
-                "format": ".1%"
-              },
-              {
-                "field": "g2019",
-                "type": "quantitative",
-                "title": "Capital taxes, % of GDP, 2019",
-                "format": ".1%"
-              },
-              {
-                "field": "t2006",
-                "type": "quantitative",
-                "title": "All taxes, % of GDP, 2006",
-                "format": ".1%"
-              },
-              {
-                "field": "t2019",
-                "type": "quantitative",
-                "title": "All taxes, % of GDP, 2019",
-                "format": ".1%"
-              }
-            ]
-          }
+            "tooltip": {
+              "field": "tt",
+              "type": "nominal"
+            }
+          },
+          "transform": [
+            {
+              "calculate": "{'title': datum.country, 'Capital taxes, 2006': format(datum['capital_share_2006'], '.1f') + '%', 'Capital taxes, 2019': format(datum['capital_share_2019'], '.1f') + '%'}",
+              "as": "tt"
+            }
+          ]
         }
       ]
     },
@@ -339,6 +301,10 @@
             {
               "calculate": "indexof(['change_company_capital_income', 'change_households_capital_income', 'change_capital_stocks'], datum.key)",
               "as": "tax_order"
+            },
+            {
+              "calculate": "{'title': datum.country + ', ' + lower(datum.tax), 'Change, 2006–19': format(datum.pp, '+.1f') + ' points'}",
+              "as": "tt"
             }
           ],
           "mark": {
@@ -390,8 +356,8 @@
                 ],
                 "range": [
                   "#c4532d",
-                  "#e0a08a",
-                  "#5e8c6a"
+                  "#e3a28b",
+                  "#7f8fa6"
                 ]
               },
               "legend": {
@@ -409,29 +375,17 @@
               "field": "tax_order",
               "type": "quantitative"
             },
-            "tooltip": [
-              {
-                "field": "country",
-                "title": "Country"
-              },
-              {
-                "field": "tax",
-                "title": "Tax"
-              },
-              {
-                "field": "pp",
-                "type": "quantitative",
-                "title": "Change, percentage points",
-                "format": "+.1f"
-              }
-            ]
+            "tooltip": {
+              "field": "tt",
+              "type": "nominal"
+            }
           }
         },
         {
           "mark": {
             "type": "rule",
             "color": "#16191d",
-            "strokeWidth": 1
+            "strokeWidth": 2
           },
           "encoding": {
             "x": {

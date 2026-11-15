@@ -176,24 +176,7 @@
           "color": "#c4532d"
         }
       },
-      "encoding": {
-        "tooltip": [
-          {
-            "field": "name",
-            "title": "Authority"
-          },
-          {
-            "field": "date",
-            "title": "Year or period"
-          },
-          {
-            "field": "value",
-            "type": "quantitative",
-            "title": "Value",
-            "format": ",.1f"
-          }
-        ]
-      }
+      "encoding": {}
     },
     {
       "transform": [
@@ -211,6 +194,10 @@
         },
         {
           "filter": "datum.geo_id == area"
+        },
+        {
+          "calculate": "{'title': datum.name + ', ' + datum.date, 'Value': format(datum.value, ',.3~r'), 'Median authority': format(datum.median, ',.3~r')}",
+          "as": "tt"
         }
       ],
       "mark": {
@@ -242,28 +229,10 @@
           },
           "value": 0
         },
-        "tooltip": [
-          {
-            "field": "name",
-            "title": "Authority"
-          },
-          {
-            "field": "date",
-            "title": "Year or period"
-          },
-          {
-            "field": "value",
-            "type": "quantitative",
-            "title": "Value",
-            "format": ",.3~r"
-          },
-          {
-            "field": "median",
-            "type": "quantitative",
-            "title": "Median authority",
-            "format": ",.3~r"
-          }
-        ]
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
       }
     },
     {

@@ -82,36 +82,6 @@
             "gradientLength": 140
           }
         },
-        "tooltip": [
-          {
-            "field": "name",
-            "title": "Council"
-          },
-          {
-            "field": "pay",
-            "type": "quantitative",
-            "title": "Annual pay, 2024",
-            "format": "$,.0f"
-          },
-          {
-            "field": "tax_scotland",
-            "type": "quantitative",
-            "title": "Income tax, Scottish bands",
-            "format": "$,.0f"
-          },
-          {
-            "field": "tax_rest_of_uk",
-            "type": "quantitative",
-            "title": "Income tax, rest-of-UK bands",
-            "format": "$,.0f"
-          },
-          {
-            "field": "difference",
-            "type": "quantitative",
-            "title": "Extra tax in Scotland",
-            "format": "$,.0f"
-          }
-        ],
         "stroke": {
           "condition": {
             "param": "hp",
@@ -127,6 +97,10 @@
             "value": 2
           },
           "value": 0.6
+        },
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
         }
       },
       "params": [
@@ -138,6 +112,12 @@
             "on": "pointerover",
             "clear": "pointerout"
           }
+        }
+      ],
+      "transform": [
+        {
+          "calculate": "{'title': datum.name, 'Extra tax a year': '£' + format(datum.difference, ',.0f'), 'Pay, 2024': '£' + format(datum.pay, ',.0f')}",
+          "as": "tt"
         }
       ]
     },

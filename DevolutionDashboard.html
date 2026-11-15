@@ -126,7 +126,7 @@
         //    comes from the project's theme, project/charts/theme.json, as on the project page.
         const TEMPLATE = {
             "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-            "description": "Line chart of one indicator for England's strategic authorities: Greater Manchester in red, Greater London dashed, the others grey, and a marker at 2017, the first Greater Manchester mayoral election. Hovering shows Greater Manchester, Greater London and the median authority for the nearest year.",
+            "description": "Line chart of one indicator for England's strategic authorities: Greater Manchester in red, Greater London dashed grey, the others light grey, and a marker at 2017, the first Greater Manchester mayoral election. Hovering shows Greater Manchester, Greater London and the median authority for the nearest year.",
             "width": "container",
             "height": 220,
             "data": { "url": "", "format": { "type": "json", "property": "data" } },
@@ -144,22 +144,19 @@
                 { "mark": { "type": "line", "color": "#c9ced4", "strokeWidth": 1.3 },
                   "encoding": { "detail": { "field": "geo_id" } } },
                 { "transform": [{ "filter": "datum.geo_id == 'MSA022'" }],
-                  "mark": { "type": "line", "color": "#1f4e8c", "strokeWidth": 1.6, "strokeDash": [5, 3] } },
+                  "mark": { "type": "line", "color": "#5b636d", "strokeWidth": 1.6, "strokeDash": [5, 3] } },
                 { "transform": [{ "filter": "datum.geo_id == 'MSA001'" }],
                   "mark": { "type": "line", "color": "#c4532d", "strokeWidth": 2.6 } },
                 { "transform": [
                     { "joinaggregate": [{ "op": "median", "field": "value", "as": "median" }], "groupby": ["year"] },
                     { "filter": "datum.geo_id == 'MSA001' || datum.geo_id == 'MSA022'" },
-                    { "pivot": "geo_id", "value": "value", "groupby": ["year", "date", "median"] }],
+                    { "pivot": "geo_id", "value": "value", "groupby": ["year", "date", "median"] },
+                    { "calculate": "{'title': datum.date, 'Greater Manchester': format(datum.MSA001, ',.3~r'), 'Greater London': format(datum.MSA022, ',.3~r'), 'Median authority': format(datum.median, ',.3~r')}", "as": "card" }],
                   "mark": { "type": "rule", "color": "#16191d", "strokeWidth": 1 },
                   "params": [{ "name": "hover", "select": { "type": "point", "fields": ["year"], "nearest": true, "on": "pointerover", "clear": "pointerout" } }],
                   "encoding": { "y": null,
                                 "opacity": { "condition": { "param": "hover", "empty": false, "value": 1 }, "value": 0 },
-                                "tooltip": [
-                                    { "field": "date", "title": "Year or period" },
-                                    { "field": "MSA001", "type": "quantitative", "title": "Greater Manchester", "format": ",.3~r" },
-                                    { "field": "MSA022", "type": "quantitative", "title": "Greater London", "format": ",.3~r" },
-                                    { "field": "median", "type": "quantitative", "title": "Median authority", "format": ",.3~r" }] } }
+                                "tooltip": { "field": "card", "type": "nominal" } } }
             ]
         };
 

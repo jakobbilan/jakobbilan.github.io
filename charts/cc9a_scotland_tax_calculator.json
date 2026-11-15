@@ -142,8 +142,8 @@
               "Rest of UK"
             ],
             "range": [
-              "#c4532d",
-              "#1f4e8c"
+              "#1f4e8c",
+              "#5b636d"
             ]
           },
           "legend": {
@@ -203,6 +203,10 @@
         {
           "calculate": "'£' + format(datum.gross, ',')",
           "as": "income_label"
+        },
+        {
+          "calculate": "{'title': '£' + format(datum.gross, ',') + ' a year', 'Scotland, next £1': format(datum['Scotland'], '.1~%'), 'Rest of UK, next £1': format(datum['Rest of UK'], '.1~%')}",
+          "as": "tt"
         }
       ],
       "mark": {
@@ -241,26 +245,10 @@
           },
           "value": 0
         },
-        "tooltip": [
-          {
-            "field": "gross",
-            "type": "quantitative",
-            "title": "Gross income",
-            "format": "$,.0f"
-          },
-          {
-            "field": "Scotland",
-            "type": "quantitative",
-            "title": "Scotland, next £1",
-            "format": ".1%"
-          },
-          {
-            "field": "Rest of UK",
-            "type": "quantitative",
-            "title": "Rest of UK, next £1",
-            "format": ".1%"
-          }
-        ]
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
       }
     },
     {

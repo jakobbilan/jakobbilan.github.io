@@ -62,20 +62,20 @@
       "title": null,
       "scale": {
         "domain": [
-          "Brazil",
-          "South Africa",
           "United States",
+          "United Kingdom",
           "France",
           "Germany",
-          "United Kingdom"
+          "Brazil",
+          "South Africa"
         ],
         "range": [
-          "#5e8c6a",
-          "#7f8fa6",
           "#c4532d",
           "#1f4e8c",
-          "#16191d",
-          "#b7a57a"
+          "#7f8fa6",
+          "#b7a57a",
+          "#5e8c6a",
+          "#3d434b"
         ]
       },
       "legend": {
@@ -105,23 +105,6 @@
         "size": 70
       },
       "encoding": {
-        "tooltip": [
-          {
-            "field": "country_name",
-            "title": "Country"
-          },
-          {
-            "field": "year",
-            "title": "Year",
-            "format": "d"
-          },
-          {
-            "field": "share",
-            "type": "quantitative",
-            "title": "Income share of the richest 10%",
-            "format": ".1%"
-          }
-        ],
         "opacity": {
           "condition": {
             "param": "hp",
@@ -129,6 +112,10 @@
             "value": 1
           },
           "value": 0
+        },
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
         }
       },
       "params": [
@@ -140,6 +127,12 @@
             "on": "pointerover",
             "clear": "pointerout"
           }
+        }
+      ],
+      "transform": [
+        {
+          "calculate": "{'title': datum.country_name + ', ' + datum.year, 'Richest 10%’s share': format(datum['value'], '.1f') + '%'}",
+          "as": "tt"
         }
       ]
     }

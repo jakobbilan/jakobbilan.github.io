@@ -91,6 +91,10 @@
         {
           "calculate": "indexof([\"Income tax\", \"Personal allowance taper\", \"National Insurance\", \"Child benefit withdrawal\", \"Student loans (graduates only)\"], datum.component)",
           "as": "stack_order"
+        },
+        {
+          "calculate": "{'title': '£' + format(datum.income, ',') + ' a year', 'Rate on the next £1': format(datum.total_core, '.1~%'), 'With student loans': format(datum.total_with_loans, '.1~%')}",
+          "as": "tt"
         }
       ],
       "mark": {
@@ -159,36 +163,10 @@
           "field": "stack_order",
           "type": "quantitative"
         },
-        "tooltip": [
-          {
-            "field": "income",
-            "type": "quantitative",
-            "title": "Gross earnings",
-            "format": "$,.0f"
-          },
-          {
-            "field": "component",
-            "title": "Component"
-          },
-          {
-            "field": "marginal_rate",
-            "type": "quantitative",
-            "title": "This component",
-            "format": ".1%"
-          },
-          {
-            "field": "total_core",
-            "type": "quantitative",
-            "title": "Total without student loans",
-            "format": ".1%"
-          },
-          {
-            "field": "total_with_loans",
-            "type": "quantitative",
-            "title": "Total with student loans",
-            "format": ".1%"
-          }
-        ]
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
       }
     },
     {
