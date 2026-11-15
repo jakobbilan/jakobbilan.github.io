@@ -12,10 +12,6 @@
         "change_households_capital_income": "number",
         "change_company_capital_income": "number",
         "change_capital_stocks": "number",
-        "labour_share_2006": "number",
-        "labour_share_2019": "number",
-        "consumption_share_2006": "number",
-        "consumption_share_2019": "number",
         "capital_tax_gdp_2006": "number",
         "capital_tax_gdp_2019": "number",
         "total_tax_gdp_2006": "number",
@@ -31,7 +27,8 @@
     "legend": {
       "fill": "independent",
       "stroke": "independent",
-      "color": "independent"
+      "color": "independent",
+      "shape": "independent"
     }
   },
   "hconcat": [
@@ -242,7 +239,7 @@
     },
     {
       "title": {
-        "text": "Change 2006–19, percentage points",
+        "text": "Change 2006–19 by tax, percentage points",
         "anchor": "start",
         "fontSize": 13,
         "fontWeight": 600,
@@ -356,14 +353,14 @@
                 ],
                 "range": [
                   "#c4532d",
-                  "#e3a28b",
+                  "#c3c9d1",
                   "#7f8fa6"
                 ]
               },
               "legend": {
                 "orient": "bottom",
                 "direction": "horizontal",
-                "columns": 1,
+                "columns": 3,
                 "symbolType": "square",
                 "symbolSize": 110,
                 "labelFontSize": 12,
@@ -384,8 +381,20 @@
         {
           "mark": {
             "type": "rule",
+            "color": "#ffffff",
+            "strokeWidth": 5
+          },
+          "encoding": {
+            "x": {
+              "datum": 0
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "rule",
             "color": "#16191d",
-            "strokeWidth": 2
+            "strokeWidth": 1.6
           },
           "encoding": {
             "x": {
@@ -396,20 +405,54 @@
         {
           "transform": [
             {
-              "filter": "datum.change < 0"
+              "calculate": "{'title': datum.country, 'Net change, 2006–19': format(datum.change, '+.1f') + ' points'}",
+              "as": "tt"
             }
           ],
           "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 72,
+            "color": "#16191d",
+            "stroke": "#ffffff",
+            "strokeWidth": 1.5,
+            "opacity": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "change",
+              "type": "quantitative"
+            },
+            "shape": {
+              "datum": "Net change",
+              "type": "nominal",
+              "legend": {
+                "orient": "bottom",
+                "title": null,
+                "symbolFillColor": "#16191d",
+                "symbolStrokeColor": "#ffffff",
+                "symbolSize": 72,
+                "labelFontSize": 12,
+                "offset": 12
+              }
+            },
+            "tooltip": {
+              "field": "tt",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "mark": {
             "type": "text",
-            "align": "right",
-            "dx": -6,
+            "align": "left",
             "fontSize": 12.5,
             "fontWeight": 600,
             "color": "#16191d"
           },
           "encoding": {
             "x": {
-              "field": "neg",
+              "datum": -9.3,
               "type": "quantitative"
             },
             "text": {
@@ -422,26 +465,37 @@
         {
           "transform": [
             {
-              "filter": "datum.change >= 0"
+              "window": [
+                {
+                  "op": "rank",
+                  "as": "rank"
+                }
+              ],
+              "sort": [
+                {
+                  "field": "change",
+                  "order": "ascending"
+                }
+              ]
+            },
+            {
+              "filter": "datum.rank == 1"
             }
           ],
           "mark": {
             "type": "text",
             "align": "left",
-            "dx": 6,
-            "fontSize": 12.5,
-            "fontWeight": 600,
-            "color": "#16191d"
+            "dy": -17,
+            "fontSize": 11,
+            "color": "#5b636d"
           },
           "encoding": {
             "x": {
-              "field": "pos",
+              "datum": -9.3,
               "type": "quantitative"
             },
             "text": {
-              "field": "change",
-              "type": "quantitative",
-              "format": "+.1f"
+              "value": "Net"
             }
           }
         }
@@ -451,8 +505,8 @@
   "usermeta": {
     "concatLayout": {
       "shares": [
-        0.6,
-        0.4
+        0.5,
+        0.5
       ],
       "labelRoom": 106,
       "gap": 36,

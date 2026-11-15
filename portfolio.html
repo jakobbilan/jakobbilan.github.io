@@ -166,17 +166,17 @@
         <figure class="chart wide size-s" id="figure-cc3-2" aria-labelledby="title-figure-cc3-2">
             <div class="chart-head">
                 <p class="chart-number">CC3 · Chart 2</p>
-                <h3 class="chart-title" id="title-figure-cc3-2">The top 400 against everyone: two estimates</h3>
-                <p class="chart-subtitle">Total effective tax rate, United States, 2018–20</p>
+                <h3 class="chart-title" id="title-figure-cc3-2">Three accounting choices turn the top 400’s lower tax rate into a higher one</h3>
+                <p class="chart-subtitle">Total effective tax rate, United States, 2018–20: from Balkir et al. to Splinter, step by step</p>
             </div>
-            <div class="chart-body" id="cc3b" data-spec="charts/cc3b_competing_estimates.json" data-height="300 260"
-                role="img" aria-label="Slope chart: the top 400 pay 23.8% and the population 30.2% in the benchmark; 38% and 25% after Splinter's adjustments."></div>
+            <div class="chart-body" id="cc3b" data-spec="charts/cc3b_splinter_bridge.json" data-height="250 250"
+                role="img" aria-label="Bridge chart: the top 400's tax rate is 23.8% in Balkir et al., below everyone's 30.2%; Splinter's adjustments of +3, +8 and +3 points take it to 38%, above everyone's 25% when transfers count as income."></div>
             <footer class="chart-foot">
-                <p class="chart-key">Splinter adds 3 points for excluding “pure” capital gains, 8 for spreading family fortunes over several tax returns and 3 for under-reported state and local taxes; counting transfers as income lowers the average.</p>
-                <p>Sources: Balkir et al. (2025); Splinter (2025), as reported by the Cato Institute and the Tax Foundation.</p>
+                <p class="chart-key">Blue: the top 400’s rate under each method; red: Splinter’s three adjustments, in percentage points; grey: everyone’s rate under the same method (Splinter counts transfers as income, which lowers it). The steps are rounded in the sources and sum to 37.8 against Splinter’s 38.</p>
+                <p>Sources: Balkir, Saez, Yagan and Zucman (2025), NBER Working Paper 34170; Splinter (2025), as reported by the Cato Institute (Michel, 9 September 2025) and the Tax Foundation.</p>
                 <p class="chart-actions">
-                    <a href="data/cc3_competing_estimates.csv" download>Data (CSV)</a>
-                    <a href="charts/cc3b_competing_estimates.json">Chart specification</a>
+                    <a href="data/cc3_splinter_bridge.csv" download>Data (CSV)</a>
+                    <a href="charts/cc3b_splinter_bridge.json">Chart specification</a>
                     <button type="button" data-save="cc3b">Save image</button>
                 </p>
             </footer>
@@ -204,11 +204,10 @@
                 </div>
             </div>
             <footer class="chart-foot">
-                <p class="chart-key">The replica’s bar segments are traced from the pixels of the published image, accurate to about 0.2 percentage points; each bar sums to 100. The FT’s typeface, Metric, is replaced by Helvetica or Arial.</p>
+                <p class="chart-key">The replica’s data come from the paper’s own table (Tables A1a and A1b: tax take by type, % of GDP, 2006 and 2019), turned into shares of all tax revenue as the FT did. Traced from the image, the FT’s bars matched these figures to within 0.23 percentage points. The FT’s typeface, Metric, is replaced by Helvetica or Arial.</p>
                 <p>Source: Martin Sandbu, <a href="https://www.ft.com/content/3d00ef8c-eec3-4afa-a35f-5ea333bf8bfe">“How to think about wealth taxation”</a>, Free Lunch, <i>Financial Times</i>, 5 November 2026. Data: Péligry and Ragot, Luxembourg Income Study working paper 895.</p>
                 <p class="chart-actions">
                     <a href="data/cc4_ft_tax_shares.csv" download>Data (CSV)</a>
-                    <a href="notebooks/cc4_trace_ft_charts.ipynb">Tracing notebook</a>
                     <a href="charts/cc4a_replica.json">Chart specification</a>
                     <button type="button" data-save="cc4a">Save image</button>
                 </p>
@@ -223,8 +222,8 @@
             <div class="chart-body" id="cc4b" data-spec="charts/cc4b_improved.json"
                 role="img" aria-label="Dot plot of capital taxes as a share of all tax revenue in 2006 and 2019 for eight countries, sorted by the change, with bars splitting the change into corporate income, personal capital income and capital stock taxes."></div>
             <footer class="chart-foot">
-                <p class="chart-key">Capital taxes add up the FT’s three capital categories: corporate income (taxes on the capital income of corporations and the self-employed), personal capital income, and the capital stock, mostly property. A falling share can also mean other taxes grew: Japan’s total tax take rose from about 27% to 32% of GDP.</p>
-                <p>Source: as above; tax take as % of GDP traced from the companion chart in the same article.</p>
+                <p class="chart-key">Capital taxes add up the FT’s three capital categories: corporate income (taxes on the capital income of corporations and the self-employed), personal capital income, and the capital stock, mostly property. Bars: the change by tax; black dot and left column: the net change. A falling share can also mean other taxes grew: Japan’s total tax take rose from 26.7% to 31.5% of GDP.</p>
+                <p>Source: Péligry and Ragot, Luxembourg Income Study working paper 895, Tables A1a and A1b.</p>
                 <p class="chart-actions">
                     <a href="data/cc4_capital_tax_change.csv" download>Data (CSV)</a>
                     <a href="charts/cc4b_improved.json">Chart specification</a>
@@ -381,7 +380,7 @@
             <div class="chart-body" id="cc9a" data-spec="charts/cc9a_scotland_tax_calculator.json" data-height="360 320"
                 role="img" aria-label="Step chart of marginal income tax rates by income in Scotland and the rest of the UK, with a tax-year menu and an income slider."></div>
             <footer class="chart-foot">
-                <p class="chart-key">Non-savings, non-dividend income with the standard personal allowance, tapered above £100,000. The readout gives each system’s tax at the chosen income.</p>
+                <p class="chart-key">Solid blue: Scotland; dashed: the rest of the UK; shading: where Scotland’s rate is higher (red) or lower (blue). Non-savings, non-dividend income with the standard personal allowance, tapered above £100,000. The readout gives each system’s tax at the chosen income.</p>
                 <p>Sources: gov.scot and gov.uk rates and bands, 2024–25 to 2026–27; own calculation, checked against a published worked example.</p>
                 <p class="chart-actions">
                     <a href="charts/cc9a_scotland_tax_calculator.json">Chart specification</a>
@@ -423,7 +422,9 @@
                 PP434 course data and map files (jhellingsdata/LSE-PP434; jhellingsdata/map-data): ONS, DESNZ and MHCLG statistics, including the English Indices of Deprivation 2025.
                 Scottish Government, Scottish Income Tax rates and bands, 2024 to 2025, 2025 to 2026 and 2026 to 2027; HMRC, Income Tax rates for the same years.
                 AutoCPI: Davies, R. and McEvoy, F. (2024), daily UK supermarket prices, Economics Observatory; data provided in PP434.
-                Found charts in CC1: Richard Davies, e4e chart collection (RDeconomist.github.io).</p>
+                Found charts in CC1: Richard Davies, e4e chart collection (RDeconomist.github.io).
+                Sandbu, M. (2026), “How to think about wealth taxation”, Free Lunch, Financial Times, 5 November.
+                Péligry, P. and Ragot, X. (2025), Evolution of Fiscal Systems: Convergence or Divergence?, LIS Working Paper 895.</p>
             <p>Charts made with Vega-Lite; data prepared in Python notebooks. <a href="https://github.com/jakobbilan/jakobbilan.github.io">Code and data on GitHub</a>.</p>
         </footer>
     </main>

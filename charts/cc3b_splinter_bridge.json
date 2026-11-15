@@ -1,0 +1,133 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Bridge chart of the top 400's total tax rate, United States, 2018-20: Balkir et al. (2025) put it at 23.8%, below everyone's 30.2%; Splinter's three adjustments (+3 for excluding 'pure' capital gains, +8 for splitting family fortunes across tax returns, +3 for under-reported state and local taxes) take it to 38%, above everyone's 25% when transfers count as income.",
+  "data": {
+    "url": "data/cc3_splinter_bridge.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "step": "number",
+        "start": "number",
+        "end": "number"
+      }
+    }
+  },
+  "width": "container",
+  "height": 250,
+  "transform": [
+    {
+      "calculate": "datum.step == 1 ? {'title': 'Everyone, Balkir et al. (2025)', 'Total tax rate': '30.2%'} : datum.step == 2 ? {'title': 'Top 400, Balkir et al. (2025)', 'Total tax rate': '23.8%'} : datum.step == 3 ? {'title': 'Excluding “pure” capital gains', 'Adds to the top 400’s rate': '3 points'} : datum.step == 4 ? {'title': 'Family fortunes split across several tax returns', 'Adds to the top 400’s rate': '8 points'} : datum.step == 5 ? {'title': 'Under-reported state and local taxes', 'Adds to the top 400’s rate': '3 points'} : datum.step == 6 ? {'title': 'Top 400, Splinter (2025)', 'Total tax rate': '38%'} : {'title': 'Everyone, Splinter (2025)', 'Total tax rate': '25%', 'Note': 'counts transfers as income'}",
+      "as": "tt"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "label",
+      "type": "nominal",
+      "title": null,
+      "sort": {
+        "field": "step",
+        "op": "min",
+        "order": "ascending"
+      },
+      "scale": {
+        "paddingInner": 0.32,
+        "paddingOuter": 0.15
+      },
+      "axis": {
+        "labelFontSize": 12.5,
+        "labelColor": "#16191d",
+        "labelLimit": 300,
+        "labelPadding": 10
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadius": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "start",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              42
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ],
+            "labelExpr": "datum.value + '%'",
+            "grid": true
+          }
+        },
+        "x2": {
+          "field": "end"
+        },
+        "color": {
+          "field": "kind",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "estimate",
+              "adjustment",
+              "everyone"
+            ],
+            "range": [
+              "#1f4e8c",
+              "#c4532d",
+              "#a3acb6"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "fontSize": 12.5,
+        "fontWeight": 600,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "x": {
+          "field": "end",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "value_label"
+        }
+      }
+    }
+  ],
+  "usermeta": {
+    "compactSet": [
+      [
+        "encoding.y.axis.labelLimit",
+        150
+      ],
+      [
+        "encoding.y.axis.labelFontSize",
+        11
+      ]
+    ]
+  }
+}
