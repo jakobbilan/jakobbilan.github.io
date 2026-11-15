@@ -97,10 +97,84 @@
       }
     },
     {
+      "transform": [
+        {
+          "filter": "datum.country == 'United States'"
+        }
+      ],
       "mark": {
         "type": "text",
         "align": "left",
         "dx": 6,
+        "dy": 0,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "aggregate": "max",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "share",
+          "aggregate": {
+            "argmax": "year"
+          },
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "country",
+          "aggregate": {
+            "argmax": "year"
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.country == 'United Kingdom'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": -6,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "aggregate": "max",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "share",
+          "aggregate": {
+            "argmax": "year"
+          },
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "country",
+          "aggregate": {
+            "argmax": "year"
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.country == 'France'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": 7,
         "fontWeight": 600
       },
       "encoding": {
