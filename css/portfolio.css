@@ -273,3 +273,23 @@
 .portfolio [hidden] {
     display: none !important;
 }
+
+/* CC4 replica: the FT graphic's frame, its paper colour and the short black rule at the top left */
+.ft-frame {
+    padding: 0.7rem 0.4rem 0.2rem;
+    background: #fff1e6;
+}
+
+.ft-frame::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 0 0 0.55rem 6px;
+    background: #000;
+}
+
+/* CC4 original: the screenshot keeps its own size on wide screens */
+#figure-cc4-1 img {
+    max-width: 1020px;
+}

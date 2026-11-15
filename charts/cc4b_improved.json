@@ -1,0 +1,522 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Improved version of the FT chart. Left: capital taxes (the three capital categories added up) as a share of all tax revenue in 2006 (hollow) and 2019 (filled) for eight large economies, sorted by the change. Right: the change in percentage points, split into taxes on corporate income, personal capital income and the capital stock.",
+  "data": {
+    "url": "data/cc4_capital_tax_change.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "capital_share_2006": "number",
+        "capital_share_2019": "number",
+        "change": "number",
+        "change_households_capital_income": "number",
+        "change_company_capital_income": "number",
+        "change_capital_stocks": "number",
+        "labour_share_2006": "number",
+        "labour_share_2019": "number",
+        "consumption_share_2006": "number",
+        "consumption_share_2019": "number",
+        "capital_tax_gdp_2006": "number",
+        "capital_tax_gdp_2019": "number",
+        "total_tax_gdp_2006": "number",
+        "total_tax_gdp_2019": "number"
+      }
+    }
+  },
+  "spacing": 36,
+  "resolve": {
+    "scale": {
+      "y": "shared"
+    },
+    "legend": {
+      "fill": "independent",
+      "stroke": "independent",
+      "color": "independent"
+    }
+  },
+  "hconcat": [
+    {
+      "title": {
+        "text": "Capital taxes, % of all tax revenue",
+        "anchor": "start",
+        "fontSize": 13,
+        "fontWeight": 600,
+        "color": "#16191d",
+        "offset": 12
+      },
+      "width": 520,
+      "height": 300,
+      "transform": [
+        {
+          "calculate": "datum.capital_share_2006 / 100",
+          "as": "s2006"
+        },
+        {
+          "calculate": "datum.capital_share_2019 / 100",
+          "as": "s2019"
+        },
+        {
+          "calculate": "datum.capital_tax_gdp_2006 / 100",
+          "as": "g2006"
+        },
+        {
+          "calculate": "datum.capital_tax_gdp_2019 / 100",
+          "as": "g2019"
+        },
+        {
+          "calculate": "datum.total_tax_gdp_2006 / 100",
+          "as": "t2006"
+        },
+        {
+          "calculate": "datum.total_tax_gdp_2019 / 100",
+          "as": "t2019"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "change",
+            "op": "min",
+            "order": "ascending"
+          },
+          "axis": {
+            "labelFontSize": 13,
+            "labelColor": "#16191d",
+            "labelPadding": 10
+          },
+          "scale": {
+            "paddingInner": 0.35,
+            "paddingOuter": 0.25
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "strokeWidth": 3,
+            "color": "#c9ced4",
+            "strokeCap": "round"
+          },
+          "encoding": {
+            "x": {
+              "field": "capital_share_2006",
+              "type": "quantitative",
+              "title": null,
+              "scale": {
+                "domain": [
+                  0,
+                  35
+                ],
+                "nice": false
+              },
+              "axis": {
+                "values": [
+                  0,
+                  5,
+                  10,
+                  15,
+                  20,
+                  25,
+                  30,
+                  35
+                ],
+                "labelExpr": "datum.value + '%'",
+                "grid": true
+              }
+            },
+            "x2": {
+              "field": "capital_share_2019"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "fold": [
+                "capital_share_2006",
+                "capital_share_2019"
+              ],
+              "as": [
+                "key",
+                "share"
+              ]
+            },
+            {
+              "calculate": "datum.key == 'capital_share_2006' ? '2006' : '2019'",
+              "as": "year"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 130,
+            "strokeWidth": 1.6,
+            "opacity": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "share",
+              "type": "quantitative"
+            },
+            "fill": {
+              "field": "year",
+              "type": "nominal",
+              "title": null,
+              "scale": {
+                "domain": [
+                  "2006",
+                  "2019"
+                ],
+                "range": [
+                  "#ffffff",
+                  "#c4532d"
+                ]
+              },
+              "legend": {
+                "orient": "bottom",
+                "direction": "horizontal",
+                "symbolType": "circle",
+                "symbolStrokeColor": "#5b636d",
+                "symbolStrokeWidth": 1.4,
+                "symbolSize": 110,
+                "labelFontSize": 12,
+                "offset": 12
+              }
+            },
+            "stroke": {
+              "field": "year",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "2006",
+                  "2019"
+                ],
+                "range": [
+                  "#5b636d",
+                  "#c4532d"
+                ]
+              },
+              "title": null
+            }
+          }
+        },
+        {
+          "params": [
+            {
+              "name": "hp",
+              "select": {
+                "type": "point",
+                "nearest": true,
+                "on": "pointerover",
+                "clear": "pointerout"
+              }
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "size": 140,
+            "opacity": 0
+          },
+          "encoding": {
+            "x": {
+              "field": "capital_share_2019",
+              "type": "quantitative"
+            },
+            "tooltip": [
+              {
+                "field": "country",
+                "title": "Country"
+              },
+              {
+                "field": "s2006",
+                "type": "quantitative",
+                "title": "Capital taxes, share of revenue, 2006",
+                "format": ".1%"
+              },
+              {
+                "field": "s2019",
+                "type": "quantitative",
+                "title": "Capital taxes, share of revenue, 2019",
+                "format": ".1%"
+              },
+              {
+                "field": "change",
+                "type": "quantitative",
+                "title": "Change, percentage points",
+                "format": "+.1f"
+              },
+              {
+                "field": "g2006",
+                "type": "quantitative",
+                "title": "Capital taxes, % of GDP, 2006",
+                "format": ".1%"
+              },
+              {
+                "field": "g2019",
+                "type": "quantitative",
+                "title": "Capital taxes, % of GDP, 2019",
+                "format": ".1%"
+              },
+              {
+                "field": "t2006",
+                "type": "quantitative",
+                "title": "All taxes, % of GDP, 2006",
+                "format": ".1%"
+              },
+              {
+                "field": "t2019",
+                "type": "quantitative",
+                "title": "All taxes, % of GDP, 2019",
+                "format": ".1%"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": {
+        "text": "Change 2006–19, percentage points",
+        "anchor": "start",
+        "fontSize": 13,
+        "fontWeight": 600,
+        "color": "#16191d",
+        "offset": 12
+      },
+      "width": 340,
+      "height": 300,
+      "transform": [
+        {
+          "calculate": "min(datum.change_company_capital_income, 0) + min(datum.change_households_capital_income, 0) + min(datum.change_capital_stocks, 0)",
+          "as": "neg"
+        },
+        {
+          "calculate": "max(datum.change_company_capital_income, 0) + max(datum.change_households_capital_income, 0) + max(datum.change_capital_stocks, 0)",
+          "as": "pos"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "change",
+            "op": "min",
+            "order": "ascending"
+          },
+          "axis": {
+            "labels": false
+          },
+          "scale": {
+            "paddingInner": 0.35,
+            "paddingOuter": 0.25
+          }
+        }
+      },
+      "layer": [
+        {
+          "transform": [
+            {
+              "fold": [
+                "change_company_capital_income",
+                "change_households_capital_income",
+                "change_capital_stocks"
+              ],
+              "as": [
+                "key",
+                "pp"
+              ]
+            },
+            {
+              "calculate": "datum.key == 'change_company_capital_income' ? 'Corporate income' : datum.key == 'change_households_capital_income' ? 'Personal capital income' : 'Capital stock (property)'",
+              "as": "tax"
+            },
+            {
+              "calculate": "indexof(['change_company_capital_income', 'change_households_capital_income', 'change_capital_stocks'], datum.key)",
+              "as": "tax_order"
+            }
+          ],
+          "mark": {
+            "type": "bar",
+            "height": {
+              "band": 1
+            }
+          },
+          "encoding": {
+            "x": {
+              "field": "pp",
+              "type": "quantitative",
+              "stack": "zero",
+              "title": null,
+              "scale": {
+                "domain": [
+                  -9.5,
+                  2.5
+                ],
+                "nice": false
+              },
+              "axis": {
+                "values": [
+                  -8,
+                  -6,
+                  -4,
+                  -2,
+                  0,
+                  2
+                ],
+                "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value",
+                "grid": true
+              }
+            },
+            "color": {
+              "field": "tax",
+              "type": "nominal",
+              "title": null,
+              "sort": [
+                "Corporate income",
+                "Personal capital income",
+                "Capital stock (property)"
+              ],
+              "scale": {
+                "domain": [
+                  "Corporate income",
+                  "Personal capital income",
+                  "Capital stock (property)"
+                ],
+                "range": [
+                  "#c4532d",
+                  "#e0a08a",
+                  "#5e8c6a"
+                ]
+              },
+              "legend": {
+                "orient": "bottom",
+                "direction": "horizontal",
+                "columns": 1,
+                "symbolType": "square",
+                "symbolSize": 110,
+                "labelFontSize": 12,
+                "offset": 12,
+                "columnPadding": 14
+              }
+            },
+            "order": {
+              "field": "tax_order",
+              "type": "quantitative"
+            },
+            "tooltip": [
+              {
+                "field": "country",
+                "title": "Country"
+              },
+              {
+                "field": "tax",
+                "title": "Tax"
+              },
+              {
+                "field": "pp",
+                "type": "quantitative",
+                "title": "Change, percentage points",
+                "format": "+.1f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#16191d",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "datum": 0
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.change < 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "dx": -6,
+            "fontSize": 12.5,
+            "fontWeight": 600,
+            "color": "#16191d"
+          },
+          "encoding": {
+            "x": {
+              "field": "neg",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "change",
+              "type": "quantitative",
+              "format": "+.1f"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.change >= 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 6,
+            "fontSize": 12.5,
+            "fontWeight": 600,
+            "color": "#16191d"
+          },
+          "encoding": {
+            "x": {
+              "field": "pos",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "change",
+              "type": "quantitative",
+              "format": "+.1f"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "usermeta": {
+    "concatLayout": {
+      "shares": [
+        0.6,
+        0.4
+      ],
+      "labelRoom": 106,
+      "gap": 36,
+      "stackBelow": 700,
+      "stackSet": [
+        [
+          "vconcat.1.encoding.y.axis",
+          {
+            "labelFontSize": 13,
+            "labelColor": "#16191d",
+            "labelPadding": 10
+          }
+        ]
+      ]
+    },
+    "compactBelow": 700,
+    "compactLegend": {
+      "columns": 1
+    }
+  }
+}

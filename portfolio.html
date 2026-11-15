@@ -189,33 +189,53 @@
         <figure class="chart wide" id="figure-cc4-1" aria-labelledby="title-figure-cc4-1">
             <div class="chart-head">
                 <p class="chart-number">CC4 · Original</p>
-                <h3 class="chart-title" id="title-figure-cc4-1"><span class="draft">[Original chart]</span></h3>
+                <h3 class="chart-title" id="title-figure-cc4-1">Financial Times: “A shrinking share of capital taxes”</h3>
+                <p class="chart-subtitle">The chart as published, a screenshot</p>
             </div>
-            <div class="chart-status" data-image="img/cc4_original.png" data-alt="The original chart replicated in CC4">Screenshot of the original chart: img/cc4_original.png</div>
+            <div class="chart-status" data-image="img/cc4_original.png" data-alt="Financial Times chart, A shrinking share of capital taxes: percentage share of total tax revenues by source for the US, Japan, Germany, the UK, France, Italy, Canada and South Korea in 2006 and 2019, as 100% stacked bars in six colours.">Screenshot of the original chart: img/cc4_original.png</div>
             <footer class="chart-foot">
-                <p><span class="draft">[Source of the original chart]</span></p>
+                <p>Source: Martin Sandbu, <a href="https://www.ft.com/content/3d00ef8c-eec3-4afa-a35f-5ea333bf8bfe">“How to think about wealth taxation”</a>, Free Lunch, <i>Financial Times</i>, 5 November 2026. Data: Péligry and Ragot, Luxembourg Income Study working paper 895.</p>
             </footer>
         </figure>
-        <div class="chart-pair wide">
-            <figure class="chart" id="figure-cc4-2" aria-labelledby="title-figure-cc4-2">
-                <div class="chart-head">
-                    <p class="chart-number">CC4 · Replica</p>
-                    <h3 class="chart-title" id="title-figure-cc4-2"><span class="draft">[Replica]</span></h3>
-                </div>
-                <div class="chart-body" id="cc4a" data-spec="charts/cc4a_replica.json" data-needs="charts/cc4a_replica.json" data-height="320 280">
-                    <div class="chart-status">charts/cc4a_replica.json</div>
-                </div>
-            </figure>
-            <figure class="chart" id="figure-cc4-3" aria-labelledby="title-figure-cc4-3">
-                <div class="chart-head">
-                    <p class="chart-number">CC4 · Improved</p>
-                    <h3 class="chart-title" id="title-figure-cc4-3"><span class="draft">[Improved version]</span></h3>
-                </div>
-                <div class="chart-body" id="cc4b" data-spec="charts/cc4b_improved.json" data-needs="charts/cc4b_improved.json" data-height="320 280">
-                    <div class="chart-status">charts/cc4b_improved.json</div>
-                </div>
-            </figure>
-        </div>
+        <figure class="chart wide" id="figure-cc4-2" aria-labelledby="title-figure-cc4-2">
+            <div class="chart-head">
+                <p class="chart-number">CC4 · Replica</p>
+                <h3 class="chart-title" id="title-figure-cc4-2">The same chart, re-created in Vega-Lite</h3>
+                <p class="chart-subtitle">FT layout, colours and type; bar segments traced from the published image</p>
+            </div>
+            <div class="ft-frame">
+                <div class="chart-body" id="cc4a" data-spec="charts/cc4a_replica.json" data-height="320 300"
+                    role="img" aria-label="Replica of the FT chart: 100% stacked bars of tax revenue by source, eight countries, 2006 and 2019."></div>
+            </div>
+            <footer class="chart-foot">
+                <p class="chart-key">Segment boundaries traced from the pixels of the published image (1,020 pixels wide), accurate to about 0.2 percentage points; each bar sums to 100. The FT’s typeface, Metric, is replaced by Helvetica or Arial.</p>
+                <p>Source: as above.</p>
+                <p class="chart-actions">
+                    <a href="data/cc4_ft_tax_shares.csv" download>Data (CSV)</a>
+                    <a href="notebooks/cc4_trace_ft_charts.ipynb">Tracing notebook</a>
+                    <a href="charts/cc4a_replica.json">Chart specification</a>
+                    <button type="button" data-save="cc4a">Save image</button>
+                </p>
+            </footer>
+        </figure>
+        <figure class="chart wide" id="figure-cc4-3" aria-labelledby="title-figure-cc4-3">
+            <div class="chart-head">
+                <p class="chart-number">CC4 · Improved</p>
+                <h3 class="chart-title" id="title-figure-cc4-3">Capital taxes’ share of revenue fell in six of eight large economies, mostly because taxes on corporate income fell</h3>
+                <p class="chart-subtitle">Capital taxes as % of all tax revenue, 2006 and 2019, and the change split by tax</p>
+            </div>
+            <div class="chart-body" id="cc4b" data-spec="charts/cc4b_improved.json"
+                role="img" aria-label="Dot plot of capital taxes as a share of all tax revenue in 2006 and 2019 for eight countries, sorted by the change, with bars splitting the change into corporate income, personal capital income and capital stock taxes."></div>
+            <footer class="chart-foot">
+                <p class="chart-key">Capital taxes add up the FT’s three capital categories: corporate income (taxes on the capital income of corporations and the self-employed), personal capital income, and the capital stock, mostly property. A falling share can also mean other taxes grew: Japan’s total tax take rose from about 27% to 32% of GDP.</p>
+                <p>Source: as above; tax take as % of GDP traced from the companion chart in the same article.</p>
+                <p class="chart-actions">
+                    <a href="data/cc4_capital_tax_change.csv" download>Data (CSV)</a>
+                    <a href="charts/cc4b_improved.json">Chart specification</a>
+                    <button type="button" data-save="cc4b">Save image</button>
+                </p>
+            </footer>
+        </figure>
             <p class="comment" data-maxwords="25"><span class="draft">[Explanation]</span></p>
         </section>
         <section id="cc5" aria-labelledby="cc5-title">

@@ -85,21 +85,39 @@
 
     // Phones: legends and labels that would crowd a narrow chart (each chart says which, in usermeta) ----------
 
+    function setPath(spec, path, value) {
+        const keys = path.split(".");
+        let o = spec;
+        keys.slice(0, -1).forEach(function (k) { o = o[k] = o[k] || {}; });
+        o[keys[keys.length - 1]] = value;
+    }
+
     function compact(spec) {
         const meta = spec.usermeta || {};
         if (meta.compactLegend) (function walk(o) {
             if (!o || typeof o !== "object") return;
             if (o.legend && typeof o.legend === "object") Object.assign(o.legend, meta.compactLegend);
             Object.values(o).forEach(walk);
-        })(spec.layer || spec.encoding);
-        (meta.compactSet || []).forEach(function (entry) {
-            const keys = entry[0].split(".");
-            let o = spec;
-            keys.slice(0, -1).forEach(function (k) { o = o[k] = o[k] || {}; });
-            o[keys[keys.length - 1]] = entry[1];
-        });
+        })(spec.layer || spec.encoding || spec);
+        (meta.compactSet || []).forEach(function (entry) { setPath(spec, entry[0], entry[1]); });
         if (meta.compactDropLayers && spec.layer) {
             spec.layer = spec.layer.filter(function (_, i) { return !meta.compactDropLayers.includes(i); });
+        }
+        return spec;
+    }
+
+    // Two-panel charts (CC4, improved): the panels share the width available; on narrow screens they stack
+    function layoutConcat(spec, width) {
+        const L = spec.usermeta && spec.usermeta.concatLayout;
+        if (!L || !spec.hconcat) return spec;
+        if (width < L.stackBelow) {
+            spec.vconcat = spec.hconcat;
+            delete spec.hconcat;
+            spec.vconcat.forEach(function (panel) { panel.width = Math.max(200, width - L.labelRoom); });
+            (L.stackSet || []).forEach(function (entry) { setPath(spec, entry[0], entry[1]); });
+        } else {
+            const room = width - L.labelRoom - L.gap * (spec.hconcat.length - 1);
+            spec.hconcat.forEach(function (panel, i) { panel.width = Math.floor(room * L.shares[i]); });
         }
         return spec;
     }
@@ -149,8 +167,11 @@
                     return fix ? fix(spec) : spec;
                 })
                 .then(function (spec) {
-                    if (height && (typeof spec.height === "number" || spec.height === undefined)) spec.height = height;
-                    if (narrow.matches) spec = compact(spec);
+                    const single = !spec.hconcat && !spec.vconcat && !spec.concat;
+                    if (height && single && (typeof spec.height === "number" || spec.height === undefined)) spec.height = height;
+                    const below = spec.usermeta && spec.usermeta.compactBelow;
+                    if (narrow.matches || (below && element.clientWidth < below)) spec = compact(spec);
+                    spec = layoutConcat(spec, element.clientWidth);
                     return vegaEmbed(element, spec, {
                         renderer: element.dataset.renderer || "svg",
                         actions: false,

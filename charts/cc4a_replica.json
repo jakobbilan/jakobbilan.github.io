@@ -1,0 +1,418 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Replica of the Financial Times chart 'A shrinking share of capital taxes' (Martin Sandbu, Free Lunch, 5 November 2026): 100% stacked horizontal bars of total tax revenue by source for eight countries in 2006 and 2019. Segment shares traced from the published image.",
+  "background": "#fff1e6",
+  "padding": {
+    "left": 6,
+    "right": 14,
+    "top": 10,
+    "bottom": 8
+  },
+  "title": {
+    "text": "A shrinking share of capital taxes",
+    "subtitle": "Percentage share of total tax revenues by source"
+  },
+  "width": "container",
+  "height": 320,
+  "params": [
+    {
+      "name": "labelRoom",
+      "value": 127
+    }
+  ],
+  "data": {
+    "url": "data/cc4_ft_tax_shares.csv"
+  },
+  "resolve": {
+    "scale": {
+      "x": "independent",
+      "y": "independent",
+      "color": "independent"
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "stroke": "#4a5459",
+        "strokeWidth": 0.75
+      },
+      "encoding": {
+        "y": {
+          "field": "label",
+          "type": "nominal",
+          "sort": [
+            "US 2006",
+            "US 2019",
+            "Japan 2006",
+            "Japan 2019",
+            "Germany 2006",
+            "Germany 2019",
+            "UK 2006",
+            "UK 2019",
+            "France 2006",
+            "France 2019",
+            "Italy 2006",
+            "Italy 2019",
+            "Canada 2006",
+            "Canada 2019",
+            "South Korea 2006",
+            "South Korea 2019"
+          ],
+          "title": null,
+          "scale": {
+            "paddingInner": 0.15,
+            "paddingOuter": 0.05
+          }
+        },
+        "x": {
+          "field": "share",
+          "type": "quantitative",
+          "stack": "zero",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              100
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40,
+              50,
+              60,
+              70,
+              80,
+              90,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "tax_label",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Consumption taxes",
+            "Labour taxes paid by households",
+            "Labour taxes paid by corporations and self-employed",
+            "Capital income taxes paid by households",
+            "Capital income taxes paid by corporations and self-employed",
+            "Taxes on capital stocks"
+          ],
+          "scale": {
+            "domain": [
+              "Consumption taxes",
+              "Labour taxes paid by households",
+              "Labour taxes paid by corporations and self-employed",
+              "Capital income taxes paid by households",
+              "Capital income taxes paid by corporations and self-employed",
+              "Taxes on capital stocks"
+            ],
+            "range": [
+              "#225485",
+              "#95d2e4",
+              "#278cc7",
+              "#b5355c",
+              "#f9789f",
+              "#aacd71"
+            ]
+          },
+          "legend": null
+        },
+        "order": {
+          "field": "order",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "label",
+            "title": "Country and year"
+          },
+          {
+            "field": "tax_label",
+            "title": "Source"
+          },
+          {
+            "field": "share",
+            "type": "quantitative",
+            "title": "Share of tax revenue (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "label": "Consumption taxes",
+            "colour": "#225485",
+            "x": -120,
+            "y": -54
+          },
+          {
+            "label": "Labour taxes paid by households",
+            "colour": "#95d2e4",
+            "x": 46,
+            "y": -54
+          },
+          {
+            "label": "Labour taxes paid by corporations and self-employed",
+            "colour": "#278cc7",
+            "x": 304,
+            "y": -54
+          },
+          {
+            "label": "Capital income taxes paid by households",
+            "colour": "#b5355c",
+            "x": -120,
+            "y": -36
+          },
+          {
+            "label": "Capital income taxes paid by corporations and self-employed",
+            "colour": "#f9789f",
+            "x": 190,
+            "y": -36
+          },
+          {
+            "label": "Taxes on capital stocks",
+            "colour": "#aacd71",
+            "x": 633,
+            "y": -36
+          }
+        ]
+      },
+      "mark": {
+        "type": "square",
+        "size": 180,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative",
+          "scale": null,
+          "axis": null
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": null,
+          "axis": null
+        },
+        "color": {
+          "field": "colour",
+          "type": "nominal",
+          "scale": null
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "label": "Consumption taxes",
+            "colour": "#225485",
+            "x": -120,
+            "y": -54
+          },
+          {
+            "label": "Labour taxes paid by households",
+            "colour": "#95d2e4",
+            "x": 46,
+            "y": -54
+          },
+          {
+            "label": "Labour taxes paid by corporations and self-employed",
+            "colour": "#278cc7",
+            "x": 304,
+            "y": -54
+          },
+          {
+            "label": "Capital income taxes paid by households",
+            "colour": "#b5355c",
+            "x": -120,
+            "y": -36
+          },
+          {
+            "label": "Capital income taxes paid by corporations and self-employed",
+            "colour": "#f9789f",
+            "x": 190,
+            "y": -36
+          },
+          {
+            "label": "Taxes on capital stocks",
+            "colour": "#aacd71",
+            "x": 633,
+            "y": -36
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 11,
+        "fontSize": 15,
+        "color": "#2a2520"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative",
+          "scale": null,
+          "axis": null
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "scale": null,
+          "axis": null
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "color": "#42392d",
+        "x": {
+          "expr": "-labelRoom"
+        },
+        "y": {
+          "expr": "height + 40"
+        },
+        "text": "Source: Luxembourg Income Study working paper 895"
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "color": "#776c67",
+        "x": {
+          "expr": "-labelRoom"
+        },
+        "y": {
+          "expr": "height + 58"
+        },
+        "text": "Financial Times"
+      }
+    }
+  ],
+  "config": {
+    "font": "Metric, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "frame": "bounds",
+      "font": "Metric, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      "fontSize": 21,
+      "fontWeight": 600,
+      "color": "#0d0805",
+      "subtitleFont": "Metric, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      "subtitleFontSize": 18,
+      "subtitleColor": "#40372b",
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "axis": {
+      "labelFont": "Metric, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#40372b",
+      "grid": false,
+      "title": null
+    },
+    "axisX": {
+      "domain": true,
+      "domainColor": "#a0998f",
+      "ticks": true,
+      "tickColor": "#a0998f",
+      "tickSize": 6,
+      "labelPadding": 4
+    },
+    "axisY": {
+      "domain": false,
+      "ticks": false,
+      "labelColor": "#2a2520",
+      "labelPadding": 8,
+      "grid": false,
+      "minExtent": 127,
+      "maxExtent": 127
+    },
+    "text": {
+      "font": "Metric, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    }
+  },
+  "usermeta": {
+    "compactDropLayers": [
+      1,
+      2
+    ],
+    "compactSet": [
+      [
+        "layer.0.encoding.color.legend",
+        {
+          "orient": "top",
+          "columns": 1,
+          "symbolType": "square",
+          "labelFontSize": 12,
+          "labelColor": "#2a2520",
+          "labelLimit": 0,
+          "offset": 10,
+          "labelExpr": "replace(replace(datum.label, ' paid by corporations and self-employed', ' (companies)'), ' paid by households', ' (households)')"
+        }
+      ],
+      [
+        "params.0.value",
+        96
+      ],
+      [
+        "config.title.fontSize",
+        17
+      ],
+      [
+        "config.title.subtitleFontSize",
+        14
+      ],
+      [
+        "config.axis.labelFontSize",
+        12
+      ],
+      [
+        "config.axisY.minExtent",
+        96
+      ],
+      [
+        "config.axisY.maxExtent",
+        96
+      ]
+    ],
+    "compactBelow": 960
+  }
+}

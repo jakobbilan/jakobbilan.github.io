@@ -1,0 +1,97 @@
+country,year,label,tax,tax_label,order,share
+US,2006,US 2006,consumption,Consumption taxes,1,15.4
+US,2006,US 2006,labour_households,Labour taxes paid by households,2,39.1
+US,2006,US 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,14.4
+US,2006,US 2006,capital_income_households,Capital income taxes paid by households,4,3.6
+US,2006,US 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,14.2
+US,2006,US 2006,capital_stocks,Taxes on capital stocks,6,13.3
+US,2019,US 2019,consumption,Consumption taxes,1,16.3
+US,2019,US 2019,labour_households,Labour taxes paid by households,2,45.0
+US,2019,US 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,13.8
+US,2019,US 2019,capital_income_households,Capital income taxes paid by households,4,3.5
+US,2019,US 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,8.1
+US,2019,US 2019,capital_stocks,Taxes on capital stocks,6,13.3
+Japan,2006,Japan 2006,consumption,Consumption taxes,1,16.6
+Japan,2006,Japan 2006,labour_households,Labour taxes paid by households,2,29.7
+Japan,2006,Japan 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,23.6
+Japan,2006,Japan 2006,capital_income_households,Capital income taxes paid by households,4,1.9
+Japan,2006,Japan 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,17.0
+Japan,2006,Japan 2006,capital_stocks,Taxes on capital stocks,6,11.2
+Japan,2019,Japan 2019,consumption,Consumption taxes,1,18.4
+Japan,2019,Japan 2019,labour_households,Labour taxes paid by households,2,33.7
+Japan,2019,Japan 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,24.5
+Japan,2019,Japan 2019,capital_income_households,Capital income taxes paid by households,4,1.7
+Japan,2019,Japan 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,12.0
+Japan,2019,Japan 2019,capital_stocks,Taxes on capital stocks,6,9.7
+Germany,2006,Germany 2006,consumption,Consumption taxes,1,27.2
+Germany,2006,Germany 2006,labour_households,Labour taxes paid by households,2,39.7
+Germany,2006,Germany 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,22.7
+Germany,2006,Germany 2006,capital_income_households,Capital income taxes paid by households,4,1.1
+Germany,2006,Germany 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,5.9
+Germany,2006,Germany 2006,capital_stocks,Taxes on capital stocks,6,3.4
+Germany,2019,Germany 2019,consumption,Consumption taxes,1,25.2
+Germany,2019,Germany 2019,labour_households,Labour taxes paid by households,2,42.0
+Germany,2019,Germany 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,23.2
+Germany,2019,Germany 2019,capital_income_households,Capital income taxes paid by households,4,1.1
+Germany,2019,Germany 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,5.0
+Germany,2019,Germany 2019,capital_stocks,Taxes on capital stocks,6,3.5
+UK,2006,UK 2006,consumption,Consumption taxes,1,29.5
+UK,2006,UK 2006,labour_households,Labour taxes paid by households,2,28.8
+UK,2006,UK 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,14.4
+UK,2006,UK 2006,capital_income_households,Capital income taxes paid by households,4,4.2
+UK,2006,UK 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,10.3
+UK,2006,UK 2006,capital_stocks,Taxes on capital stocks,6,12.8
+UK,2019,UK 2019,consumption,Consumption taxes,1,32.4
+UK,2019,UK 2019,labour_households,Labour taxes paid by households,2,27.2
+UK,2019,UK 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,15.0
+UK,2019,UK 2019,capital_income_households,Capital income taxes paid by households,4,5.4
+UK,2019,UK 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,7.0
+UK,2019,UK 2019,capital_stocks,Taxes on capital stocks,6,13.0
+France,2006,France 2006,consumption,Consumption taxes,1,24.2
+France,2006,France 2006,labour_households,Labour taxes paid by households,2,21.8
+France,2006,France 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,33.0
+France,2006,France 2006,capital_income_households,Capital income taxes paid by households,4,2.1
+France,2006,France 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,9.6
+France,2006,France 2006,capital_stocks,Taxes on capital stocks,6,9.3
+France,2019,France 2019,consumption,Consumption taxes,1,26.9
+France,2019,France 2019,labour_households,Labour taxes paid by households,2,23.7
+France,2019,France 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,30.8
+France,2019,France 2019,capital_income_households,Capital income taxes paid by households,4,3.4
+France,2019,France 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,5.5
+France,2019,France 2019,capital_stocks,Taxes on capital stocks,6,9.7
+Italy,2006,Italy 2006,consumption,Consumption taxes,1,24.5
+Italy,2006,Italy 2006,labour_households,Labour taxes paid by households,2,22.7
+Italy,2006,Italy 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,30.6
+Italy,2006,Italy 2006,capital_income_households,Capital income taxes paid by households,4,2.8
+Italy,2006,Italy 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,10.4
+Italy,2006,Italy 2006,capital_stocks,Taxes on capital stocks,6,9.0
+Italy,2019,Italy 2019,consumption,Consumption taxes,1,27.8
+Italy,2019,Italy 2019,labour_households,Labour taxes paid by households,2,26.1
+Italy,2019,Italy 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,29.9
+Italy,2019,Italy 2019,capital_income_households,Capital income taxes paid by households,4,2.7
+Italy,2019,Italy 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,6.1
+Italy,2019,Italy 2019,capital_stocks,Taxes on capital stocks,6,7.4
+Canada,2006,Canada 2006,consumption,Consumption taxes,1,24.5
+Canada,2006,Canada 2006,labour_households,Labour taxes paid by households,2,34.3
+Canada,2006,Canada 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,13.0
+Canada,2006,Canada 2006,capital_income_households,Capital income taxes paid by households,4,3.6
+Canada,2006,Canada 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,13.4
+Canada,2006,Canada 2006,capital_stocks,Taxes on capital stocks,6,11.2
+Canada,2019,Canada 2019,consumption,Consumption taxes,1,23.2
+Canada,2019,Canada 2019,labour_households,Labour taxes paid by households,2,36.3
+Canada,2019,Canada 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,12.1
+Canada,2019,Canada 2019,capital_income_households,Capital income taxes paid by households,4,3.1
+Canada,2019,Canada 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,13.1
+Canada,2019,Canada 2019,capital_stocks,Taxes on capital stocks,6,12.2
+South Korea,2006,South Korea 2006,consumption,Consumption taxes,1,35.0
+South Korea,2006,South Korea 2006,labour_households,Labour taxes paid by households,2,20.6
+South Korea,2006,South Korea 2006,labour_corporations,Labour taxes paid by corporations and self-employed,3,14.5
+South Korea,2006,South Korea 2006,capital_income_households,Capital income taxes paid by households,4,1.5
+South Korea,2006,South Korea 2006,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,14.3
+South Korea,2006,South Korea 2006,capital_stocks,Taxes on capital stocks,6,14.1
+South Korea,2019,South Korea 2019,consumption,Consumption taxes,1,26.9
+South Korea,2019,South Korea 2019,labour_households,Labour taxes paid by households,2,26.1
+South Korea,2019,South Korea 2019,labour_corporations,Labour taxes paid by corporations and self-employed,3,16.9
+South Korea,2019,South Korea 2019,capital_income_households,Capital income taxes paid by households,4,1.6
+South Korea,2019,South Korea 2019,capital_income_corporations,Capital income taxes paid by corporations and self-employed,5,15.6
+South Korea,2019,South Korea 2019,capital_stocks,Taxes on capital stocks,6,12.9
