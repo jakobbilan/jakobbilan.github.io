@@ -1,0 +1,255 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Choropleth of Greater Manchester's small areas (LSOAs) coloured by their national deprivation decile in the English Indices of Deprivation 2025, with council borders drawn on top.",
+  "title": {
+    "text": "Greater Manchester: deprivation",
+    "subtitle": "Decile within England, Indices of Deprivation 2025"
+  },
+  "width": "container",
+  "height": 460,
+  "projection": {
+    "type": "mercator"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/jhellingsdata/map-data/refs/heads/main/gbr/sa/msa001_greater_manchester/LAD.json",
+        "format": {
+          "type": "topojson",
+          "feature": "geog"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#E8EBEF",
+        "stroke": null
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/jhellingsdata/map-data/refs/heads/main/gbr/sa/msa001_greater_manchester/LSOA.json",
+        "format": {
+          "type": "topojson",
+          "feature": "geog"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.id",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/jhellingsdata/LSE-PP434/main/weeks/week07/data/msa/imd_decile_LSOA_ENG.csv"
+            },
+            "key": "geo_id",
+            "fields": [
+              "value"
+            ]
+          },
+          "as": [
+            "decile_raw"
+          ]
+        },
+        {
+          "calculate": "isValid(datum.decile_raw) ? toNumber(datum.decile_raw) : null",
+          "as": "decile"
+        },
+        {
+          "calculate": "isValid(datum.decile) ? toString(datum.decile) : 'No data'",
+          "as": "decile_label"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 0.15
+      },
+      "encoding": {
+        "color": {
+          "field": "decile",
+          "type": "ordinal",
+          "title": "Decile",
+          "scale": {
+            "domain": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10
+            ],
+            "scheme": {
+              "name": "redyellowblue",
+              "count": 10
+            }
+          },
+          "legend": {
+            "orient": "right",
+            "direction": "vertical",
+            "labelExpr": "datum.value == 1 ? '1 most deprived' : datum.value == 10 ? '10 least deprived' : datum.value"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.name",
+            "title": "Neighbourhood (LSOA)"
+          },
+          {
+            "field": "decile_label",
+            "title": "Deprivation decile"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/jhellingsdata/map-data/refs/heads/main/gbr/sa/msa001_greater_manchester/LAD.json",
+        "format": {
+          "type": "topojson",
+          "feature": "geog"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "filled": false,
+        "stroke": "#1B2A41",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "properties.name",
+            "title": "Council"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/jhellingsdata/map-data/refs/heads/main/gbr/sa/msa001_greater_manchester/LAD.json",
+        "format": {
+          "type": "topojson",
+          "feature": "geog"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "geoCentroid(null, datum)",
+          "as": "centre"
+        },
+        {
+          "calculate": "datum.centre[0]",
+          "as": "lon"
+        },
+        {
+          "calculate": "datum.centre[1]",
+          "as": "lat"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 10.5,
+        "fontWeight": 600,
+        "stroke": "white",
+        "strokeWidth": 3,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "properties.name"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/jhellingsdata/map-data/refs/heads/main/gbr/sa/msa001_greater_manchester/LAD.json",
+        "format": {
+          "type": "topojson",
+          "feature": "geog"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "geoCentroid(null, datum)",
+          "as": "centre"
+        },
+        {
+          "calculate": "datum.centre[0]",
+          "as": "lon"
+        },
+        {
+          "calculate": "datum.centre[1]",
+          "as": "lat"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 10.5,
+        "fontWeight": 600,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "properties.name"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

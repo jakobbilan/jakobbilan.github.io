@@ -1,0 +1,320 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Point map of Scotland's 32 councils. Each circle sits at the council's coordinates; its area shows how much more income tax a person on the council's 2024 annual pay figure owes under Scotland's 2024-25 bands than under the rest of the UK's, and its colour shows the pay figure.",
+  "title": {
+    "text": "Scotland: extra income tax on typical pay",
+    "subtitle": "Scottish minus rest-of-UK bands, 2024–25, £ a year"
+  },
+  "width": "container",
+  "height": 520,
+  "projection": {
+    "type": "mercator"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/jhellingsdata/map-data/refs/heads/main/gbr/LAD_SCT_2026_05.json",
+        "format": {
+          "type": "topojson",
+          "feature": "geog"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#E8EBEF",
+        "stroke": "white",
+        "strokeWidth": 0.7
+      }
+    },
+    {
+      "data": {
+        "url": "data/cc7_scotland_councils.csv"
+      },
+      "mark": {
+        "type": "circle",
+        "stroke": "#1B2A41",
+        "strokeWidth": 0.6,
+        "opacity": 0.85
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "difference",
+          "type": "quantitative",
+          "title": "Extra tax (£ a year)",
+          "scale": {
+            "type": "linear",
+            "zero": true,
+            "range": [
+              0,
+              600
+            ]
+          },
+          "legend": {
+            "values": [
+              50,
+              100,
+              200
+            ],
+            "orient": "right"
+          }
+        },
+        "color": {
+          "field": "pay",
+          "type": "quantitative",
+          "title": "Pay, 2024 (£)",
+          "scale": {
+            "scheme": "purples"
+          },
+          "legend": {
+            "format": ",.0f",
+            "orient": "right"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Council"
+          },
+          {
+            "field": "pay",
+            "type": "quantitative",
+            "title": "Annual pay, 2024 (£)",
+            "format": ",.0f"
+          },
+          {
+            "field": "tax_scotland",
+            "type": "quantitative",
+            "title": "Income tax, Scottish bands (£)",
+            "format": ",.0f"
+          },
+          {
+            "field": "tax_rest_of_uk",
+            "type": "quantitative",
+            "title": "Income tax, rUK bands (£)",
+            "format": ",.0f"
+          },
+          {
+            "field": "difference",
+            "type": "quantitative",
+            "title": "Difference (£)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/cc7_scotland_councils.csv"
+      },
+      "transform": [
+        {
+          "filter": {
+            "field": "name",
+            "oneOf": [
+              "Angus",
+              "Shetland Islands",
+              "City of Edinburgh"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.name + ' +£' + format(datum.difference, ',.0f')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 11,
+        "fontSize": 10.5,
+        "fontWeight": 600,
+        "stroke": "white",
+        "strokeWidth": 3,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/cc7_scotland_councils.csv"
+      },
+      "transform": [
+        {
+          "filter": {
+            "field": "name",
+            "oneOf": [
+              "Angus",
+              "Shetland Islands",
+              "City of Edinburgh"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.name + ' +£' + format(datum.difference, ',.0f')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 11,
+        "fontSize": 10.5,
+        "fontWeight": 600,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/cc7_scotland_councils.csv"
+      },
+      "transform": [
+        {
+          "filter": {
+            "field": "name",
+            "oneOf": [
+              "East Dunbartonshire"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.name + ' +£' + format(datum.difference, ',.0f')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -11,
+        "fontSize": 10.5,
+        "fontWeight": 600,
+        "stroke": "white",
+        "strokeWidth": 3,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/cc7_scotland_councils.csv"
+      },
+      "transform": [
+        {
+          "filter": {
+            "field": "name",
+            "oneOf": [
+              "East Dunbartonshire"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.name + ' +£' + format(datum.difference, ',.0f')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -11,
+        "fontSize": 10.5,
+        "fontWeight": 600,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

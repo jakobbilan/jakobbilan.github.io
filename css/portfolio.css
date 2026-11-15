@@ -1,0 +1,102 @@
+/* PP434 portfolio: shared styles for portfolio.html and DevolutionDashboard.html
+   Cool paper, ink navy, one auditor-red accent; Newsreader for display, Public Sans for text and charts. */
+:root {
+  --paper: #F4F6F8;
+  --sheet: #FFFFFF;
+  --ink: #1B2A41;
+  --graphite: #5B6472;
+  --rule: #D5DAE1;
+  --red: #B42318;
+  --blue: #2F5D8C;
+  --measure: 68ch;
+  --wide: 920px;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--sans); font-size: 1rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); text-underline-offset: 2px; }
+a:hover { color: var(--red); }
+a:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; border-radius: 2px; }
+code { font-size: 0.86em; background: #E9EDF1; padding: 0.1em 0.3em; border-radius: 3px; overflow-wrap: anywhere; }
+
+.page { max-width: var(--wide); margin: 0 auto; padding: 2.75rem 1.25rem 4rem; }
+.page.wide { max-width: 1240px; }
+
+/* Masthead: the title sits on a stepped rule, like a schedule of tax bands */
+.masthead { padding-bottom: 1.5rem; }
+.masthead h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(2.1rem, 5.2vw, 3.3rem);
+               line-height: 1.06; letter-spacing: -0.012em; margin: 0 0 0.9rem; max-width: 20ch; }
+.standfirst { font-family: var(--serif); font-size: clamp(1.15rem, 2.2vw, 1.35rem); line-height: 1.45;
+              margin: 0 0 1rem; max-width: 58ch; }
+.byline { color: var(--graphite); font-size: 0.9rem; margin: 0; max-width: 80ch; }
+.brackets { display: block; width: 100%; height: 34px; margin-top: 1.5rem; }
+
+
+/* Contents: wraps on wide screens, scrolls sideways on phones */
+nav.toc { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule);
+          margin: 0 -1.25rem 0.5rem; padding: 0.55rem 1.25rem; }
+nav.toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; margin: 0; padding: 0; font-size: 0.88rem; }
+nav.toc a { text-decoration: none; color: var(--ink); white-space: nowrap; }
+nav.toc a:hover { color: var(--red); }
+@media (max-width: 680px) {
+  nav.toc ol { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  nav.toc ol::-webkit-scrollbar { display: none; }
+}
+
+/* One section per coding challenge: the required label (h2), then the story (h3, note, charts, comment) */
+section.cc { border-top: 1px solid var(--rule); padding: 2.4rem 0 1rem; scroll-margin-top: 3rem; }
+section.cc > header { display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 0.4rem; }
+.cc-num { font-family: var(--serif); font-size: 1.75rem; line-height: 1; color: var(--red); font-weight: 600; min-width: 3.6rem; }
+section.cc h2 { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.35; margin: 0; color: var(--ink); }
+.headline, .topic { font-family: var(--serif); font-weight: 600; font-size: clamp(1.35rem, 3vw, 1.65rem);
+                    line-height: 1.2; margin: 0.5rem 0 0.6rem; max-width: 34ch; }
+.topic { max-width: 40ch; }
+.note { max-width: var(--measure); margin: 0 0 0.5rem; }
+.comment { max-width: var(--measure); margin: 1rem 0 0.5rem; padding-left: 0.85rem; border-left: 3px solid var(--red); }
+section.cc h4 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; margin: 2.2rem 0 0; }
+.cta { margin: 1rem 0 0; font-weight: 600; display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; align-items: baseline; }
+.cta-meta { font-weight: 400; color: var(--graphite); font-size: 0.9rem; }
+
+figure.chart { margin: 1.4rem 0 0.4rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px;
+               padding: 1rem 1rem 0.5rem; overflow-x: auto; }
+figure.chart .vega-embed { width: 100%; }
+figure.chart img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+figure.chart figcaption { color: var(--graphite); font-size: 0.84rem; padding: 0.45rem 0 0.15rem; }
+.slot { min-height: 9rem; display: grid; place-items: center; color: var(--graphite); border: 1px dashed var(--rule); border-radius: 3px; }
+.pair { display: grid; grid-template-columns: 1fr; gap: 0 1rem; }
+@media (min-width: 900px) { .pair.two { grid-template-columns: 1fr 1fr; } }
+
+dl.api { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.45rem 1.1rem; max-width: 80ch;
+         font-size: 0.95rem; margin: 1.1rem 0 0; }
+dl.api dt { font-weight: 600; }
+dl.api dd { margin: 0; }
+@media (max-width: 560px) { dl.api { grid-template-columns: 1fr; } dl.api dd { margin-bottom: 0.5rem; } }
+
+/* Dashboard (CC6): 3 x 2 on wide screens, 2 x 3 on tablets, one column on phones */
+.legend-line { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; font-size: 0.88rem; color: var(--graphite); margin: 0 0 1rem; }
+.key { display: inline-block; width: 22px; height: 0; border-top: 3px solid; vertical-align: middle; margin-right: 0.4rem; }
+.key.gm { border-color: var(--red); }
+.key.ldn { border-top-style: dashed; border-top-width: 2px; border-color: var(--blue); }
+.key.other { border-top-width: 1.5px; border-color: #B3BAC4; }
+.key.mayor { width: 0; height: 14px; border-top: 0; border-left: 1.5px dashed var(--graphite); margin: 0 0.55rem 0 0.3rem; }
+.grid6 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.grid6 figure.chart { margin: 0; padding: 0.75rem 0.75rem 0.25rem; }
+@media (max-width: 1080px) { .grid6 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px)  { .grid6 { grid-template-columns: 1fr; } }
+
+footer.sources { border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1.4rem; font-size: 0.86rem; color: var(--graphite); }
+footer.sources h2 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; color: var(--ink); margin: 0 0 0.5rem; }
+footer.sources ol { padding-left: 1.2rem; margin: 0 0 1rem; }
+footer.sources li { margin-bottom: 0.3rem; max-width: 95ch; }
+
+/* Controls that Vega-Lite draws for interactive charts (CC9) */
+.vega-bindings { display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem; margin: 0.8rem 0 0.2rem; font-size: 0.9rem; }
+.vega-bind label { display: flex; align-items: center; gap: 0.45rem; }
+.vega-bind-name { font-weight: 600; }
+.vega-bindings select, .vega-bindings input { font: inherit; }
+.vega-bindings select { padding: 0.2rem 0.3rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--sheet); color: var(--ink); max-width: 70vw; }
+.vega-bindings input[type="range"] { width: min(260px, 55vw); accent-color: var(--red); }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

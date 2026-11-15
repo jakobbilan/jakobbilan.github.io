@@ -1,0 +1,166 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Line chart of the share of pre-tax national income received by the top 1% in the United States, the United Kingdom and France since 1900 (World Inequality Database via Our World in Data). Labels sit at the latest year of each line.",
+  "title": {
+    "text": "Top 1% share of pre-tax income",
+    "subtitle": "% of national income; gaps are years without estimates"
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "data/cc2a_wid_top1_pretax.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.year >= 1900 && isValid(datum.share)"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "domain": [
+          1900,
+          2025
+        ],
+        "nice": false
+      },
+      "axis": {
+        "format": "d",
+        "tickCount": 7,
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "share",
+      "type": "quantitative",
+      "title": "% of national income",
+      "scale": {
+        "domain": [
+          0,
+          25
+        ]
+      },
+      "axis": {
+        "tickCount": 5
+      }
+    },
+    "color": {
+      "field": "country",
+      "type": "nominal",
+      "legend": null,
+      "scale": {
+        "domain": [
+          "United States",
+          "United Kingdom",
+          "France"
+        ],
+        "range": [
+          "#B42318",
+          "#B7791F",
+          "#2F5D8C"
+        ]
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 28,
+        "opacity": 0
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "country"
+          },
+          {
+            "field": "year"
+          },
+          {
+            "field": "share",
+            "type": "quantitative",
+            "title": "Top 1% share (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "aggregate": "max",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "share",
+          "aggregate": {
+            "argmax": "year"
+          },
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "country",
+          "aggregate": {
+            "argmax": "year"
+          }
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

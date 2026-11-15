@@ -1,0 +1,186 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Scatter plot of the top statutory personal income tax rate against the standard VAT, GST or sales tax rate for each jurisdiction in Wikipedia's list of tax rates, coloured by whether the jurisdiction levies a net wealth tax. Data scraped and cleaned in a Colab notebook.",
+  "title": {
+    "text": "Top income tax rate vs VAT",
+    "subtitle": "Statutory rates; colour shows a net wealth tax"
+  },
+  "width": "container",
+  "height": 340,
+  "data": {
+    "url": "data/cc5_tax_rates_tidy.csv"
+  },
+  "transform": [
+    {
+      "pivot": "tax",
+      "value": "top_rate_pct",
+      "groupby": [
+        "jurisdiction",
+        "wealth_tax"
+      ]
+    },
+    {
+      "filter": "isValid(datum.income_top) && isValid(datum.vat)"
+    },
+    {
+      "calculate": "isValid({\"France\": \"France\", \"United Kingdom\": \"UK\", \"United States\": \"US\", \"Germany\": \"Germany\", \"Norway\": \"Norway\", \"Switzerland\": \"Switzerland\", \"Brazil\": \"Brazil\", \"Hungary\": \"Hungary\", \"Japan\": \"Japan\", \"Colombia\": \"Colombia\"}[datum.jurisdiction]) ? {\"France\": \"France\", \"United Kingdom\": \"UK\", \"United States\": \"US\", \"Germany\": \"Germany\", \"Norway\": \"Norway\", \"Switzerland\": \"Switzerland\", \"Brazil\": \"Brazil\", \"Hungary\": \"Hungary\", \"Japan\": \"Japan\", \"Colombia\": \"Colombia\"}[datum.jurisdiction] : ''",
+      "as": "label"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "income_top",
+      "type": "quantitative",
+      "title": "Top personal income tax rate (%)",
+      "scale": {
+        "domain": [
+          0,
+          70
+        ]
+      }
+    },
+    "y": {
+      "field": "vat",
+      "type": "quantitative",
+      "title": "Standard VAT/GST/sales tax (%)",
+      "scale": {
+        "domain": [
+          0,
+          32
+        ]
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "size": 55,
+        "opacity": 0.8,
+        "stroke": "white",
+        "strokeWidth": 0.6
+      },
+      "encoding": {
+        "color": {
+          "field": "wealth_tax",
+          "type": "nominal",
+          "title": "Net wealth tax",
+          "sort": [
+            "Yes",
+            "Inactive",
+            "No",
+            "Not listed",
+            "Other"
+          ],
+          "scale": {
+            "domain": [
+              "Yes",
+              "Inactive",
+              "No",
+              "Not listed",
+              "Other"
+            ],
+            "range": [
+              "#B42318",
+              "#B7791F",
+              "#2F5D8C",
+              "#C3CAD3",
+              "#5B6472"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "columns": 3,
+            "labelLimit": 400
+          }
+        },
+        "tooltip": [
+          {
+            "field": "jurisdiction",
+            "title": "Jurisdiction"
+          },
+          {
+            "field": "income_top",
+            "type": "quantitative",
+            "title": "Top income tax (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "vat",
+            "type": "quantitative",
+            "title": "VAT/sales (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "inheritance",
+            "type": "quantitative",
+            "title": "Inheritance (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "wealth_tax",
+            "title": "Wealth tax"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.label != ''"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": -5,
+        "fontSize": 10.5
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

@@ -1,200 +1,295 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en-GB">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Portfolio, PP434 | Jakob Kilian Bilan</title>
-    <!-- Search and sharing -->
-    <meta name="description" content="Jakob Kilian Bilan’s chart portfolio for PP434 Automated Data Visualisation for Policymaking at the London School of Economics.">
-    <meta name="author" content="Jakob Kilian Bilan">
-    <link rel="canonical" href="https://jakobbilan.github.io/portfolio.html">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Jakob Kilian Bilan">
-    <meta property="og:title" content="Portfolio, PP434">
-    <meta property="og:description" content="Jakob Kilian Bilan’s chart portfolio for PP434 Automated Data Visualisation for Policymaking at the London School of Economics.">
-    <meta property="og:url" content="https://jakobbilan.github.io/portfolio.html">
-    <meta property="og:image" content="https://jakobbilan.github.io/assets/social/site-card.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Jakob Kilian Bilan: economic policy, LSE and Sciences Po">
-    <meta property="og:locale" content="en_GB">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" href="favicon.ico" sizes="48x48">
-    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
-    <link rel="icon" href="assets/icons/favicon-96.png" type="image/png" sizes="96x96">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <meta name="theme-color" content="#ffffff">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Person",
-          "@id": "https://jakobbilan.github.io/#person",
-          "name": "Jakob Kilian Bilan",
-          "url": "https://jakobbilan.github.io/",
-          "sameAs": [
-            "https://www.linkedin.com/in/jakob-kilian-bilan-1225412a6/",
-            "https://github.com/jakobbilan"
-          ]
-        },
-        {
-          "@type": "CollectionPage",
-          "@id": "https://jakobbilan.github.io/portfolio.html#page",
-          "url": "https://jakobbilan.github.io/portfolio.html",
-          "name": "Portfolio, PP434",
-          "isPartOf": {
-            "@id": "https://jakobbilan.github.io/#website"
-          },
-          "about": {
-            "@id": "https://jakobbilan.github.io/#person"
-          },
-          "author": {
-            "@id": "https://jakobbilan.github.io/#person"
-          }
-        }
-      ]
-    }
-    </script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data science portfolio | Jakob Kilian Bilan</title>
+  <meta name="description" content="PP434 data science portfolio on tax progressivity and inequality.">
 
-    <!-- Vega, Vega-Lite and vega-embed: render the chart specs -->
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/portfolio.css">
+
+  <!-- Vega 6, Vega-Lite 6, vega-embed 7 (the course's major versions), pinned to the tested releases -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@6.4.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6.5.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7.3.0"></script>
 </head>
-
 <body>
-    <!-- Site header, same on every page; aria-current marks Projects, the parent page -->
-    <header>
-        <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="research.html">Research</a>
-            <a href="cv.html">CV</a>
-            <a href="projects.html" aria-current="true">Projects</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
+<div class="page">
 
-    <main class="charts">
-        <p class="breadcrumb"><a href="projects.html">Projects</a> / Portfolio</p>
+  <header class="masthead">
+    <h1>[Headline]</h1>
+    <p class="standfirst">[Standfirst]</p>
+    <p class="byline">Jakob Kilian Bilan, LSE School of Public Policy. PP434 Automated Data Visualisation for Policymaking, 2026/27. Updated [Date].</p>
+    <svg class="brackets" viewBox="0 0 920 34" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 32 H150 V27 H300 V21 H470 V14 H640 V6 H920" fill="none" stroke="#B42318" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    </svg>
+  </header>
 
-        <hgroup>
-            <h1>Portfolio</h1>
-            <p>PP434 – Automated Data Visualisation for Policymaking 2026/27</p>
-            <p>Code and data: <a href="https://github.com/jakobbilan/jakobbilan.github.io">github.com/jakobbilan/jakobbilan.github.io</a></p>
-        </hgroup>
+  <nav class="toc" aria-label="Coding challenges">
+    <ol>
+      <li><a href="#cc1">CC1 Hosting</a></li>
+      <li><a href="#cc2">CC2 Building</a></li>
+      <li><a href="#cc3">CC3 Policy debate</a></li>
+      <li><a href="#cc4">CC4 Replication</a></li>
+      <li><a href="#cc5">CC5 API and scraper</a></li>
+      <li><a href="#cc6">CC6 Loops</a></li>
+      <li><a href="#cc7">CC7 Maps</a></li>
+      <li><a href="#cc8">CC8 Big data</a></li>
+      <li><a href="#cc9">CC9 Interactivity</a></li>
+      <li hidden><a href="#cc10">CC10</a></li>
+    </ol>
+  </nav>
 
-        <p>On this page, I will soon maintain an active portfolio of charts that may be of interest. Please feel free to explore!</p>
+  <main>
 
-        <!-- Ten challenges, one section each; vegaEmbed fills each figure by its id -->
-        <section>
-            <h2>Hosting visualisations</h2>
+  <!-- CC1 -->
+  <section class="cc" id="cc1" aria-labelledby="cc1-title">
+    <header><span class="cc-num">CC1</span><h2 id="cc1-title">Hosting: display charts in your own site</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
+    <figure class="chart">
+      <div id="cc1a"></div>
+      <figcaption>Chart: Richard Davies, e4e chart collection (<a href="https://github.com/RDeconomist/RDeconomist.github.io/blob/main/charts/e4e/ch3_Work/chart3_X_inequalityGINImapSlider.json">specification</a>). Data: World Inequality Database.</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="cc1b"></div>
+      <figcaption>Chart: Richard Davies, e4e chart collection (<a href="https://github.com/RDeconomist/RDeconomist.github.io/blob/main/charts/e4e/ch3_Work/chart3_12_usIncomesOverTime.json">specification</a>). Data: US Census Bureau.</figcaption>
+    </figure>
+  </section>
 
-            <section>
-                <div class="chart-description">
-                    <h3>Section 1: A basic chart</h3>
-                    <p>For now, these charts are just examples from the GrowthLab repo. Soon, my own charts will land in their place.</p>
-                </div>
-                <figure id="gdp-life-expectancy"></figure>
-            </section>
+  <!-- CC2 -->
+  <section class="cc" id="cc2" aria-labelledby="cc2-title">
+    <header><span class="cc-num">CC2</span><h2 id="cc2-title">Building: create your own visualisations</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
+    <figure class="chart">
+      <div id="cc2a" class="slot">[Chart]</div>
+      <figcaption>Income before taxes and most benefits. Data: World Inequality Database, via the Our World in Data chart API (<a href="notebooks/cc2a_wid_download.ipynb">download notebook</a>, <a href="data/cc2a_wid_top1_pretax.csv">CSV</a>).</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="cc2b"></div>
+      <figcaption>Illustrative employee as modelled by the Economics Observatory, "Why do some people in Britain face marginal tax rates of over 60 percent?" (November 2025). Data: <a href="https://github.com/EconomicsObservatory/ECOvisualisations/tree/main/articles/2025-11-19-why-do-some-people-in-britain-face-marginal-tax-rates-of-over-60-percent">article data on GitHub</a>, read from the raw file.</figcaption>
+    </figure>
+  </section>
 
-            <section>
-                <div class="chart-description">
-                    <h3>Section 2: Another basic chart</h3>
-                    <p>Another example chart from the GrowthLab repo.</p>
-                </div>
-                <figure id="gdp-per-capita"></figure>
-            </section>
+  <!-- CC3 -->
+  <section class="cc" id="cc3" aria-labelledby="cc3-title">
+    <header><span class="cc-num">CC3</span><h2 id="cc3-title">Policy debate: use a visualisation in policy commentary</h2></header>
+    <p class="topic" data-maxwords="25">[Policy topic]</p>
+    <figure class="chart">
+      <div id="cc3a"></div>
+      <figcaption>Top 400: the wealthiest ~0.0002% of US tax units (top 100 plus next 300). Dashed line: top labour-income earners, about 45%. Source: Balkir, Saez, Yagan and Zucman (2025), NBER Working Paper 34170, Table 2 (<a href="data/cc3_bsyz_effective_tax_rates.csv">data</a>).</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="cc3b"></div>
+      <figcaption>Splinter adds 3 points for excluding "pure" capital gains, 8 for spreading family fortunes over several tax returns and 3 for under-reported state and local taxes; counting transfers as income lowers the average. Sources: Balkir et al. (2025); Splinter (2025), as reported by the Cato Institute and the Tax Foundation (<a href="data/cc3_competing_estimates.csv">data</a>).</figcaption>
+    </figure>
+    <p class="comment" data-maxwords="25">[Comment]</p>
+  </section>
 
-            <section>
-                <div class="chart-description">
-                    <h3>Section 3: And even another basic chart</h3>
-                    <p>Another example chart from the GrowthLab repo.</p>
-                </div>
-                <figure id="g7-inflation"></figure>
-            </section>
+  <!-- CC4 -->
+  <section class="cc" id="cc4" aria-labelledby="cc4-title">
+    <header><span class="cc-num">CC4</span><h2 id="cc4-title">Replication: re-create, then improve, someone else's chart</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <figure class="chart">
+      <div id="cc4-original" class="slot">[Original chart]</div>
+      <figcaption>[Source of the original chart]</figcaption>
+    </figure>
+    <div class="pair two">
+      <figure class="chart"><div id="cc4a" class="slot">[Replica]</div><figcaption>Replica in Vega-Lite (traced data).</figcaption></figure>
+      <figure class="chart"><div id="cc4b" class="slot">[Improved version]</div><figcaption>Improved version.</figcaption></figure>
+    </div>
+    <p class="comment" data-maxwords="25">[Explanation]</p>
+  </section>
 
-            <section>
-                <div class="chart-description">
-                    <h3>Section 4: Just one more chart, please, just one more!</h3>
-                    <p>Another example chart, this time from FRED.</p>
-                </div>
-                <figure id="wti-oil-price"></figure>
-            </section>
-        </section>
+  <!-- CC5 -->
+  <section class="cc" id="cc5" aria-labelledby="cc5-title">
+    <header><span class="cc-num">CC5</span><h2 id="cc5-title">Accessing data: (1) API, (2) scraper</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
 
-        <section>
-            <h2>Making a point with data</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge2"></figure>
-        </section>
+    <h4>API</h4>
+    <figure class="chart">
+      <div id="cc5a"></div>
+      <figcaption>Household-survey measure of income or consumption (World Bank Poverty and Inequality Platform). Live chart: requested from the World Bank Indicators API each time the page loads.</figcaption>
+    </figure>
+    <dl class="api">
+      <dt>Base URL</dt>
+      <dd><code>https://api.worldbank.org/v2/</code> [Base URL description]</dd>
+      <dt>Elements of a call</dt>
+      <dd>[Elements of a call]</dd>
+      <dt>Data returned</dt>
+      <dd>[Data returned]</dd>
+      <dt>Full URL</dt>
+      <dd><a href="https://api.worldbank.org/v2/country/USA;GBR;FRA;DEU;BRA;ZAF/indicator/SI.DST.10TH.10?format=json&amp;per_page=1000&amp;date=1990:2025"><code>https://api.worldbank.org/v2/country/USA;GBR;FRA;DEU;BRA;ZAF/indicator/SI.DST.10TH.10?format=json&amp;per_page=1000&amp;date=1990:2025</code></a></dd>
+    </dl>
 
-        <section>
-            <h2>Visualisation principles and the grammar of graphics</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge3"></figure>
-        </section>
+    <h4>Scraper</h4>
+    <p><a href="#" class="notebook">[Link to the Colab notebook]</a></p>
+    <figure class="chart">
+      <div id="cc5b" class="slot">[Chart]</div>
+      <figcaption>Headline statutory rates (marginal, not effective). Data: Wikipedia, List of countries by tax rates, scraped November 2026, cleaned in the notebook and exported as tidy (long) data: <a href="data/cc5_tax_rates_tidy.csv">CSV</a>.</figcaption>
+    </figure>
+    <p class="comment" data-maxwords="25">[Comment]</p>
+  </section>
 
-        <section>
-            <h2>Data access: APIs and scrapers</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge4"></figure>
-        </section>
+  <!-- CC6 -->
+  <section class="cc" id="cc6" aria-labelledby="cc6-title">
+    <header><span class="cc-num">CC6</span><h2 id="cc6-title">Loops: a UK devolution dashboard</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
+    <p class="cta"><a href="DevolutionDashboard.html">Open the devolution dashboard</a><span class="cta-meta">Six indicators for England's strategic authorities, 1991 to 2026</span></p>
+  </section>
 
-        <section>
-            <h2>Programming: loops and dashboards</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge5"></figure>
-        </section>
+  <!-- CC7 -->
+  <section class="cc" id="cc7" aria-labelledby="cc7-title">
+    <header><span class="cc-num">CC7</span><h2 id="cc7-title">Maps: base maps and choropleths</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
+    <figure class="chart">
+      <div id="cc7a"></div>
+      <figcaption>Coordinates map: one point per council at its latitude and longitude. Circle area: income tax under Scotland's 2024–25 bands minus the rest of the UK's, on the council's 2024 annual pay figure; colour: that pay figure. Sources: ONS pay data and map file via PP434 course files; tax bands from gov.scot and gov.uk; own calculation (<a href="data/cc7_scotland_councils.csv">data</a>, <a href="notebooks/cc7_scotland_points.ipynb">notebook</a>).</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="cc7b"></div>
+      <figcaption>Choropleth: 1,702 neighbourhoods (LSOAs) coloured through a lookup on their area code; decile 1 is England's most deprived 10%. Lines: council borders. Sources: MHCLG via PP434 course files; boundaries from jhellingsdata/map-data.</figcaption>
+    </figure>
+  </section>
 
-        <section>
-            <h2>Maps</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge6"></figure>
-        </section>
+  <!-- CC8 -->
+  <section class="cc" id="cc8" aria-labelledby="cc8-title">
+    <header><span class="cc-num">CC8</span><h2 id="cc8-title">Big data: extracting a story from millions of prices</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <figure class="chart">
+      <div id="cc8a" class="slot">[Chart]</div>
+      <figcaption>Data: AutoCPI, daily UK supermarket prices (Economics Observatory; Davies and McEvoy, 2024), [Method note].</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="cc8b" class="slot">[Chart]</div>
+      <figcaption>Data: AutoCPI, daily UK supermarket prices (Economics Observatory; Davies and McEvoy, 2024), [Method note].</figcaption>
+    </figure>
+    <p class="comment" data-maxwords="50">[Explanation]</p>
+  </section>
 
-        <section>
-            <h2>Big data</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge7"></figure>
-        </section>
+  <!-- CC9 -->
+  <section class="cc" id="cc9" aria-labelledby="cc9-title">
+    <header><span class="cc-num">CC9</span><h2 id="cc9-title">Interactivity: two interactive charts</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
+    <figure class="chart">
+      <div id="cc9a"></div>
+      <figcaption>Interactive: a menu for the tax year and a slider for income. Non-savings, non-dividend income with the standard personal allowance (tapered above £100,000). Sources: gov.scot and gov.uk rates and bands, 2024–25 to 2026–27; own calculation, checked against a published worked example.</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="cc9b"></div>
+      <figcaption>Interactive: menus for the indicator and the authority. Data: PP434 course files, as in CC6 (<a href="data/cc9_strategic_authorities.csv">tidy CSV</a>).</figcaption>
+    </figure>
+  </section>
 
-        <section>
-            <h2>Advanced and interactive charts</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge8"></figure>
-        </section>
+  <!-- CC10: hidden until a tenth brief is set -->
+  <section class="cc" id="cc10" aria-labelledby="cc10-title" hidden>
+    <header><span class="cc-num">CC10</span><h2 id="cc10-title">[Challenge title]</h2></header>
+    <h3 class="headline">[Headline]</h3>
+    <p class="note">[Note]</p>
+    <figure class="chart"><div id="cc10a" class="slot">[Chart]</div></figure>
+  </section>
 
-        <section>
-            <h2>Machine learning</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge9"></figure>
-        </section>
+  </main>
 
-        <section>
-            <h2>Large language models</h2>
-            <p class="meta">To follow.</p>
-            <figure id="challenge10"></figure>
-        </section>
-    </main>
+  <footer class="sources">
+    <h2>Sources</h2>
+    <ol>
+      <li>Balkir, A., Saez, E., Yagan, D. and Zucman, G. (2025). How Much Tax Do US Billionaires Pay? Evidence from Administrative Data. NBER Working Paper 34170.</li>
+      <li>Splinter, D. (2025). Comment on Balkir, Saez, Yagan and Zucman; figures as reported in Michel, A. (2025), "What's the Tax Rate for the Forbes 400?", Cato Institute, and by the Tax Foundation.</li>
+      <li>World Inequality Database (WID.world): income share of the richest 1%, before tax, via the Our World in Data chart API.</li>
+      <li>Economics Observatory (2025). Why do some people in Britain face marginal tax rates of over 60 percent? Data on GitHub (EconomicsObservatory/ECOvisualisations).</li>
+      <li>World Bank, Poverty and Inequality Platform: income share held by highest 10% (SI.DST.10TH.10), World Bank Indicators API.</li>
+      <li>Wikipedia, List of countries by tax rates, scraped November 2026.</li>
+      <li>PP434 course data and map files (jhellingsdata/LSE-PP434; jhellingsdata/map-data): ONS, DESNZ and MHCLG statistics, including the English Indices of Deprivation 2025.</li>
+      <li>Scottish Government (2024), Scottish Income Tax 2024 to 2025 factsheet; HMRC, Income Tax rates 2024 to 2025.</li>
+      <li>Found charts in CC1: Richard Davies, e4e chart collection (RDeconomist.github.io).</li>
+      <li>AutoCPI: Davies, R. and McEvoy, F. (2024), daily UK supermarket prices, Economics Observatory; data provided in PP434.</li>
+      <li>Scottish Government, Scottish Income Tax rates and bands 2025 to 2026 and 2026 to 2027; HMRC, Income Tax rates 2025 to 2026 and 2026 to 2027.</li>
+    </ol>
+    <p class="repo">Code and data: <a href="https://github.com/jakobbilan/jakobbilan.github.io">github.com/jakobbilan/jakobbilan.github.io</a>. Charts made with Vega-Lite; data prepared in Python notebooks.</p>
+  </footer>
+</div>
 
-    <script>
-        // Chart text in the page typeface, unless a spec sets its own font
-        let options = { config: { font: 'Charter, "Bitstream Charter", "Sitka Text", Cambria, serif' } };
+<script>
+  const OPTS = { renderer: "svg", actions: { export: true, source: true, compiled: false, editor: true } };
+  const DAVIES = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/main/charts/e4e/ch3_Work/";
 
-        // Hosting visualisations: two specs from course repositories, two from this repository
-        let gdpLifeExpectancy = "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/2/s2_chart2.json";
-        let gdpPerCapita = "gdp-per-capita-lines.json";
-        let g7Inflation = "https://raw.githubusercontent.com/RDeconomist/RDeconomist.github.io/refs/heads/main/charts/library/chartLine2.json";
-        let wtiOilPrice = "wti-oil-price.json";
+  // Every chart on the page: where it goes, its specification, and (for files made by a notebook) what it needs
+  const CHARTS = [
+    { id: "cc1a", spec: DAVIES + "chart3_X_inequalityGINImapSlider.json" },
+    { id: "cc1b", spec: DAVIES + "chart3_12_usIncomesOverTime.json" },
+    { id: "cc2a", spec: "charts/cc2a_wid_top1_pretax.json", needs: "data/cc2a_wid_top1_pretax.csv" },
+    { id: "cc2b", spec: "charts/cc2b_uk_marginal_rates.json" },
+    { id: "cc3a", spec: "charts/cc3a_bsyz_components.json" },
+    { id: "cc3b", spec: "charts/cc3b_competing_estimates.json" },
+    { id: "cc4a", spec: "charts/cc4a_replica.json", needs: "charts/cc4a_replica.json" },
+    { id: "cc4b", spec: "charts/cc4b_improved.json", needs: "charts/cc4b_improved.json" },
+    { id: "cc5a", spec: "charts/cc5a_worldbank_top10_live.json" },
+    { id: "cc5b", spec: "charts/cc5b_tax_rates_scraped.json", needs: "data/cc5_tax_rates_tidy.csv" },
+    { id: "cc7a", spec: "charts/cc7a_scotland_income_tax_points.json" },
+    { id: "cc7b", spec: "charts/cc7b_gm_deprivation.json" },
+    { id: "cc8a", spec: "charts/cc8a_prices.json", needs: "charts/cc8a_prices.json" },
+    { id: "cc8b", spec: "charts/cc8b_prices.json", needs: "charts/cc8b_prices.json" },
+    { id: "cc9a", spec: "charts/cc9a_scotland_tax_calculator.json" },
+    { id: "cc9b", spec: "charts/cc9b_strategic_authority_explorer.json" }
+  ];
 
-        vegaEmbed('#gdp-life-expectancy', gdpLifeExpectancy, options);
-        vegaEmbed('#gdp-per-capita', gdpPerCapita, options);
-        vegaEmbed('#g7-inflation', g7Inflation, options);
-        vegaEmbed('#wti-oil-price', wtiOilPrice, options);
-    </script>
+  const exists = url => fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
+
+  async function embed(chart) {
+    const el = document.getElementById(chart.id);
+    if (chart.needs && !(await exists(chart.needs))) {
+      console.info(`${chart.id}: waiting for ${chart.needs}`);
+      return;                                            // the placeholder text stays in place
+    }
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;   // measure labels with the page font
+    try {
+      await vegaEmbed("#" + chart.id, chart.spec, OPTS);
+      el.classList.remove("slot");
+    } catch (err) {
+      console.error(chart.id, err);
+    }
+  }
+
+  // Load each chart when it comes near the screen (the GM map file is 1.5 MB)
+  function whenNear(id, run) {
+    const el = document.getElementById(id);
+    if (typeof IntersectionObserver !== "function") return run();
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { io.disconnect(); run(); }
+    }, { rootMargin: "800px 0px" });
+    io.observe(el);
+  }
+
+  CHARTS.forEach(chart => whenNear(chart.id, () => embed(chart)));
+
+  // CC4 original: shown as soon as img/cc4_original.png exists
+  exists("img/cc4_original.png").then(ok => {
+    if (!ok) return;
+    const slot = document.getElementById("cc4-original");
+    slot.classList.remove("slot");
+    slot.innerHTML = '<img src="img/cc4_original.png" alt="Original chart replicated in CC4">';
+  });
+
+  // Console checks: bracketed placeholders still on the page, and the brief's 25-word limits
+  if (typeof document.createTreeWalker === "function") {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const left = [];
+    while (walker.nextNode()) (walker.currentNode.nodeValue.match(/\[[A-Z][^\]]{0,60}\]/g) || []).forEach(m => left.push(m));
+    if (left.length) console.warn(`${left.length} placeholders left:`, left.join(" "));
+  }
+  document.querySelectorAll("[data-maxwords]").forEach(el => {
+    const words = el.textContent.trim().split(/\s+/).filter(Boolean).length;
+    if (words > Number(el.dataset.maxwords)) console.warn(`${words} words (limit ${el.dataset.maxwords}):`, el.textContent.trim());
+  });
+</script>
 </body>
 </html>

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Slope chart comparing two estimates of the total effective tax rate of the top 400 US households and of the full population in 2018-20. In the Balkir-Saez-Yagan-Zucman benchmark the top 400 pay less than average; after Splinter's adjustments they pay more.",
+  "title": {
+    "text": "Top 400 vs everyone: two estimates",
+    "subtitle": "Total effective tax rate, US, 2018–20"
+  },
+  "width": "container",
+  "height": 260,
+  "data": {
+    "url": "data/cc3_competing_estimates.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "estimate",
+      "type": "nominal",
+      "sort": [
+        "Balkir et al. (2025)",
+        "Splinter (2025)"
+      ],
+      "title": null,
+      "scale": {
+        "padding": 0.6
+      },
+      "axis": {
+        "labelAngle": 0,
+        "labelLimit": 400,
+        "domain": false,
+        "ticks": false
+      }
+    },
+    "y": {
+      "field": "rate",
+      "type": "quantitative",
+      "title": "% of income",
+      "scale": {
+        "domain": [
+          0,
+          45
+        ]
+      }
+    },
+    "color": {
+      "field": "group",
+      "type": "nominal",
+      "title": null,
+      "scale": {
+        "domain": [
+          "Top 400",
+          "Full population"
+        ],
+        "range": [
+          "#B42318",
+          "#2F5D8C"
+        ]
+      },
+      "legend": {
+        "orient": "top",
+        "direction": "horizontal",
+        "symbolType": "stroke"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "detail": {
+          "field": "group"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 90,
+        "opacity": 1
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "estimate",
+            "title": "Estimate"
+          },
+          {
+            "field": "group",
+            "title": "Group"
+          },
+          {
+            "field": "rate",
+            "type": "quantitative",
+            "title": "Rate (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "note",
+            "title": "What it does"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "dy": -12,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "rate",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

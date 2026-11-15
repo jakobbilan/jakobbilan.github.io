@@ -1,0 +1,247 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Horizontal stacked bars of total effective tax rates in the United States, 2018-20, for the full population and the wealthiest 400 households, split by type of tax. A reference line marks the roughly 45% rate of top labour-income earners.",
+  "title": {
+    "text": "Effective tax rate by wealth group, US",
+    "subtitle": "All taxes as % of economic income, 2018–20"
+  },
+  "width": "container",
+  "height": 200,
+  "data": {
+    "url": "data/cc3_bsyz_effective_tax_rates.csv"
+  },
+  "encoding": {
+    "y": {
+      "field": "group",
+      "type": "nominal",
+      "sort": [
+        "Full population",
+        "Next 300",
+        "Top 400",
+        "Top 100"
+      ],
+      "title": null,
+      "axis": {
+        "labelLimit": 300,
+        "labelFontSize": 11.5
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "height": {
+          "band": 0.7
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "rate",
+          "type": "quantitative",
+          "stack": "zero",
+          "title": "% of economic income",
+          "scale": {
+            "domain": [
+              0,
+              50
+            ]
+          },
+          "axis": {
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40,
+              50
+            ]
+          }
+        },
+        "color": {
+          "field": "component",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Income and payroll taxes",
+            "Corporate taxes (worldwide)",
+            "Estate and gift taxes",
+            "Property and sales taxes"
+          ],
+          "scale": {
+            "domain": [
+              "Income and payroll taxes",
+              "Corporate taxes (worldwide)",
+              "Estate and gift taxes",
+              "Property and sales taxes"
+            ],
+            "range": [
+              "#2F5D8C",
+              "#B42318",
+              "#B7791F",
+              "#9AA3AE"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "columns": 2,
+            "symbolType": "square",
+            "labelLimit": 400
+          }
+        },
+        "order": {
+          "field": "component_order",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "title": "Group"
+          },
+          {
+            "field": "component",
+            "title": "Tax"
+          },
+          {
+            "field": "rate",
+            "type": "quantitative",
+            "title": "% of economic income",
+            "format": ".1f"
+          },
+          {
+            "field": "total",
+            "type": "quantitative",
+            "title": "Total (reported)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "max",
+              "field": "total",
+              "as": "total"
+            }
+          ],
+          "groupby": [
+            "group"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "field": "total",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "total",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 45
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          4,
+          3
+        ],
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": null
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 45,
+            "label": "Top labour earners"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "dx": -4,
+        "dy": 2,
+        "y": 0,
+        "fontSize": 10.5,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": null,
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

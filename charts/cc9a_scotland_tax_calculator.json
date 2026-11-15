@@ -1,0 +1,315 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Interactive step chart of the marginal income tax rate by gross income under Scotland's bands and the rest of the UK's. A menu chooses the tax year (2024-25 to 2026-27) and a slider chooses an income; a vertical line marks it and a readout gives the tax under each system and the difference.",
+  "title": {
+    "text": "Marginal income tax rate: Scotland vs rest of UK",
+    "subtitle": "Choose a tax year and an income below the chart"
+  },
+  "width": "container",
+  "height": 320,
+  "params": [
+    {
+      "name": "year",
+      "value": "2026-27",
+      "bind": {
+        "input": "select",
+        "options": [
+          "2026-27",
+          "2025-26",
+          "2024-25"
+        ],
+        "name": "Tax year "
+      }
+    },
+    {
+      "name": "income",
+      "value": 31000,
+      "bind": {
+        "input": "range",
+        "min": 10000,
+        "max": 160000,
+        "step": 500,
+        "name": "Gross income, £ "
+      }
+    },
+    {
+      "name": "L1",
+      "expr": "year == '2024-25' ? 2306 : year == '2025-26' ? 2827 : 3967"
+    },
+    {
+      "name": "L2",
+      "expr": "year == '2024-25' ? 13991 : year == '2025-26' ? 14921 : 16956"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "sequence": {
+          "start": 0,
+          "stop": 160100,
+          "step": 100,
+          "as": "gross"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "max(0, datum.gross - (datum.gross <= 100000 ? 12570 : max(0, 12570 - (datum.gross - 100000) / 2)))",
+          "as": "t"
+        },
+        {
+          "calculate": "(datum.t <= 0 ? 0 : datum.t <= L1 ? 0.19 : datum.t <= L2 ? 0.20 : datum.t <= 31092 ? 0.21 : datum.t <= 62430 ? 0.42 : datum.t <= 125140 ? 0.45 : 0.48) * (datum.gross > 100000 && datum.gross < 125140 ? 1.5 : 1)",
+          "as": "Scotland"
+        },
+        {
+          "calculate": "(datum.t <= 0 ? 0 : datum.t <= 37700 ? 0.20 : datum.t <= 125140 ? 0.40 : 0.45) * (datum.gross > 100000 && datum.gross < 125140 ? 1.5 : 1)",
+          "as": "Rest of UK"
+        },
+        {
+          "fold": [
+            "Scotland",
+            "Rest of UK"
+          ],
+          "as": [
+            "system",
+            "rate"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "step-after",
+        "strokeWidth": 2.2
+      },
+      "encoding": {
+        "x": {
+          "field": "gross",
+          "type": "quantitative",
+          "title": "Gross annual income",
+          "scale": {
+            "domain": [
+              0,
+              160000
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              20000,
+              40000,
+              60000,
+              80000,
+              100000,
+              120000,
+              140000,
+              160000
+            ],
+            "labelExpr": "datum.value == 0 ? '£0' : '£' + format(datum.value / 1000, ',.0f') + 'k'",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "rate",
+          "type": "quantitative",
+          "title": "Rate on the next £1",
+          "scale": {
+            "domain": [
+              0,
+              0.7
+            ]
+          },
+          "axis": {
+            "format": ".0%",
+            "values": [
+              0,
+              0.1,
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6,
+              0.7
+            ]
+          }
+        },
+        "color": {
+          "field": "system",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Scotland",
+            "Rest of UK"
+          ],
+          "scale": {
+            "domain": [
+              "Scotland",
+              "Rest of UK"
+            ],
+            "range": [
+              "#B42318",
+              "#2F5D8C"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "symbolType": "stroke"
+          }
+        },
+        "strokeDash": {
+          "field": "system",
+          "type": "nominal",
+          "sort": [
+            "Scotland",
+            "Rest of UK"
+          ],
+          "scale": {
+            "domain": [
+              "Scotland",
+              "Rest of UK"
+            ],
+            "range": [
+              [
+                1,
+                0
+              ],
+              [
+                5,
+                3
+              ]
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "income",
+          "as": "gross"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#1B2A41",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "x": {
+          "field": "gross",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "x": 2,
+        "x2": 262,
+        "y": 0,
+        "y2": 58,
+        "fill": "white",
+        "opacity": 0.92,
+        "cornerRadius": 3
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "income",
+          "as": "g"
+        },
+        {
+          "calculate": "max(0, datum.g - (datum.g <= 100000 ? 12570 : max(0, 12570 - (datum.g - 100000) / 2)))",
+          "as": "t"
+        },
+        {
+          "calculate": "(0.19 * clamp(datum.t, 0, L1) + 0.20 * clamp(datum.t - L1, 0, L2 - L1) + 0.21 * clamp(datum.t - L2, 0, 31092 - L2) + 0.42 * clamp(datum.t - 31092, 0, 31338) + 0.45 * clamp(datum.t - 62430, 0, 62710) + 0.48 * max(datum.t - 125140, 0))",
+          "as": "scot"
+        },
+        {
+          "calculate": "(0.20 * clamp(datum.t, 0, 37700) + 0.40 * clamp(datum.t - 37700, 0, 87440) + 0.45 * max(datum.t - 125140, 0))",
+          "as": "ruk"
+        },
+        {
+          "calculate": "datum.scot - datum.ruk",
+          "as": "diff"
+        },
+        {
+          "calculate": "'Income £' + format(datum.g, ',') + ', ' + year + '\\n' + 'Scotland £' + format(datum.scot, ',.0f') + ', rest of UK £' + format(datum.ruk, ',.0f') + '\\n' + (abs(datum.diff) < 0.5 ? 'No difference' : '£' + format(abs(datum.diff), ',.0f') + (datum.diff > 0 ? ' more' : ' less') + ' in Scotland')",
+          "as": "readout"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "x": 10,
+        "y": 6,
+        "lineBreak": "\n",
+        "lineHeight": 16,
+        "fontSize": 12,
+        "fontWeight": 500,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "text": {
+          "field": "readout"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

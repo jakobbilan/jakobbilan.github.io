@@ -1,0 +1,259 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Stacked step-area chart of the marginal rate on an extra pound of earnings in the UK, split into income tax, National Insurance, the personal allowance taper, child benefit withdrawal and student loan repayments. The source file stores cumulative rates; the transforms turn them into one layer per component.",
+  "title": {
+    "text": "Marginal rate on the next £1, UK",
+    "subtitle": "By gross annual earnings, stacked by component"
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "https://raw.githubusercontent.com/EconomicsObservatory/ECOvisualisations/main/articles/2025-11-19-why-do-some-people-in-britain-face-marginal-tax-rates-of-over-60-percent/data/fig1_marginal_rates.csv"
+  },
+  "layer": [
+    {
+      "transform": [
+        {
+          "pivot": "type",
+          "value": "rate",
+          "groupby": [
+            "income"
+          ]
+        },
+        {
+          "calculate": "datum.income_tax",
+          "as": "Income tax"
+        },
+        {
+          "calculate": "datum.plus_nics - datum.income_tax",
+          "as": "National Insurance"
+        },
+        {
+          "calculate": "datum.plus_PA_withdrawl - datum.plus_nics",
+          "as": "Personal allowance taper"
+        },
+        {
+          "calculate": "datum.plus_child_benefit_withdrawal - datum.plus_PA_withdrawl",
+          "as": "Child benefit withdrawal"
+        },
+        {
+          "calculate": "datum.plus_student_loans - datum.plus_child_benefit_withdrawal",
+          "as": "Student loan repayments"
+        },
+        {
+          "fold": [
+            "Income tax",
+            "National Insurance",
+            "Personal allowance taper",
+            "Child benefit withdrawal",
+            "Student loan repayments"
+          ],
+          "as": [
+            "component",
+            "marginal_rate"
+          ]
+        },
+        {
+          "calculate": "indexof([\"Income tax\", \"National Insurance\", \"Personal allowance taper\", \"Child benefit withdrawal\", \"Student loan repayments\"], datum.component)",
+          "as": "stack_order"
+        },
+        {
+          "calculate": "datum.plus_student_loans",
+          "as": "total_rate"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "interpolate": "step-after"
+      },
+      "encoding": {
+        "x": {
+          "field": "income",
+          "type": "quantitative",
+          "title": "Gross annual earnings",
+          "scale": {
+            "domain": [
+              0,
+              160000
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              20000,
+              40000,
+              60000,
+              80000,
+              100000,
+              120000,
+              140000,
+              160000
+            ],
+            "labelExpr": "datum.value == 0 ? '£0' : '£' + format(datum.value / 1000, ',.0f') + 'k'",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "marginal_rate",
+          "type": "quantitative",
+          "stack": "zero",
+          "title": "Marginal rate",
+          "scale": {
+            "domain": [
+              0,
+              0.9
+            ]
+          },
+          "axis": {
+            "format": ".0%",
+            "values": [
+              0,
+              0.2,
+              0.4,
+              0.6,
+              0.8
+            ]
+          }
+        },
+        "color": {
+          "field": "component",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Income tax",
+            "National Insurance",
+            "Personal allowance taper",
+            "Child benefit withdrawal",
+            "Student loan repayments"
+          ],
+          "scale": {
+            "domain": [
+              "Income tax",
+              "National Insurance",
+              "Personal allowance taper",
+              "Child benefit withdrawal",
+              "Student loan repayments"
+            ],
+            "range": [
+              "#2F5D8C",
+              "#8FB3D9",
+              "#B42318",
+              "#B7791F",
+              "#9AA3AE"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "columns": 2,
+            "symbolType": "square",
+            "labelLimit": 400
+          }
+        },
+        "order": {
+          "field": "stack_order",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "income",
+            "type": "quantitative",
+            "title": "Earnings (£)",
+            "format": ",.0f"
+          },
+          {
+            "field": "component",
+            "title": "Component"
+          },
+          {
+            "field": "marginal_rate",
+            "type": "quantitative",
+            "title": "This component",
+            "format": ".1%"
+          },
+          {
+            "field": "total_rate",
+            "type": "quantitative",
+            "title": "All components",
+            "format": ".1%"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "income": 70000,
+            "marginal_rate": 0.6826,
+            "label": "68%"
+          },
+          {
+            "income": 112570,
+            "marginal_rate": 0.77,
+            "label": "77%"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "dy": -8,
+        "fontWeight": 600,
+        "fontSize": 12,
+        "color": "#1B2A41"
+      },
+      "encoding": {
+        "x": {
+          "field": "income",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "marginal_rate",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

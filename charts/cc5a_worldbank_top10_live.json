@@ -1,0 +1,165 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Live line chart, loaded from the World Bank Indicators API each time the page opens: income (or consumption) share held by the richest 10% in six countries, from household surveys (World Bank Poverty and Inequality Platform).",
+  "title": {
+    "text": "Richest 10%'s income share (surveys)",
+    "subtitle": "% of income or consumption; live from the World Bank API"
+  },
+  "width": "container",
+  "height": 300,
+  "data": {
+    "url": "https://api.worldbank.org/v2/country/USA;GBR;FRA;DEU;BRA;ZAF/indicator/SI.DST.10TH.10?format=json&per_page=1000&date=1990:2025",
+    "format": {
+      "type": "json",
+      "property": "[1]"
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.value != null"
+    },
+    {
+      "calculate": "toNumber(datum.date)",
+      "as": "year"
+    },
+    {
+      "calculate": "datum.country.value",
+      "as": "country_name"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "domain": [
+          1990,
+          2025
+        ],
+        "nice": false
+      },
+      "axis": {
+        "format": "d",
+        "tickCount": 8,
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "% of income or consumption",
+      "scale": {
+        "domain": [
+          20,
+          55
+        ]
+      }
+    },
+    "color": {
+      "field": "country_name",
+      "type": "nominal",
+      "title": null,
+      "scale": {
+        "domain": [
+          "Brazil",
+          "South Africa",
+          "United States",
+          "France",
+          "Germany",
+          "United Kingdom"
+        ],
+        "range": [
+          "#2A7F62",
+          "#6B4FA0",
+          "#B42318",
+          "#2F5D8C",
+          "#5B6472",
+          "#B7791F"
+        ]
+      },
+      "legend": {
+        "orient": "top",
+        "direction": "horizontal",
+        "columns": 3,
+        "symbolType": "stroke",
+        "labelLimit": 400
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1.8,
+        "point": {
+          "filled": true,
+          "size": 18
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "size": 60,
+        "opacity": 0
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "country_name",
+            "title": "Country"
+          },
+          {
+            "field": "year",
+            "title": "Year"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Top 10% share (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}

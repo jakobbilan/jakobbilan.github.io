@@ -1,0 +1,283 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Interactive line chart of England's strategic authorities. One menu chooses the indicator, another the authority to highlight; the other authorities are grey lines and the dashed line is the median authority in each year.",
+  "title": {
+    "text": {
+      "expr": "indicator == 'life_expectancy_male' ? 'Male life expectancy at birth' : indicator == 'pay_fulltime' ? 'Median full-time pay of residents' : indicator == 'gva_per_head' ? 'Economic output (GVA) per resident' : indicator == 'employment_rate' ? 'Employment rate, ages 16 to 64' : indicator == 'old_age_dependency' ? 'People aged 65+ per 100 aged 16 to 64' : 'Greenhouse gas emissions per resident'"
+    },
+    "subtitle": {
+      "expr": "'Highlighted: chosen authority. Dashed: median authority. Unit: ' + (indicator == 'life_expectancy_male' ? 'years, 3-year average' : indicator == 'pay_fulltime' ? '£ a year' : indicator == 'gva_per_head' ? '£, current prices' : indicator == 'employment_rate' ? '% of residents' : indicator == 'old_age_dependency' ? 'old-age dependency ratio' : 'tonnes CO2 equivalent')"
+    }
+  },
+  "width": "container",
+  "height": 320,
+  "params": [
+    {
+      "name": "indicator",
+      "value": "life_expectancy_male",
+      "bind": {
+        "input": "select",
+        "options": [
+          "life_expectancy_male",
+          "pay_fulltime",
+          "gva_per_head",
+          "employment_rate",
+          "old_age_dependency",
+          "emissions_per_head"
+        ],
+        "labels": [
+          "Male life expectancy at birth",
+          "Median full-time pay of residents",
+          "Economic output (GVA) per resident",
+          "Employment rate, ages 16 to 64",
+          "People aged 65+ per 100 aged 16 to 64",
+          "Greenhouse gas emissions per resident"
+        ],
+        "name": "Indicator "
+      }
+    },
+    {
+      "name": "area",
+      "value": "MSA001",
+      "bind": {
+        "input": "select",
+        "options": [
+          "MSA008",
+          "MSA017",
+          "MSA016",
+          "MSA018",
+          "MSA011",
+          "MSA013",
+          "MSA019",
+          "MSA022",
+          "MSA001",
+          "MSA015",
+          "MSA012",
+          "MSA020",
+          "MSA003",
+          "MSA021",
+          "MSA007",
+          "MSA004",
+          "MSA014",
+          "MSA006",
+          "MSA002",
+          "MSA005",
+          "MSA009",
+          "MSA010"
+        ],
+        "labels": [
+          "Cambridgeshire and Peterborough",
+          "Cheshire and Warrington",
+          "Cumbria",
+          "Devon and Torbay",
+          "East Midlands",
+          "Greater Essex",
+          "Greater Lincolnshire",
+          "Greater London",
+          "Greater Manchester",
+          "Hampshire and the Solent",
+          "Hull and East Yorkshire",
+          "Lancashire",
+          "Liverpool City Region",
+          "Norfolk and Suffolk",
+          "North East",
+          "South Yorkshire",
+          "Sussex and Brighton",
+          "Tees Valley",
+          "West Midlands",
+          "West Yorkshire",
+          "West of England",
+          "York and North Yorkshire"
+        ],
+        "name": "Authority "
+      }
+    }
+  ],
+  "data": {
+    "url": "data/cc9_strategic_authorities.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.indicator == indicator"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "zero": false,
+        "nice": false
+      },
+      "axis": {
+        "format": "d",
+        "tickCount": 8,
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "title": null,
+      "scale": {
+        "zero": false
+      },
+      "axis": {
+        "labelExpr": "format(datum.value, ',')"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1,
+        "color": "#B3BAC4",
+        "opacity": 0.85
+      },
+      "encoding": {
+        "detail": {
+          "field": "geo_id"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "median",
+              "field": "value",
+              "as": "value"
+            }
+          ],
+          "groupby": [
+            "year"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1.6,
+        "strokeDash": [
+          5,
+          3
+        ],
+        "color": "#2F5D8C"
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.geo_id == area"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.6,
+        "color": "#B42318",
+        "point": {
+          "filled": true,
+          "size": 18,
+          "color": "#B42318"
+        }
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "name",
+            "title": "Authority"
+          },
+          {
+            "field": "date",
+            "title": "Year or period"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Value",
+            "format": ",.1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.geo_id == area"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "argmax",
+              "field": "year",
+              "as": "last"
+            }
+          ],
+          "groupby": [
+            "name"
+          ]
+        },
+        {
+          "calculate": "datum.last.year",
+          "as": "year"
+        },
+        {
+          "calculate": "datum.last.value",
+          "as": "value"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dy": -10,
+        "fontWeight": 600,
+        "color": "#B42318"
+      },
+      "encoding": {
+        "text": {
+          "field": "name"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "title": {
+      "anchor": "start",
+      "color": "#1B2A41",
+      "fontSize": 15,
+      "fontWeight": 600,
+      "subtitleColor": "#5B6472",
+      "subtitleFontSize": 11.5,
+      "offset": 12,
+      "subtitlePadding": 4
+    },
+    "axis": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "titleFontWeight": 500,
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "gridColor": "#D5DAE1",
+      "domainColor": "#AEB6C1",
+      "tickColor": "#AEB6C1"
+    },
+    "legend": {
+      "labelColor": "#5B6472",
+      "titleColor": "#5B6472",
+      "labelFontSize": 11,
+      "titleFontSize": 11,
+      "titleFontWeight": 500
+    },
+    "text": {
+      "color": "#1B2A41",
+      "fontSize": 11
+    }
+  }
+}
