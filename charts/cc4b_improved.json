@@ -1,530 +1,406 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Improved version of the FT chart. Left: capital taxes (the three capital categories added up) as a share of all tax revenue in 2006 (hollow) and 2019 (filled) for eight large economies, sorted by the change. Right: the change in percentage points, split into taxes on corporate income, personal capital income and the capital stock.",
+  "description": "Paired stacked bars: capital taxes as a share of all tax revenue in 2006 (upper, lighter bar) and 2019 (lower bar) for eight large economies, split into corporate income, capital stock and personal capital income taxes, with corporate income on the common baseline; countries sorted by the change, which is stated in a column on the right.",
   "data": {
-    "url": "data/cc4_capital_tax_change.csv",
+    "url": "data/cc4_ft_tax_shares.csv",
     "format": {
       "type": "csv",
       "parse": {
-        "capital_share_2006": "number",
-        "capital_share_2019": "number",
-        "change": "number",
-        "change_households_capital_income": "number",
-        "change_company_capital_income": "number",
-        "change_capital_stocks": "number",
-        "capital_tax_gdp_2006": "number",
-        "capital_tax_gdp_2019": "number",
-        "total_tax_gdp_2006": "number",
-        "total_tax_gdp_2019": "number"
+        "year": "number",
+        "share": "number",
+        "gdp_share": "number",
+        "order": "number"
       }
     }
   },
-  "spacing": 36,
-  "resolve": {
-    "scale": {
-      "y": "shared"
+  "width": "container",
+  "height": 400,
+  "transform": [
+    {
+      "filter": "indexof(['capital_income_corporations', 'capital_stocks', 'capital_income_households'], datum.tax) >= 0"
     },
-    "legend": {
-      "fill": "independent",
-      "stroke": "independent",
-      "color": "independent",
-      "shape": "independent"
+    {
+      "calculate": "datum.tax == 'capital_income_corporations' ? 'Corporate income' : datum.tax == 'capital_stocks' ? 'Capital stock (property)' : 'Personal capital income'",
+      "as": "tax_short"
+    },
+    {
+      "calculate": "indexof(['capital_income_corporations', 'capital_stocks', 'capital_income_households'], datum.tax)",
+      "as": "stack_order"
+    },
+    {
+      "calculate": "toString(datum.year)",
+      "as": "year_label"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "share",
+          "as": "total"
+        }
+      ],
+      "groupby": [
+        "country",
+        "year"
+      ]
+    },
+    {
+      "calculate": "datum.year == 2019 ? datum.share : -datum.share",
+      "as": "signed"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "signed",
+          "as": "change"
+        }
+      ],
+      "groupby": [
+        "country"
+      ]
+    },
+    {
+      "calculate": "datum.year == 2019 ? round(datum.total * 10) / 10 : null",
+      "as": "t19"
+    },
+    {
+      "calculate": "datum.year == 2006 ? round(datum.total * 10) / 10 : null",
+      "as": "t06"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "t19",
+          "as": "T19"
+        },
+        {
+          "op": "max",
+          "field": "t06",
+          "as": "T06"
+        }
+      ],
+      "groupby": [
+        "country"
+      ]
+    },
+    {
+      "calculate": "datum.T19 - datum.T06",
+      "as": "change_shown"
+    },
+    {
+      "calculate": "{'title': datum.tax_short + ', ' + datum.country + ' ' + datum.year, 'Share of all tax revenue': format(datum.share, '.1f') + '%', 'All capital taxes': format(datum.total, '.1f') + '%'}",
+      "as": "tt"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "title": null,
+      "sort": {
+        "field": "change",
+        "op": "min",
+        "order": "ascending"
+      },
+      "scale": {
+        "paddingInner": 0.34,
+        "paddingOuter": 0.12
+      },
+      "axis": {
+        "labelFontSize": 13,
+        "labelColor": "#16191d",
+        "labelPadding": 10,
+        "domain": false,
+        "ticks": false
+      }
+    },
+    "yOffset": {
+      "field": "year_label",
+      "type": "nominal",
+      "sort": [
+        "2006",
+        "2019"
+      ],
+      "scale": {
+        "paddingInner": 0.14
+      }
     }
   },
-  "hconcat": [
+  "layer": [
     {
-      "title": {
-        "text": "Capital taxes, % of all tax revenue",
-        "anchor": "start",
-        "fontSize": 13,
-        "fontWeight": 600,
-        "color": "#16191d",
-        "offset": 12
+      "mark": {
+        "type": "bar"
       },
-      "width": 520,
-      "height": 300,
-      "transform": [
-        {
-          "calculate": "datum.capital_share_2006 / 100",
-          "as": "s2006"
-        },
-        {
-          "calculate": "datum.capital_share_2019 / 100",
-          "as": "s2019"
-        },
-        {
-          "calculate": "datum.capital_tax_gdp_2006 / 100",
-          "as": "g2006"
-        },
-        {
-          "calculate": "datum.capital_tax_gdp_2019 / 100",
-          "as": "g2019"
-        },
-        {
-          "calculate": "datum.total_tax_gdp_2006 / 100",
-          "as": "t2006"
-        },
-        {
-          "calculate": "datum.total_tax_gdp_2019 / 100",
-          "as": "t2019"
-        }
-      ],
       "encoding": {
-        "y": {
-          "field": "country",
-          "type": "nominal",
+        "x": {
+          "field": "share",
+          "type": "quantitative",
+          "stack": "zero",
           "title": null,
-          "sort": {
-            "field": "change",
-            "op": "min",
-            "order": "ascending"
+          "scale": {
+            "domain": [
+              0,
+              37
+            ],
+            "nice": false
           },
           "axis": {
-            "labelFontSize": 13,
-            "labelColor": "#16191d",
-            "labelPadding": 10
-          },
+            "values": [
+              0,
+              5,
+              10,
+              15,
+              20,
+              25,
+              30,
+              35
+            ],
+            "labelExpr": "datum.value + '%'",
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "tax_short",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Corporate income",
+            "Capital stock (property)",
+            "Personal capital income"
+          ],
           "scale": {
-            "paddingInner": 0.35,
-            "paddingOuter": 0.25
-          }
-        }
-      },
-      "layer": [
-        {
-          "mark": {
-            "type": "rule",
-            "strokeWidth": 3,
-            "color": "#c9ced4",
-            "strokeCap": "round"
+            "domain": [
+              "Corporate income",
+              "Capital stock (property)",
+              "Personal capital income"
+            ],
+            "range": [
+              "#c4532d",
+              "#7f8fa6",
+              "#c3c9d1"
+            ]
           },
-          "encoding": {
-            "x": {
-              "field": "capital_share_2006",
-              "type": "quantitative",
-              "title": null,
-              "scale": {
-                "domain": [
-                  0,
-                  35
-                ],
-                "nice": false
-              },
-              "axis": {
-                "values": [
-                  0,
-                  5,
-                  10,
-                  15,
-                  20,
-                  25,
-                  30,
-                  35
-                ],
-                "labelExpr": "datum.value + '%'",
-                "grid": true
-              }
-            },
-            "x2": {
-              "field": "capital_share_2019"
-            }
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "symbolType": "square",
+            "symbolSize": 120,
+            "labelFontSize": 12.5
           }
         },
-        {
-          "transform": [
-            {
-              "fold": [
-                "capital_share_2006",
-                "capital_share_2019"
-              ],
-              "as": [
-                "key",
-                "share"
-              ]
-            },
-            {
-              "calculate": "datum.key == 'capital_share_2006' ? '2006' : '2019'",
-              "as": "year"
-            }
-          ],
-          "mark": {
-            "type": "point",
-            "filled": true,
-            "size": 130,
-            "strokeWidth": 1.6,
-            "opacity": 1
+        "opacity": {
+          "condition": {
+            "test": "datum.year == 2006",
+            "value": 0.55
           },
-          "encoding": {
-            "x": {
-              "field": "share",
-              "type": "quantitative"
-            },
-            "fill": {
-              "field": "year",
-              "type": "nominal",
-              "title": null,
-              "scale": {
-                "domain": [
-                  "2006",
-                  "2019"
-                ],
-                "range": [
-                  "#ffffff",
-                  "#1f4e8c"
-                ]
-              },
-              "legend": {
-                "orient": "bottom",
-                "direction": "horizontal",
-                "symbolType": "circle",
-                "symbolStrokeColor": "#5b636d",
-                "symbolStrokeWidth": 1.4,
-                "symbolSize": 110,
-                "labelFontSize": 12,
-                "offset": 12
-              }
-            },
-            "stroke": {
-              "field": "year",
-              "type": "nominal",
-              "scale": {
-                "domain": [
-                  "2006",
-                  "2019"
-                ],
-                "range": [
-                  "#5b636d",
-                  "#1f4e8c"
-                ]
-              },
-              "title": null
-            }
-          }
+          "value": 1
         },
-        {
-          "params": [
-            {
-              "name": "hp",
-              "select": {
-                "type": "point",
-                "nearest": true,
-                "on": "pointerover",
-                "clear": "pointerout"
-              }
-            }
-          ],
-          "mark": {
-            "type": "point",
-            "size": 140,
-            "opacity": 0
-          },
-          "encoding": {
-            "x": {
-              "field": "capital_share_2019",
-              "type": "quantitative"
-            },
-            "tooltip": {
-              "field": "tt",
-              "type": "nominal"
-            }
-          },
-          "transform": [
-            {
-              "calculate": "{'title': datum.country, 'Capital taxes, 2006': format(datum['capital_share_2006'], '.1f') + '%', 'Capital taxes, 2019': format(datum['capital_share_2019'], '.1f') + '%'}",
-              "as": "tt"
-            }
-          ]
+        "order": {
+          "field": "stack_order",
+          "type": "quantitative"
+        },
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
         }
-      ]
+      }
     },
     {
-      "title": {
-        "text": "Change 2006–19 by tax, percentage points",
-        "anchor": "start",
-        "fontSize": 13,
-        "fontWeight": 600,
+      "mark": {
+        "type": "rule",
         "color": "#16191d",
-        "offset": 12
+        "strokeWidth": 1.2
       },
-      "width": 340,
-      "height": 300,
+      "encoding": {
+        "x": {
+          "datum": 0
+        },
+        "yOffset": null
+      }
+    },
+    {
       "transform": [
         {
-          "calculate": "min(datum.change_company_capital_income, 0) + min(datum.change_households_capital_income, 0) + min(datum.change_capital_stocks, 0)",
-          "as": "neg"
-        },
-        {
-          "calculate": "max(datum.change_company_capital_income, 0) + max(datum.change_households_capital_income, 0) + max(datum.change_capital_stocks, 0)",
-          "as": "pos"
+          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2006"
         }
       ],
-      "encoding": {
-        "y": {
-          "field": "country",
-          "type": "nominal",
-          "title": null,
-          "sort": {
-            "field": "change",
-            "op": "min",
-            "order": "ascending"
-          },
-          "axis": {
-            "labels": false
-          },
-          "scale": {
-            "paddingInner": 0.35,
-            "paddingOuter": 0.25
-          }
-        }
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 11.5,
+        "color": "#5b636d"
       },
-      "layer": [
-        {
-          "transform": [
-            {
-              "fold": [
-                "change_company_capital_income",
-                "change_households_capital_income",
-                "change_capital_stocks"
-              ],
-              "as": [
-                "key",
-                "pp"
-              ]
-            },
-            {
-              "calculate": "datum.key == 'change_company_capital_income' ? 'Corporate income' : datum.key == 'change_households_capital_income' ? 'Personal capital income' : 'Capital stock (property)'",
-              "as": "tax"
-            },
-            {
-              "calculate": "indexof(['change_company_capital_income', 'change_households_capital_income', 'change_capital_stocks'], datum.key)",
-              "as": "tax_order"
-            },
-            {
-              "calculate": "{'title': datum.country + ', ' + lower(datum.tax), 'Change, 2006–19': format(datum.pp, '+.1f') + ' points'}",
-              "as": "tt"
-            }
-          ],
-          "mark": {
-            "type": "bar",
-            "height": {
-              "band": 1
-            }
-          },
-          "encoding": {
-            "x": {
-              "field": "pp",
-              "type": "quantitative",
-              "stack": "zero",
-              "title": null,
-              "scale": {
-                "domain": [
-                  -9.5,
-                  2.5
-                ],
-                "nice": false
-              },
-              "axis": {
-                "values": [
-                  -8,
-                  -6,
-                  -4,
-                  -2,
-                  0,
-                  2
-                ],
-                "labelExpr": "(datum.value > 0 ? '+' : '') + datum.value",
-                "grid": true
-              }
-            },
-            "color": {
-              "field": "tax",
-              "type": "nominal",
-              "title": null,
-              "sort": [
-                "Corporate income",
-                "Personal capital income",
-                "Capital stock (property)"
-              ],
-              "scale": {
-                "domain": [
-                  "Corporate income",
-                  "Personal capital income",
-                  "Capital stock (property)"
-                ],
-                "range": [
-                  "#c4532d",
-                  "#c3c9d1",
-                  "#7f8fa6"
-                ]
-              },
-              "legend": {
-                "orient": "bottom",
-                "direction": "horizontal",
-                "columns": 3,
-                "symbolType": "square",
-                "symbolSize": 110,
-                "labelFontSize": 12,
-                "offset": 12,
-                "columnPadding": 14
-              }
-            },
-            "order": {
-              "field": "tax_order",
-              "type": "quantitative"
-            },
-            "tooltip": {
-              "field": "tt",
-              "type": "nominal"
-            }
-          }
+      "encoding": {
+        "x": {
+          "field": "total",
+          "type": "quantitative"
         },
-        {
-          "mark": {
-            "type": "rule",
-            "color": "#ffffff",
-            "strokeWidth": 5
-          },
-          "encoding": {
-            "x": {
-              "datum": 0
-            }
-          }
-        },
-        {
-          "mark": {
-            "type": "rule",
-            "color": "#16191d",
-            "strokeWidth": 1.6
-          },
-          "encoding": {
-            "x": {
-              "datum": 0
-            }
-          }
-        },
-        {
-          "transform": [
-            {
-              "calculate": "{'title': datum.country, 'Net change, 2006–19': format(datum.change, '+.1f') + ' points'}",
-              "as": "tt"
-            }
-          ],
-          "mark": {
-            "type": "point",
-            "filled": true,
-            "size": 72,
-            "color": "#16191d",
-            "stroke": "#ffffff",
-            "strokeWidth": 1.5,
-            "opacity": 1
-          },
-          "encoding": {
-            "x": {
-              "field": "change",
-              "type": "quantitative"
-            },
-            "shape": {
-              "datum": "Net change",
-              "type": "nominal",
-              "legend": {
-                "orient": "bottom",
-                "title": null,
-                "symbolFillColor": "#16191d",
-                "symbolStrokeColor": "#ffffff",
-                "symbolSize": 72,
-                "labelFontSize": 12,
-                "offset": 12
-              }
-            },
-            "tooltip": {
-              "field": "tt",
-              "type": "nominal"
-            }
-          }
-        },
-        {
-          "mark": {
-            "type": "text",
-            "align": "left",
-            "fontSize": 12.5,
-            "fontWeight": 600,
-            "color": "#16191d"
-          },
-          "encoding": {
-            "x": {
-              "datum": -9.3,
-              "type": "quantitative"
-            },
-            "text": {
-              "field": "change",
-              "type": "quantitative",
-              "format": "+.1f"
-            }
-          }
-        },
-        {
-          "transform": [
-            {
-              "window": [
-                {
-                  "op": "rank",
-                  "as": "rank"
-                }
-              ],
-              "sort": [
-                {
-                  "field": "change",
-                  "order": "ascending"
-                }
-              ]
-            },
-            {
-              "filter": "datum.rank == 1"
-            }
-          ],
-          "mark": {
-            "type": "text",
-            "align": "left",
-            "dy": -17,
-            "fontSize": 11,
-            "color": "#5b636d"
-          },
-          "encoding": {
-            "x": {
-              "datum": -9.3,
-              "type": "quantitative"
-            },
-            "text": {
-              "value": "Net"
-            }
-          }
+        "text": {
+          "field": "total",
+          "type": "quantitative",
+          "format": ".1f"
         }
-      ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2019"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "x": {
+          "field": "total",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "total",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.tax == 'capital_income_corporations'"
+        },
+        {
+          "window": [
+            {
+              "op": "dense_rank",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "change",
+              "order": "ascending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.rank == 1"
+        },
+        {
+          "calculate": "format(datum.total, '.1f')",
+          "as": "total_text"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 36,
+        "fontSize": 11,
+        "color": "#5b636d"
+      },
+      "encoding": {
+        "x": {
+          "field": "total",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "year_label"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2019"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "fontSize": 12.5,
+        "fontWeight": 600,
+        "color": "#16191d"
+      },
+      "encoding": {
+        "x": {
+          "datum": 37,
+          "type": "quantitative"
+        },
+        "yOffset": null,
+        "text": {
+          "field": "change_shown",
+          "type": "quantitative",
+          "format": "+.1f"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2019"
+        },
+        {
+          "window": [
+            {
+              "op": "rank",
+              "as": "rank"
+            }
+          ],
+          "sort": [
+            {
+              "field": "change",
+              "order": "ascending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.rank == 1"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dy": -24,
+        "fontSize": 11,
+        "color": "#5b636d"
+      },
+      "encoding": {
+        "x": {
+          "datum": 37,
+          "type": "quantitative"
+        },
+        "yOffset": null,
+        "text": {
+          "value": "Change, pts"
+        }
+      }
     }
   ],
   "usermeta": {
-    "concatLayout": {
-      "shares": [
-        0.5,
-        0.5
-      ],
-      "labelRoom": 106,
-      "gap": 36,
-      "stackBelow": 700,
-      "stackSet": [
-        [
-          "vconcat.1.encoding.y.axis",
-          {
-            "labelFontSize": 13,
-            "labelColor": "#16191d",
-            "labelPadding": 10
-          }
-        ]
-      ]
-    },
-    "compactBelow": 700,
     "compactLegend": {
-      "columns": 1
-    }
+      "columns": 2
+    },
+    "compactDropLayers": [
+      4
+    ],
+    "compactSet": [
+      [
+        "encoding.y.axis.labelFontSize",
+        11.5
+      ]
+    ]
+  },
+  "padding": {
+    "left": 4,
+    "right": 8,
+    "top": 4,
+    "bottom": 4
   }
 }
