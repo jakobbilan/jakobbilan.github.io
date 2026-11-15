@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Paired stacked bars: capital taxes as a share of all tax revenue in 2006 (upper, lighter bar) and 2019 (lower bar) for eight large economies, split into corporate income, capital stock and personal capital income taxes, with corporate income on the common baseline; countries sorted by the change, which is stated in a column on the right.",
+  "description": "Arrow chart: capital taxes as a share of all tax revenue in eight countries, one arrow per country from 2006 to 2019, in four columns on one shared scale: all capital taxes, then corporate income, capital stock and personal capital income. Countries are sorted by the change in all capital taxes; the changes in all capital taxes and in corporate income are written beside the arrowheads.",
   "data": {
     "url": "data/cc4_ft_tax_shares.csv",
     "format": {
@@ -14,46 +14,95 @@
     }
   },
   "width": "container",
-  "height": 400,
+  "height": 330,
+  "padding": {
+    "left": 4,
+    "right": 10,
+    "top": 6,
+    "bottom": 4
+  },
   "transform": [
     {
       "filter": "indexof(['capital_income_corporations', 'capital_stocks', 'capital_income_households'], datum.tax) >= 0"
     },
     {
-      "calculate": "datum.tax == 'capital_income_corporations' ? 'Corporate income' : datum.tax == 'capital_stocks' ? 'Capital stock (property)' : 'Personal capital income'",
-      "as": "tax_short"
-    },
-    {
-      "calculate": "indexof(['capital_income_corporations', 'capital_stocks', 'capital_income_households'], datum.tax)",
-      "as": "stack_order"
-    },
-    {
-      "calculate": "toString(datum.year)",
-      "as": "year_label"
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "share",
-          "as": "total"
-        }
-      ],
+      "pivot": "tax",
+      "value": "share",
       "groupby": [
         "country",
         "year"
       ]
     },
     {
-      "calculate": "datum.year == 2019 ? datum.share : -datum.share",
-      "as": "signed"
+      "calculate": "datum.capital_income_corporations + datum.capital_stocks + datum.capital_income_households",
+      "as": "all"
+    },
+    {
+      "fold": [
+        "all",
+        "capital_income_corporations",
+        "capital_stocks",
+        "capital_income_households"
+      ],
+      "as": [
+        "component",
+        "value"
+      ]
+    },
+    {
+      "calculate": "'y' + datum.year",
+      "as": "yr"
+    },
+    {
+      "pivot": "yr",
+      "value": "value",
+      "groupby": [
+        "country",
+        "component"
+      ]
+    },
+    {
+      "calculate": "round(datum.y2019 * 10) / 10 - round(datum.y2006 * 10) / 10",
+      "as": "change"
+    },
+    {
+      "calculate": "datum.component == 'all' ? -6.0 : datum.component == 'capital_income_corporations' ? 27.6 : datum.component == 'capital_stocks' ? 46.2 : 64.8",
+      "as": "offset"
+    },
+    {
+      "calculate": "datum.component == 'all' ? 0.0 : datum.component == 'capital_income_corporations' ? 29.6 : datum.component == 'capital_stocks' ? 48.2 : 64.8",
+      "as": "col_start"
+    },
+    {
+      "calculate": "datum.component == 'all' ? 27.0 : datum.component == 'capital_income_corporations' ? 45.6 : datum.component == 'capital_stocks' ? 62.2 : 71.3",
+      "as": "col_end"
+    },
+    {
+      "calculate": "datum.component == 'all' ? 'All capital taxes' : datum.component == 'capital_income_corporations' ? 'Corporate income' : datum.component == 'capital_stocks' ? 'Capital stock (property)' : 'Personal capital income'",
+      "as": "label"
+    },
+    {
+      "calculate": "datum.y2006 + datum.offset",
+      "as": "x0"
+    },
+    {
+      "calculate": "datum.y2019 + datum.offset",
+      "as": "x1"
+    },
+    {
+      "calculate": "datum.change < -0.05 ? 'M0,0L1.15,-0.62L1.15,0.62Z' : datum.change > 0.05 ? 'M0,0L-1.15,-0.62L-1.15,0.62Z' : 'circle'",
+      "as": "head"
+    },
+    {
+      "calculate": "datum.component == 'all' ? datum.change : null",
+      "as": "change_all"
     },
     {
       "joinaggregate": [
         {
-          "op": "sum",
-          "field": "signed",
-          "as": "change"
+          "op": "max",
+          "field": "change_all",
+          "as": "sort_key"
         }
       ],
       "groupby": [
@@ -61,36 +110,7 @@
       ]
     },
     {
-      "calculate": "datum.year == 2019 ? round(datum.total * 10) / 10 : null",
-      "as": "t19"
-    },
-    {
-      "calculate": "datum.year == 2006 ? round(datum.total * 10) / 10 : null",
-      "as": "t06"
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "max",
-          "field": "t19",
-          "as": "T19"
-        },
-        {
-          "op": "max",
-          "field": "t06",
-          "as": "T06"
-        }
-      ],
-      "groupby": [
-        "country"
-      ]
-    },
-    {
-      "calculate": "datum.T19 - datum.T06",
-      "as": "change_shown"
-    },
-    {
-      "calculate": "{'title': datum.tax_short + ', ' + datum.country + ' ' + datum.year, 'Share of all tax revenue': format(datum.share, '.1f') + '%', 'All capital taxes': format(datum.total, '.1f') + '%'}",
+      "calculate": "{'title': datum.country + ': ' + lower(datum.label), '2006': format(datum.y2006, '.1f') + '%', '2019': format(datum.y2019, '.1f') + '%', 'Change': format(datum.change, '+.1f') + ' points'}",
       "as": "tt"
     }
   ],
@@ -100,106 +120,213 @@
       "type": "nominal",
       "title": null,
       "sort": {
-        "field": "change",
+        "field": "sort_key",
         "op": "min",
         "order": "ascending"
       },
       "scale": {
-        "paddingInner": 0.34,
-        "paddingOuter": 0.12
+        "paddingInner": 0,
+        "paddingOuter": 0
       },
       "axis": {
         "labelFontSize": 13,
         "labelColor": "#16191d",
-        "labelPadding": 10,
+        "labelPadding": 12,
         "domain": false,
-        "ticks": false
-      }
-    },
-    "yOffset": {
-      "field": "year_label",
-      "type": "nominal",
-      "sort": [
-        "2006",
-        "2019"
-      ],
-      "scale": {
-        "paddingInner": 0.14
+        "ticks": false,
+        "grid": false
       }
     }
   },
   "layer": [
     {
+      "data": {
+        "values": [
+          {
+            "x": 0.0,
+            "x2": 27.0
+          },
+          {
+            "x": 29.6,
+            "x2": 45.6
+          },
+          {
+            "x": 48.2,
+            "x2": 62.2
+          },
+          {
+            "x": 64.8,
+            "x2": 71.3
+          }
+        ]
+      },
       "mark": {
-        "type": "bar"
+        "type": "rect",
+        "color": "#f6f7f9"
       },
       "encoding": {
         "x": {
-          "field": "share",
+          "field": "x",
           "type": "quantitative",
-          "stack": "zero",
           "title": null,
           "scale": {
             "domain": [
               0,
-              37
+              71.3
             ],
-            "nice": false
+            "nice": false,
+            "zero": false
           },
           "axis": {
             "values": [
-              0,
-              5,
-              10,
-              15,
-              20,
-              25,
-              30,
-              35
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
             ],
-            "labelExpr": "datum.value + '%'",
-            "grid": true
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
           }
         },
-        "color": {
-          "field": "tax_short",
-          "type": "nominal",
+        "x2": {
+          "field": "x2"
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": "height"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#d9dde2",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "col_start",
+          "type": "quantitative",
           "title": null,
-          "sort": [
-            "Corporate income",
-            "Capital stock (property)",
-            "Personal capital income"
-          ],
           "scale": {
             "domain": [
-              "Corporate income",
-              "Capital stock (property)",
-              "Personal capital income"
+              0,
+              71.3
             ],
-            "range": [
-              "#c4532d",
-              "#7f8fa6",
-              "#c3c9d1"
-            ]
+            "nice": false,
+            "zero": false
           },
-          "legend": {
-            "orient": "top",
-            "direction": "horizontal",
-            "symbolType": "square",
-            "symbolSize": 120,
-            "labelFontSize": 12.5
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
           }
         },
-        "opacity": {
-          "condition": {
-            "test": "datum.year == 2006",
-            "value": 0.55
+        "x2": {
+          "field": "col_end"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 3,
+        "strokeCap": "butt"
+      },
+      "encoding": {
+        "x": {
+          "field": "x0",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
           },
-          "value": 1
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
+          }
         },
-        "order": {
-          "field": "stack_order",
-          "type": "quantitative"
+        "x2": {
+          "field": "x1"
+        },
+        "color": {
+          "field": "component",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "all",
+              "capital_income_corporations",
+              "capital_stocks",
+              "capital_income_households"
+            ],
+            "range": [
+              "#1f4e8c",
+              "#c4532d",
+              "#7f8fa6",
+              "#7f8fa6"
+            ]
+          }
         },
         "tooltip": {
           "field": "tt",
@@ -209,142 +336,221 @@
     },
     {
       "mark": {
-        "type": "rule",
-        "color": "#16191d",
-        "strokeWidth": 1.2
+        "type": "point",
+        "filled": true,
+        "opacity": 1,
+        "strokeWidth": 0
       },
       "encoding": {
         "x": {
-          "datum": 0
-        },
-        "yOffset": null
-      }
-    },
-    {
-      "transform": [
-        {
-          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2006"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 5,
-        "fontSize": 11.5,
-        "color": "#5b636d"
-      },
-      "encoding": {
-        "x": {
-          "field": "total",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "total",
+          "field": "x1",
           "type": "quantitative",
-          "format": ".1f"
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
+          }
+        },
+        "shape": {
+          "field": "head",
+          "type": "nominal",
+          "scale": null,
+          "legend": null
+        },
+        "size": {
+          "condition": {
+            "test": "datum.head == 'circle'",
+            "value": 28
+          },
+          "value": 150
+        },
+        "color": {
+          "field": "component",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "all",
+              "capital_income_corporations",
+              "capital_stocks",
+              "capital_income_households"
+            ],
+            "range": [
+              "#1f4e8c",
+              "#c4532d",
+              "#7f8fa6",
+              "#7f8fa6"
+            ]
+          }
+        },
+        "tooltip": {
+          "field": "tt",
+          "type": "nominal"
         }
       }
     },
     {
       "transform": [
         {
-          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2019"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 5,
-        "fontSize": 12,
-        "fontWeight": 600,
-        "color": "#16191d"
-      },
-      "encoding": {
-        "x": {
-          "field": "total",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "total",
-          "type": "quantitative",
-          "format": ".1f"
-        }
-      }
-    },
-    {
-      "transform": [
-        {
-          "filter": "datum.tax == 'capital_income_corporations'"
-        },
-        {
-          "window": [
-            {
-              "op": "dense_rank",
-              "as": "rank"
-            }
-          ],
-          "sort": [
-            {
-              "field": "change",
-              "order": "ascending"
-            }
-          ]
-        },
-        {
-          "filter": "datum.rank == 1"
-        },
-        {
-          "calculate": "format(datum.total, '.1f')",
-          "as": "total_text"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 36,
-        "fontSize": 11,
-        "color": "#5b636d"
-      },
-      "encoding": {
-        "x": {
-          "field": "total",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "year_label"
-        }
-      }
-    },
-    {
-      "transform": [
-        {
-          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2019"
+          "filter": "(datum.component == 'all' || datum.component == 'capital_income_corporations') && datum.change < 0"
         }
       ],
       "mark": {
         "type": "text",
         "align": "right",
-        "fontSize": 12.5,
-        "fontWeight": 600,
-        "color": "#16191d"
+        "dx": -16,
+        "fontSize": 12,
+        "fontWeight": 600
       },
       "encoding": {
         "x": {
-          "datum": 37,
-          "type": "quantitative"
+          "field": "x1",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
+          }
         },
-        "yOffset": null,
         "text": {
-          "field": "change_shown",
+          "field": "change",
           "type": "quantitative",
           "format": "+.1f"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.component == 'all'",
+            "value": "#16191d"
+          },
+          "value": "#c4532d"
         }
       }
     },
     {
       "transform": [
         {
-          "filter": "datum.tax == 'capital_income_corporations' && datum.year == 2019"
+          "filter": "(datum.component == 'all' || datum.component == 'capital_income_corporations') && datum.change >= 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 16,
+        "fontSize": 12,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "field": "x1",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
+          }
+        },
+        "text": {
+          "field": "change",
+          "type": "quantitative",
+          "format": "+.1f"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.component == 'all'",
+            "value": "#16191d"
+          },
+          "value": "#c4532d"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.component == 'all'"
         },
         {
           "window": [
@@ -355,52 +561,316 @@
           ],
           "sort": [
             {
-              "field": "change",
+              "field": "sort_key",
               "order": "ascending"
             }
           ]
         },
         {
           "filter": "datum.rank == 1"
+        },
+        {
+          "fold": [
+            "x0",
+            "x1"
+          ],
+          "as": [
+            "end",
+            "xpos"
+          ]
+        },
+        {
+          "calculate": "datum.end == 'x0' ? '2006' : '2019'",
+          "as": "year_text"
         }
       ],
       "mark": {
         "type": "text",
-        "align": "right",
-        "dy": -24,
+        "dy": -13,
         "fontSize": 11,
         "color": "#5b636d"
       },
       "encoding": {
         "x": {
-          "datum": 37,
-          "type": "quantitative"
+          "field": "xpos",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
+          }
         },
-        "yOffset": null,
         "text": {
-          "value": "Change, pts"
+          "field": "year_text"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 0.0,
+            "head": "All capital\ntaxes"
+          },
+          {
+            "x": 29.6,
+            "head": "Corporate\nincome"
+          },
+          {
+            "x": 48.2,
+            "head": "Capital stock\n(property)"
+          },
+          {
+            "x": 64.8,
+            "head": "Personal capital\nincome"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "bottom",
+        "lineBreak": "\n",
+        "dx": 2,
+        "fontSize": 12.5,
+        "fontWeight": 600,
+        "color": "#16191d",
+        "lineHeight": 15
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": {
+            "values": [
+              4.0,
+              14.0,
+              24.0,
+              32.6,
+              37.6,
+              42.6,
+              51.2,
+              56.2,
+              61.2,
+              64.8,
+              67.8,
+              70.8
+            ],
+            "labelExpr": "({\"4.00\": \"10%\", \"14.00\": \"20%\", \"24.00\": \"30%\", \"32.60\": \"5%\", \"37.60\": \"10%\", \"42.60\": \"15%\", \"51.20\": \"5%\", \"56.20\": \"10%\", \"61.20\": \"15%\", \"64.80\": \"0%\", \"67.80\": \"3%\", \"70.80\": \"6%\"})[format(datum.value, '.2f')]",
+            "grid": true,
+            "gridColor": "#e3e6ea",
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 6,
+            "labelFontSize": 11,
+            "labelColor": "#5b636d"
+          }
+        },
+        "y": {
+          "value": -10
+        },
+        "text": {
+          "field": "head"
         }
       }
     }
   ],
   "usermeta": {
-    "compactLegend": {
-      "columns": 2
-    },
     "compactDropLayers": [
-      4
+      5
     ],
     "compactSet": [
       [
+        "layer.0.encoding.x.scale.domain",
+        [
+          -11,
+          71.3
+        ]
+      ],
+      [
+        "layer.1.encoding.x.scale.domain",
+        [
+          -11,
+          71.3
+        ]
+      ],
+      [
+        "layer.2.encoding.x.scale.domain",
+        [
+          -11,
+          71.3
+        ]
+      ],
+      [
+        "layer.3.encoding.x.scale.domain",
+        [
+          -11,
+          71.3
+        ]
+      ],
+      [
+        "layer.7.encoding.x.scale.domain",
+        [
+          -11,
+          71.3
+        ]
+      ],
+      [
+        "layer.4.transform",
+        [
+          {
+            "filter": "datum.component == 'all'"
+          }
+        ]
+      ],
+      [
+        "layer.4.encoding.x",
+        {
+          "datum": -1,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -11,
+              71.3
+            ],
+            "nice": false,
+            "zero": false
+          }
+        }
+      ],
+      [
+        "layer.4.mark.align",
+        "right"
+      ],
+      [
+        "layer.4.mark.dx",
+        0
+      ],
+      [
+        "layer.4.encoding.color",
+        {
+          "value": "#1f4e8c"
+        }
+      ],
+      [
+        "layer.6",
+        {
+          "data": {
+            "values": [
+              {
+                "x": -1,
+                "t": "Change"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "bottom",
+            "fontSize": 11,
+            "fontWeight": 600,
+            "color": "#1f4e8c"
+          },
+          "encoding": {
+            "x": {
+              "field": "x",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  -11,
+                  71.3
+                ],
+                "nice": false,
+                "zero": false
+              }
+            },
+            "y": {
+              "value": -10
+            },
+            "text": {
+              "field": "t"
+            }
+          }
+        }
+      ],
+      [
+        "layer.7.data.values",
+        [
+          {
+            "x": 0.0,
+            "head": "All"
+          },
+          {
+            "x": 29.6,
+            "head": "Corporate"
+          },
+          {
+            "x": 48.2,
+            "head": "Stock"
+          },
+          {
+            "x": 64.8,
+            "head": "Personal"
+          }
+        ]
+      ],
+      [
+        "layer.7.mark.fontSize",
+        11
+      ],
+      [
+        "layer.4.mark.fontSize",
+        10.5
+      ],
+      [
+        "layer.3.encoding.size.value",
+        90
+      ],
+      [
         "encoding.y.axis.labelFontSize",
         11.5
+      ],
+      [
+        "encoding.y.axis.labelPadding",
+        8
       ]
     ]
-  },
-  "padding": {
-    "left": 4,
-    "right": 8,
-    "top": 4,
-    "bottom": 4
   }
 }
