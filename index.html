@@ -36,6 +36,7 @@
           "givenName": "Jakob",
           "familyName": "Bilan",
           "url": "https://jakobbilan.github.io/",
+          "image": "https://jakobbilan.github.io/Jakob_Bilan_LSE.jpg",
           "description": "Jakob Kilian Bilan studies in the LSE–Sciences Po Double Master’s in Public Policy (MPP, Economics) and Public Administration (MPA, Economic Policy). He works as a research assistant at the LSE Growth Lab and Sciences Po’s European Chair for Sustainable Development and Climate Transition.",
           "jobTitle": "Research Assistant",
           "worksFor": [
@@ -115,6 +116,49 @@
             font-weight: inherit;
             line-height: inherit;
         }
+
+        /* Portrait, right-hand side. Phones: floats beside the opening lines, text wraps around it */
+        main.home {
+            display: flow-root;
+        }
+
+        .portrait {
+            float: right;
+            width: 36%;
+            max-width: 9.5rem;
+            margin: 1.55rem 0 0.75rem 1.25rem;
+        }
+
+        .portrait img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+
+        /* Tablets and computers: text in the left column, portrait in its own column on the right */
+        @media (min-width: 40rem) {
+            main.home {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 12rem;
+                column-gap: 2.75rem;
+                align-items: start;
+            }
+
+            main.home > .intro {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            main.home > .portrait {
+                grid-column: 2;
+                grid-row: 1;
+                float: none;
+                width: auto;
+                max-width: none;
+                margin: 1.6rem 0 0;
+            }
+        }
     </style>
 </head>
 
@@ -132,10 +176,15 @@
     </header>
 
     <main class="home">
-        <p class="lede">Welcome to my page! I'm glad you're here.</p>
-        <p>I'm a master’s student in the LSE-Sciences Po double degree in Public Administration (MPA, Economic Policy) and Public Policy (MPP, Economics).</p>
-        <p>I currently work as a research assistant at the LSE Growth Lab and at Sciences Po’s European Chair for Sustainable Development and Climate Transition. My research spans economic and fiscal policy, climate change, development, trade and more.</p>
-        <p>My latest data science project <a href="project.html">England’s council tax is stuck in 1991</a> (work in progress) presents an interactive comparison of what every small area in England pays with what its homes are worth today. Feel free to explore!</p>
+        <figure class="portrait">
+            <img src="Jakob_Bilan_LSE.jpg" alt="Portrait of Jakob Kilian Bilan" width="668" height="1001" fetchpriority="high" decoding="async">
+        </figure>
+        <div class="intro">
+            <p class="lede">Welcome to my page! I'm glad you're here.</p>
+            <p>I'm a master’s student in the LSE-Sciences Po double degree in Public Administration (MPA, Economic Policy) and Public Policy (MPP, Economics).</p>
+            <p>I currently work as a research assistant at the LSE Growth Lab and at Sciences Po’s European Chair for Sustainable Development and Climate Transition. My research spans economic and fiscal policy, climate change, development, trade and more.</p>
+            <p>My latest data science project <a href="project.html">England’s council tax is stuck in 1991</a> (work in progress) presents an interactive comparison of what every small area in England pays with what its homes are worth today. Feel free to explore!</p>
+        </div>
     </main>
 </body>
 </html>
