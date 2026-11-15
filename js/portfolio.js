@@ -128,14 +128,17 @@
         return spec;
     }
 
-    // Two-panel charts (CC4, improved): the panels share the width available; on narrow screens they stack
+    // Multi-panel charts (CC4, improved): the panels share the width available; on narrow screens they stack
     function layoutConcat(spec, width) {
         const L = spec.usermeta && spec.usermeta.concatLayout;
         if (!L || !spec.hconcat) return spec;
         if (width < L.stackBelow) {
             spec.vconcat = spec.hconcat;
             delete spec.hconcat;
-            spec.vconcat.forEach(function (panel) { panel.width = Math.max(200, width - L.labelRoom); });
+            // stacked panels keep their relative widths when the chart asks for it, so a shared scale stays shared
+            spec.vconcat.forEach(function (panel, i) {
+                panel.width = L.stackShares ? Math.floor((width - L.labelRoom) * L.stackShares[i]) : Math.max(200, width - L.labelRoom);
+            });
             (L.stackSet || []).forEach(function (entry) { setPath(spec, entry[0], entry[1]); });
         } else {
             const room = width - L.labelRoom - L.gap * (spec.hconcat.length - 1);
