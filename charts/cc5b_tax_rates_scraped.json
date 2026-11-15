@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Scatter plot of the top statutory personal income tax rate against the standard VAT, GST or sales tax rate for each jurisdiction in Wikipedia's list of tax rates, coloured by whether the jurisdiction levies a net wealth tax. Data scraped and cleaned in a Colab notebook.",
-  "title": {
-    "text": "Top income tax rate vs VAT",
-    "subtitle": "Statutory rates; colour shows a net wealth tax"
-  },
   "width": "container",
   "height": 340,
   "data": {
@@ -21,13 +17,25 @@
     },
     {
       "filter": "isValid(datum.income_top) && isValid(datum.vat)"
+    },
+    {
+      "calculate": "datum.income_top / 100",
+      "as": "income_share"
+    },
+    {
+      "calculate": "datum.vat / 100",
+      "as": "vat_share"
+    },
+    {
+      "calculate": "isValid(datum.inheritance) ? datum.inheritance / 100 : null",
+      "as": "inheritance_share"
     }
   ],
   "encoding": {
     "x": {
       "field": "income_top",
       "type": "quantitative",
-      "title": "Top personal income tax rate (%)",
+      "title": "Top income tax rate (%)",
       "scale": {
         "domain": [
           0,
@@ -38,7 +46,7 @@
     "y": {
       "field": "vat",
       "type": "quantitative",
-      "title": "Standard VAT/GST/sales tax (%)",
+      "title": "VAT or sales tax (%)",
       "scale": {
         "domain": [
           0,
@@ -77,11 +85,11 @@
               "Other"
             ],
             "range": [
-              "#B42318",
-              "#B7791F",
-              "#2F5D8C",
-              "#C3CAD3",
-              "#5B6472"
+              "#c4532d",
+              "#b7a57a",
+              "#1f4e8c",
+              "#cfd5dc",
+              "#7f8fa6"
             ]
           },
           "legend": {
@@ -97,26 +105,26 @@
             "title": "Jurisdiction"
           },
           {
-            "field": "income_top",
+            "field": "income_share",
             "type": "quantitative",
-            "title": "Top income tax (%)",
-            "format": ".1f"
+            "title": "Top income tax rate",
+            "format": ".1%"
           },
           {
-            "field": "vat",
+            "field": "vat_share",
             "type": "quantitative",
-            "title": "VAT/sales (%)",
-            "format": ".1f"
+            "title": "VAT or sales tax",
+            "format": ".1%"
           },
           {
-            "field": "inheritance",
+            "field": "inheritance_share",
             "type": "quantitative",
-            "title": "Inheritance (%)",
-            "format": ".1f"
+            "title": "Inheritance tax",
+            "format": ".1%"
           },
           {
             "field": "wealth_tax",
-            "title": "Wealth tax"
+            "title": "Net wealth tax"
           }
         ],
         "size": {
@@ -131,7 +139,7 @@
           "condition": {
             "param": "hp",
             "empty": false,
-            "value": "#1B2A41"
+            "value": "#16191d"
           },
           "value": "white"
         }
@@ -175,7 +183,8 @@
         "fontSize": 12,
         "stroke": "white",
         "strokeWidth": 3,
-        "strokeJoin": "round"
+        "strokeJoin": "round",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -208,7 +217,8 @@
         "dx": 8,
         "dy": 4,
         "fontSize": 12,
-        "color": "#1B2A41"
+        "color": "#16191d",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -240,7 +250,8 @@
         "fontSize": 12,
         "stroke": "white",
         "strokeWidth": 3,
-        "strokeJoin": "round"
+        "strokeJoin": "round",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -270,7 +281,8 @@
         "dx": 8,
         "dy": -8,
         "fontSize": 12,
-        "color": "#1B2A41"
+        "color": "#16191d",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -301,7 +313,8 @@
         "fontSize": 12,
         "stroke": "white",
         "strokeWidth": 3,
-        "strokeJoin": "round"
+        "strokeJoin": "round",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -330,7 +343,8 @@
         "dx": 8,
         "dy": 13,
         "fontSize": 12,
-        "color": "#1B2A41"
+        "color": "#16191d",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -362,7 +376,8 @@
         "fontSize": 12,
         "stroke": "white",
         "strokeWidth": 3,
-        "strokeJoin": "round"
+        "strokeJoin": "round",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -392,7 +407,8 @@
         "dx": -8,
         "dy": 4,
         "fontSize": 12,
-        "color": "#1B2A41"
+        "color": "#16191d",
+        "fontWeight": 500
       },
       "encoding": {
         "text": {
@@ -401,47 +417,6 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "usermeta": {
     "compactDropLayers": [
       1,

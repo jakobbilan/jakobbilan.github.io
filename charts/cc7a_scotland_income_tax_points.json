@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Point map of Scotland's 32 councils. Each circle sits at the council's coordinates; its area shows how much more income tax a person on the council's 2024 annual pay figure owes under Scotland's 2024-25 bands than under the rest of the UK's, and its colour shows the pay figure.",
-  "title": {
-    "text": "Scotland: extra tax on typical pay",
-    "subtitle": "Scottish minus rest-of-UK bands, 2024–25, £ a year"
-  },
   "width": "container",
   "height": 600,
   "projection": {
@@ -21,9 +17,9 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#E8EBEF",
+        "fill": "#e6e8eb",
         "stroke": "white",
-        "strokeWidth": 0.7
+        "strokeWidth": 0.8
       }
     },
     {
@@ -32,7 +28,7 @@
       },
       "mark": {
         "type": "circle",
-        "stroke": "#1B2A41",
+        "stroke": "#16191d",
         "strokeWidth": 0.6,
         "opacity": 0.85
       },
@@ -63,7 +59,10 @@
               100,
               200
             ],
-            "orient": "top-left"
+            "orient": "top-left",
+            "title": "Extra tax a year",
+            "format": "$,.0f",
+            "symbolFillColor": "#7f9fcd"
           }
         },
         "color": {
@@ -71,11 +70,16 @@
           "type": "quantitative",
           "title": "Pay, 2024 (£)",
           "scale": {
-            "scheme": "purples"
+            "range": [
+              "#d2deee",
+              "#173c72"
+            ]
           },
           "legend": {
-            "format": ",.0f",
-            "orient": "top-left"
+            "format": "$,.0f",
+            "orient": "top-left",
+            "title": "Annual pay, 2024",
+            "gradientLength": 140
           }
         },
         "tooltip": [
@@ -86,35 +90,35 @@
           {
             "field": "pay",
             "type": "quantitative",
-            "title": "Annual pay, 2024 (£)",
-            "format": ",.0f"
+            "title": "Annual pay, 2024",
+            "format": "$,.0f"
           },
           {
             "field": "tax_scotland",
             "type": "quantitative",
-            "title": "Income tax, Scottish bands (£)",
-            "format": ",.0f"
+            "title": "Income tax, Scottish bands",
+            "format": "$,.0f"
           },
           {
             "field": "tax_rest_of_uk",
             "type": "quantitative",
-            "title": "Income tax, rUK bands (£)",
-            "format": ",.0f"
+            "title": "Income tax, rest-of-UK bands",
+            "format": "$,.0f"
           },
           {
             "field": "difference",
             "type": "quantitative",
-            "title": "Difference (£)",
-            "format": ",.0f"
+            "title": "Extra tax in Scotland",
+            "format": "$,.0f"
           }
         ],
         "stroke": {
           "condition": {
             "param": "hp",
             "empty": false,
-            "value": "#B42318"
+            "value": "#c4532d"
           },
-          "value": "#1B2A41"
+          "value": "#16191d"
         },
         "strokeWidth": {
           "condition": {
@@ -161,10 +165,10 @@
         "type": "text",
         "align": "left",
         "dx": 11,
-        "fontSize": 11.5,
+        "fontSize": 12,
         "fontWeight": 600,
         "stroke": "white",
-        "strokeWidth": 3,
+        "strokeWidth": 4,
         "strokeJoin": "round"
       },
       "encoding": {
@@ -205,9 +209,9 @@
         "type": "text",
         "align": "left",
         "dx": 11,
-        "fontSize": 11.5,
+        "fontSize": 12,
         "fontWeight": 600,
-        "color": "#1B2A41"
+        "color": "#16191d"
       },
       "encoding": {
         "longitude": {
@@ -245,10 +249,10 @@
         "type": "text",
         "align": "right",
         "dx": -11,
-        "fontSize": 11.5,
+        "fontSize": 12,
         "fontWeight": 600,
         "stroke": "white",
-        "strokeWidth": 3,
+        "strokeWidth": 4,
         "strokeJoin": "round"
       },
       "encoding": {
@@ -287,9 +291,9 @@
         "type": "text",
         "align": "right",
         "dx": -11,
-        "fontSize": 11.5,
+        "fontSize": 12,
         "fontWeight": 600,
-        "color": "#1B2A41"
+        "color": "#16191d"
       },
       "encoding": {
         "longitude": {
@@ -306,47 +310,6 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "usermeta": {
     "compactDropLayers": [
       2,

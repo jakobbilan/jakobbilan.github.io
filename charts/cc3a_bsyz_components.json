@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Horizontal stacked bars of total effective tax rates in the United States, 2018-20, for the full population and the wealthiest 400 households, split by type of tax. A reference line marks the roughly 45% rate of top labour-income earners.",
-  "title": {
-    "text": "Total tax rate by wealth group, US",
-    "subtitle": "All taxes as % of economic income, 2018–20"
-  },
   "width": "container",
   "height": 200,
   "data": {
@@ -23,7 +19,6 @@
       "title": null,
       "axis": {
         "labelLimit": 300,
-        "labelFontSize": 11.5,
         "labelExpr": "datum.label == 'Top 400' ? 'Top 400 overall' : datum.label"
       }
     }
@@ -77,10 +72,10 @@
               "Property and sales taxes"
             ],
             "range": [
-              "#2F5D8C",
-              "#B42318",
-              "#B7791F",
-              "#9AA3AE"
+              "#1f4e8c",
+              "#c4532d",
+              "#b7a57a",
+              "#7f8fa6"
             ]
           },
           "legend": {
@@ -105,19 +100,29 @@
             "title": "Tax"
           },
           {
-            "field": "rate",
+            "field": "rate_share",
             "type": "quantitative",
-            "title": "% of economic income",
-            "format": ".1f"
+            "title": "Share of economic income",
+            "format": ".1%"
           },
           {
-            "field": "total",
+            "field": "total_share",
             "type": "quantitative",
-            "title": "Total (reported)",
-            "format": ".1f"
+            "title": "All taxes",
+            "format": ".1%"
           }
         ]
-      }
+      },
+      "transform": [
+        {
+          "calculate": "datum.rate / 100",
+          "as": "rate_share"
+        },
+        {
+          "calculate": "datum.total / 100",
+          "as": "total_share"
+        }
+      ]
     },
     {
       "transform": [
@@ -132,13 +137,18 @@
           "groupby": [
             "group"
           ]
+        },
+        {
+          "calculate": "format(datum.total, '.1f') + '%'",
+          "as": "total_label"
         }
       ],
       "mark": {
         "type": "text",
         "align": "left",
         "dx": 5,
-        "fontWeight": 600
+        "fontWeight": 600,
+        "fontSize": 12.5
       },
       "encoding": {
         "x": {
@@ -146,9 +156,7 @@
           "type": "quantitative"
         },
         "text": {
-          "field": "total",
-          "type": "quantitative",
-          "format": ".1f"
+          "field": "total_label"
         }
       }
     },
@@ -166,7 +174,8 @@
           4,
           3
         ],
-        "color": "#1B2A41"
+        "color": "#16191d",
+        "strokeWidth": 1.2
       },
       "encoding": {
         "x": {
@@ -192,8 +201,9 @@
         "dx": -4,
         "dy": 2,
         "y": 0,
-        "fontSize": 12.0,
-        "color": "#1B2A41"
+        "fontSize": 12,
+        "color": "#16191d",
+        "fontWeight": 600
       },
       "encoding": {
         "x": {
@@ -207,47 +217,6 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "usermeta": {
     "compactLegend": {
       "columns": 1

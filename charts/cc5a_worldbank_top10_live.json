@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Live line chart, loaded from the World Bank Indicators API each time the page opens: income (or consumption) share held by the richest 10% in six countries, from household surveys (World Bank Poverty and Inequality Platform).",
-  "title": {
-    "text": "Richest 10%'s income share (surveys)",
-    "subtitle": "% of income or consumption; live from the World Bank API"
-  },
   "width": "container",
   "height": 300,
   "data": {
@@ -25,6 +21,10 @@
     {
       "calculate": "datum.country.value",
       "as": "country_name"
+    },
+    {
+      "calculate": "datum.value / 100",
+      "as": "share"
     }
   ],
   "encoding": {
@@ -48,7 +48,7 @@
     "y": {
       "field": "value",
       "type": "quantitative",
-      "title": "% of income or consumption",
+      "title": null,
       "scale": {
         "domain": [
           20,
@@ -70,12 +70,12 @@
           "United Kingdom"
         ],
         "range": [
-          "#2A7F62",
-          "#6B4FA0",
-          "#B42318",
-          "#2F5D8C",
-          "#5B6472",
-          "#B7791F"
+          "#5e8c6a",
+          "#7f8fa6",
+          "#c4532d",
+          "#1f4e8c",
+          "#16191d",
+          "#b7a57a"
         ]
       },
       "legend": {
@@ -91,7 +91,7 @@
     {
       "mark": {
         "type": "line",
-        "strokeWidth": 1.8,
+        "strokeWidth": 2,
         "point": {
           "filled": true,
           "size": 18
@@ -112,13 +112,14 @@
           },
           {
             "field": "year",
-            "title": "Year"
+            "title": "Year",
+            "format": "d"
           },
           {
-            "field": "value",
+            "field": "share",
             "type": "quantitative",
-            "title": "Top 10% share (%)",
-            "format": ".1f"
+            "title": "Income share of the richest 10%",
+            "format": ".1%"
           }
         ],
         "opacity": {
@@ -143,47 +144,6 @@
       ]
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "usermeta": {
     "compactLegend": {
       "columns": 2

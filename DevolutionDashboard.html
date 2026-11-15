@@ -1,149 +1,215 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Devolution dashboard | Jakob Kilian Bilan</title>
-  <meta name="description" content="PP434 portfolio, CC6: Greater Manchester among England's strategic authorities, six indicators.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/portfolio.css">
-  <script src="https://cdn.jsdelivr.net/npm/vega@6.4.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@6.5.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@7.3.0"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Devolution dashboard | Jakob Kilian Bilan</title>
+    <meta name="description" content="PP434 portfolio, CC6: Greater Manchester among England's strategic authorities, six indicators.">
+    <meta name="author" content="Jakob Kilian Bilan">
+    <link rel="canonical" href="https://jakobbilan.github.io/DevolutionDashboard.html">
+    <link rel="icon" href="favicon.ico" sizes="48x48">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/icons/favicon-96.png" type="image/png" sizes="96x96">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="preload" href="project/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Same design as the project page: site styles, project styles, then the portfolio's additions -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="project/css/project.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+    <!-- Vega, Vega-Lite and vega-embed: the project page's pinned copies, served from this repository -->
+    <script src="project/vendor/vega-5.33.1.min.js" defer></script>
+    <script src="project/vendor/vega-lite-5.23.0.min.js" defer></script>
+    <script src="project/vendor/vega-embed-6.29.0.min.js" defer></script>
 </head>
-<body>
-<div class="page wide">
-  <header class="masthead">
-    <h1>[Headline]</h1>
-    <p class="standfirst">[Standfirst]</p>
-    <p class="byline">Devolution dashboard, PP434 portfolio (CC6). <a href="portfolio.html#cc6">Back to the portfolio</a>. <a href="https://colab.research.google.com/drive/1u_sDdEF_oGuNeZIoCYr9Q37NAkil97ks?usp=sharing" class="notebook">Colab notebook: downloading the six series with a loop</a></p>
-  </header>
+<body class="project-page">
+    <div class="progress" aria-hidden="true"></div>
+    <!-- Site header, same on every page; aria-current marks Projects, the parent page -->
+    <header>
+        <a class="site-name" href="index.html">Jakob Kilian Bilan</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="research.html">Research</a>
+            <a href="cv.html">CV</a>
+            <a href="projects.html" aria-current="true">Projects</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+    <main class="project portfolio" id="top">
+        <div class="hero">
+            <p class="breadcrumb"><a href="projects.html">Projects</a> / <a href="portfolio.html">Portfolio</a> / Devolution dashboard</p>
+            <p class="kicker">PP434 data portfolio · CC6</p>
+            <h1><span class="draft">[Headline]</span></h1>
+            <p class="standfirst"><span class="draft">[Standfirst]</span></p>
+            <p class="byline"><a href="portfolio.html#cc6">Back to the portfolio</a> ·
+                <a href="https://colab.research.google.com/drive/1u_sDdEF_oGuNeZIoCYr9Q37NAkil97ks?usp=sharing" class="notebook">Colab notebook: downloading the six series with a loop</a></p>
+        </div>
+        <figure class="chart wide dash" aria-label="Six indicators for England's strategic authorities">
+            <p class="dash-key">
+                <span><span class="swatch"></span>Greater Manchester</span>
+                <span><span class="swatch london"></span>Greater London</span>
+                <span><span class="swatch others"></span>Other strategic authorities</span>
+                <span><span class="swatch mayor"></span>2017: first Greater Manchester mayor elected</span>
+            </p>
+            <!-- Six places for charts, c1 to c6, filled by the loop below -->
+            <div class="dash-grid">
+                <div class="dash-cell">
+                    <div class="chart-head">
+                        <h3 class="chart-title" id="title-c1"></h3>
+                        <p class="chart-subtitle" id="unit-c1"></p>
+                    </div>
+                    <div class="chart-body" id="c1" data-height="220 220" role="img" aria-labelledby="title-c1"></div>
+                </div>
+                <div class="dash-cell">
+                    <div class="chart-head">
+                        <h3 class="chart-title" id="title-c2"></h3>
+                        <p class="chart-subtitle" id="unit-c2"></p>
+                    </div>
+                    <div class="chart-body" id="c2" data-height="220 220" role="img" aria-labelledby="title-c2"></div>
+                </div>
+                <div class="dash-cell">
+                    <div class="chart-head">
+                        <h3 class="chart-title" id="title-c3"></h3>
+                        <p class="chart-subtitle" id="unit-c3"></p>
+                    </div>
+                    <div class="chart-body" id="c3" data-height="220 220" role="img" aria-labelledby="title-c3"></div>
+                </div>
+                <div class="dash-cell">
+                    <div class="chart-head">
+                        <h3 class="chart-title" id="title-c4"></h3>
+                        <p class="chart-subtitle" id="unit-c4"></p>
+                    </div>
+                    <div class="chart-body" id="c4" data-height="220 220" role="img" aria-labelledby="title-c4"></div>
+                </div>
+                <div class="dash-cell">
+                    <div class="chart-head">
+                        <h3 class="chart-title" id="title-c5"></h3>
+                        <p class="chart-subtitle" id="unit-c5"></p>
+                    </div>
+                    <div class="chart-body" id="c5" data-height="220 220" role="img" aria-labelledby="title-c5"></div>
+                </div>
+                <div class="dash-cell">
+                    <div class="chart-head">
+                        <h3 class="chart-title" id="title-c6"></h3>
+                        <p class="chart-subtitle" id="unit-c6"></p>
+                    </div>
+                    <div class="chart-body" id="c6" data-height="220 220" role="img" aria-labelledby="title-c6"></div>
+                </div>
+            </div>
+            <footer class="chart-foot">
+                <p class="chart-key">Hover or tap a chart for Greater Manchester, Greater London and the median authority in that year. Life expectancy is a three-year average, plotted at the last year of each period.</p>
+                <p>Sources: PP434 course files (jhellingsdata/LSE-PP434, week 7, strategic authority data): ONS regional accounts, Annual Survey of Hours and Earnings, Annual Population Survey, life expectancy for local areas and mid-year population estimates; DESNZ local authority greenhouse gas emissions.</p>
+                <p class="chart-actions">
+                    <a href="data/cc9_strategic_authorities.csv" download>Data (CSV, all six series)</a>
+                    <a href="https://colab.research.google.com/drive/1u_sDdEF_oGuNeZIoCYr9Q37NAkil97ks?usp=sharing">Colab notebook</a>
+                </p>
+            </footer>
+        </figure>
+    </main>
+    <script>
+        // 1. WHERE THE SIX JSON FILES ARE: raw GitHub links to the files saved by the Python loop,
+        //    with the local data folder as a fallback.
+        const RAW_BASE = "https://raw.githubusercontent.com/jakobbilan/jakobbilan.github.io/main/data/devolution/";
+        const LOCAL_BASE = "data/devolution/";
 
-  <p class="legend-line">
-    <span><span class="key gm"></span>Greater Manchester</span>
-    <span><span class="key ldn"></span>Greater London</span>
-    <span><span class="key other"></span>Other strategic authorities</span>
-    <span><span class="key mayor"></span>2017: first Greater Manchester mayor elected</span>
-  </p>
+        // 2. THE LIST TO LOOP OVER: one entry per chart
+        const SERIES = [
+            { file: "gva_per_head.json",         title: "Economic output (GVA) per resident",    unit: "£ per resident, current prices" },
+            { file: "pay_fulltime.json",         title: "Median full-time pay of residents",     unit: "£ a year" },
+            { file: "employment_rate.json",      title: "Employment rate, ages 16 to 64",        unit: "% of residents aged 16 to 64" },
+            { file: "life_expectancy_male.json", title: "Male life expectancy at birth",         unit: "Years, three-year average" },
+            { file: "old_age_dependency.json",   title: "People aged 65+ per 100 aged 16 to 64", unit: "Old-age dependency ratio" },
+            { file: "emissions_per_head.json",   title: "Greenhouse gas emissions per resident", unit: "Tonnes of CO2 equivalent" }
+        ];
 
-  <main class="grid6">
-    <figure class="chart"><div id="c1"></div></figure>
-    <figure class="chart"><div id="c2"></div></figure>
-    <figure class="chart"><div id="c3"></div></figure>
-    <figure class="chart"><div id="c4"></div></figure>
-    <figure class="chart"><div id="c5"></div></figure>
-    <figure class="chart"><div id="c6"></div></figure>
-  </main>
+        // 3. A TEMPLATE CHART, the same for every series except the data link. Its look (fonts, axes, colours)
+        //    comes from the project's theme, project/charts/theme.json, as on the project page.
+        const TEMPLATE = {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "description": "Line chart of one indicator for England's strategic authorities: Greater Manchester in red, Greater London dashed, the others grey, and a marker at 2017, the first Greater Manchester mayoral election. Hovering shows Greater Manchester, Greater London and the median authority for the nearest year.",
+            "width": "container",
+            "height": 220,
+            "data": { "url": "", "format": { "type": "json", "property": "data" } },
+            "encoding": {
+                "x": { "field": "year", "type": "quantitative", "title": null, "scale": { "zero": false, "nice": false },
+                       "axis": { "format": "d", "tickCount": 4 } },
+                "y": { "field": "value", "type": "quantitative", "scale": { "zero": false },
+                       "axis": { "labelExpr": "abs(datum.value) >= 10000 ? format(datum.value / 1000, ',.0f') + 'k' : format(datum.value, ',')",
+                                 "tickCount": 5, "minExtent": 34 } }
+            },
+            "layer": [
+                { "data": { "values": [{ "year": 2017 }] },
+                  "mark": { "type": "rule", "color": "#5b636d", "strokeDash": [2, 3], "strokeWidth": 1 },
+                  "encoding": { "y": null } },
+                { "mark": { "type": "line", "color": "#c9ced4", "strokeWidth": 1.3 },
+                  "encoding": { "detail": { "field": "geo_id" } } },
+                { "transform": [{ "filter": "datum.geo_id == 'MSA022'" }],
+                  "mark": { "type": "line", "color": "#1f4e8c", "strokeWidth": 1.6, "strokeDash": [5, 3] } },
+                { "transform": [{ "filter": "datum.geo_id == 'MSA001'" }],
+                  "mark": { "type": "line", "color": "#c4532d", "strokeWidth": 2.6 } },
+                { "transform": [
+                    { "joinaggregate": [{ "op": "median", "field": "value", "as": "median" }], "groupby": ["year"] },
+                    { "filter": "datum.geo_id == 'MSA001' || datum.geo_id == 'MSA022'" },
+                    { "pivot": "geo_id", "value": "value", "groupby": ["year", "date", "median"] }],
+                  "mark": { "type": "rule", "color": "#16191d", "strokeWidth": 1 },
+                  "params": [{ "name": "hover", "select": { "type": "point", "fields": ["year"], "nearest": true, "on": "pointerover", "clear": "pointerout" } }],
+                  "encoding": { "y": null,
+                                "opacity": { "condition": { "param": "hover", "empty": false, "value": 1 }, "value": 0 },
+                                "tooltip": [
+                                    { "field": "date", "title": "Year or period" },
+                                    { "field": "MSA001", "type": "quantitative", "title": "Greater Manchester", "format": ",.3~r" },
+                                    { "field": "MSA022", "type": "quantitative", "title": "Greater London", "format": ",.3~r" },
+                                    { "field": "median", "type": "quantitative", "title": "Median authority", "format": ",.3~r" }] } }
+            ]
+        };
 
-  <footer class="sources">
-    <h2>Sources</h2>
-    <ol>
-      <li>PP434 course files (jhellingsdata/LSE-PP434, week 7, strategic authority data): ONS regional accounts, Annual Survey of Hours and Earnings, Annual Population Survey, life expectancy for local areas and mid-year population estimates; DESNZ local authority greenhouse gas emissions.</li>
-      <li>Strategic authorities are those in the course data (codes MSA001 to MSA022). Life expectancy is a three-year average, plotted at the last year of each period.</li>
-    </ol>
-  </footer>
-</div>
+        // Same embed options as the project page: no menu, £ number formats, the project's tooltip style
+        const OPTIONS = {
+            renderer: "svg",
+            actions: false,
+            formatLocale: { decimal: ".", thousands: ",", grouping: [3], currency: ["£", ""] },
+            tooltip: { theme: "custom" }
+        };
 
-<script>
-  // 1. WHERE THE SIX JSON FILES ARE: raw GitHub links to the files saved by the Python loop,
-  //    with the local data folder as a fallback.
-  const RAW_BASE = "https://raw.githubusercontent.com/jakobbilan/jakobbilan.github.io/main/data/devolution/";
-  const LOCAL_BASE = "data/devolution/";
+        // Use the raw GitHub files if they can be reached, otherwise the local folder
+        async function pickBase() {
+            try {
+                const response = await fetch(RAW_BASE + SERIES[0].file, { method: "HEAD" });
+                if (response.ok) return RAW_BASE;
+            } catch (err) { /* offline or blocked */ }
+            console.warn("Raw GitHub files not reachable; using " + LOCAL_BASE);
+            return LOCAL_BASE;
+        }
 
-  // 2. THE LIST TO LOOP OVER: one entry per chart
-  const SERIES = [
-    { file: "gva_per_head.json",         title: "Economic output (GVA) per resident",    unit: "£, current prices" },
-    { file: "pay_fulltime.json",         title: "Median full-time pay of residents",     unit: "£ a year" },
-    { file: "employment_rate.json",      title: "Employment rate, ages 16 to 64",        unit: "% of residents" },
-    { file: "life_expectancy_male.json", title: "Male life expectancy at birth",         unit: "years, 3-year average" },
-    { file: "old_age_dependency.json",   title: "People aged 65+ per 100 aged 16 to 64", unit: "old-age dependency ratio" },
-    { file: "emissions_per_head.json",   title: "Greenhouse gas emissions per resident", unit: "tonnes CO2 equivalent" }
-  ];
+        // 4. THE LOOP: one embed call, run once per series (six times)
+        async function drawDashboard() {
+            const base = await pickBase();
+            const theme = await fetch("project/charts/theme.json").then(r => (r.ok ? r.json() : {})).catch(() => ({}));
+            for (let i = 0; i < SERIES.length; i++) {
+                const spec = structuredClone(TEMPLATE);              // a fresh copy for each chart
+                spec.data.url = base + SERIES[i].file;
+                document.getElementById(`title-c${i + 1}`).textContent = SERIES[i].title;
+                document.getElementById(`unit-c${i + 1}`).textContent = SERIES[i].unit;
+                vegaEmbed(`#c${i + 1}`, spec, Object.assign({ config: theme }, OPTIONS))
+                    .catch(err => console.error(`chart ${i + 1}`, err));
+            }
+        }
 
-  // 3. A TEMPLATE CHART: identical for every series except the data link and the titles
-  const TEMPLATE = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-    "description": "Line chart of one indicator for England's strategic authorities, with Greater Manchester highlighted, Greater London dashed, and a marker at 2017, the year of the first Greater Manchester mayoral election. Hovering shows Greater Manchester, Greater London and the median authority for the nearest year.",
-    "width": "container",
-    "height": 200,
-    "title": { "text": "", "subtitle": "", "anchor": "start", "frame": "group" },
-    "data": { "url": "", "format": { "type": "json", "property": "data" } },
-    "encoding": {
-      "x": { "field": "year", "type": "quantitative", "title": null, "scale": { "zero": false, "nice": false },
-             "axis": { "format": "d", "tickCount": 5, "grid": false } },
-      "y": { "field": "value", "type": "quantitative", "title": null, "scale": { "zero": false },
-             "axis": { "labelExpr": "abs(datum.value) >= 10000 ? format(datum.value / 1000, ',.0f') + 'k' : format(datum.value, ',')",
-                       "tickCount": 5, "minExtent": 36 } }
-    },
-    "layer": [
-      { "data": { "values": [{ "year": 2017 }] },
-        "mark": { "type": "rule", "color": "#5B6472", "strokeDash": [2, 3], "strokeWidth": 1 },
-        "encoding": { "y": null } },
-      { "mark": { "type": "line", "strokeWidth": 1, "color": "#B3BAC4", "opacity": 0.85 },
-        "encoding": { "detail": { "field": "geo_id" } } },
-      { "transform": [{ "filter": "datum.geo_id == 'MSA022'" }],
-        "mark": { "type": "line", "strokeWidth": 1.6, "strokeDash": [4, 3], "color": "#2F5D8C" } },
-      { "transform": [{ "filter": "datum.geo_id == 'MSA001'" }],
-        "mark": { "type": "line", "strokeWidth": 2.6, "color": "#B42318", "point": { "filled": true, "size": 16, "color": "#B42318" } } },
-      { "transform": [
-          { "joinaggregate": [{ "op": "median", "field": "value", "as": "median" }], "groupby": ["year"] },
-          { "filter": "datum.geo_id == 'MSA001' || datum.geo_id == 'MSA022'" },
-          { "pivot": "geo_id", "value": "value", "groupby": ["year", "date", "median"] }],
-        "mark": { "type": "rule", "color": "#1B2A41", "strokeWidth": 1 },
-        "params": [{ "name": "hover", "select": { "type": "point", "fields": ["year"], "nearest": true, "on": "pointerover", "clear": "pointerout" } }],
-        "encoding": { "y": null,
-                      "opacity": { "condition": { "param": "hover", "empty": false, "value": 0.6 }, "value": 0 },
-                      "tooltip": [
-                        { "field": "date", "title": "Year or period" },
-                        { "field": "MSA001", "type": "quantitative", "title": "Greater Manchester", "format": ",.1f" },
-                        { "field": "MSA022", "type": "quantitative", "title": "Greater London", "format": ",.1f" },
-                        { "field": "median", "type": "quantitative", "title": "Median authority", "format": ",.1f" }] } }
-    ],
-    "config": {
-      "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-      "view": { "stroke": null },
-      "title": { "anchor": "start", "color": "#1B2A41", "fontSize": 15, "fontWeight": 600, "subtitleColor": "#5B6472", "subtitleFontSize": 12.5, "offset": 10 },
-      "axis": { "labelColor": "#5B6472", "gridColor": "#D5DAE1", "domainColor": "#AEB6C1", "tickColor": "#AEB6C1", "labelFontSize": 12 }
-    }
-  };
+        // Tooltips on touch screens close on scroll and with Escape, as on the project page
+        function hideTooltips() {
+            document.querySelectorAll("#vg-tooltip-element.visible, .vg-tooltip.visible").forEach(tip => tip.classList.remove("visible"));
+        }
+        window.addEventListener("scroll", hideTooltips, { passive: true });
+        document.addEventListener("keydown", event => { if (event.key === "Escape") hideTooltips(); });
 
-  const OPTS = { renderer: "svg", actions: { export: true, source: true, compiled: false, editor: true } };
+        // the Vega scripts load with "defer", so start once the page is parsed
+        document.addEventListener("DOMContentLoaded", drawDashboard);
 
-  // Use the raw GitHub files if they can be reached, otherwise the local folder
-  async function pickBase() {
-    try {
-      const response = await fetch(RAW_BASE + SERIES[0].file, { method: "HEAD" });
-      if (response.ok) return RAW_BASE;
-    } catch (err) { /* offline or blocked */ }
-    console.warn("Raw GitHub files not reachable; using " + LOCAL_BASE);
-    return LOCAL_BASE;
-  }
-
-  // 4. THE LOOP: one embed call, run once per series (six times)
-  async function drawDashboard() {
-    const base = await pickBase();
-    if (document.fonts && document.fonts.ready) await document.fonts.ready;
-    const narrow = document.getElementById("c1").clientWidth < 360;      // phones: slightly smaller text
-    for (let i = 0; i < SERIES.length; i++) {
-      const spec = structuredClone(TEMPLATE);              // a fresh copy for each chart
-      spec.data.url = base + SERIES[i].file;
-      spec.title.text = SERIES[i].title;
-      spec.title.subtitle = SERIES[i].unit;
-      if (narrow) { spec.config.title.fontSize = 14; spec.config.axis.labelFontSize = 11; }
-      vegaEmbed(`#c${i + 1}`, spec, OPTS).catch(err => console.error(`chart ${i + 1}`, err));
-    }
-  }
-  drawDashboard();
-
-  // Console check: bracketed placeholders still on the page
-  if (typeof document.createTreeWalker === "function") {
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    const left = [];
-    while (walker.nextNode()) (walker.currentNode.nodeValue.match(/\[[A-Z][^\]]{0,60}\]/g) || []).forEach(m => left.push(m));
-    if (left.length) console.warn(`${left.length} placeholders left:`, left.join(" "));
-  }
-</script>
+        // For the author, in the browser console: text still marked as draft
+        document.addEventListener("DOMContentLoaded", () => {
+            const drafts = document.querySelectorAll(".draft");
+            if (drafts.length) console.warn(drafts.length + " passages still marked as draft:", [...drafts].map(d => d.textContent.trim()).join(" "));
+        });
+    </script>
 </body>
 </html>

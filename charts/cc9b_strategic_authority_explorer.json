@@ -1,15 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Interactive line chart of England's strategic authorities. One menu chooses the indicator, another the authority to highlight; the other authorities are grey lines and the dashed line is the median authority in each year.",
-  "title": {
-    "text": {
-      "expr": "indicator == 'life_expectancy_male' ? 'Male life expectancy at birth' : indicator == 'pay_fulltime' ? 'Median full-time pay of residents' : indicator == 'gva_per_head' ? 'Economic output (GVA) per resident' : indicator == 'employment_rate' ? 'Employment rate, ages 16 to 64' : indicator == 'old_age_dependency' ? 'People aged 65+ per 100 aged 16 to 64' : 'Greenhouse gas emissions per resident'"
-    },
-    "subtitle": {
-      "expr": "(indicator == 'life_expectancy_male' ? 'years, 3-year average' : indicator == 'pay_fulltime' ? '£ a year' : indicator == 'gva_per_head' ? '£, current prices' : indicator == 'employment_rate' ? '% of residents' : indicator == 'old_age_dependency' ? 'old-age dependency ratio' : 'tonnes CO2 equivalent')"
-    },
-    "frame": "group"
-  },
   "width": "container",
   "height": 320,
   "params": [
@@ -134,9 +125,9 @@
     {
       "mark": {
         "type": "line",
-        "strokeWidth": 1,
-        "color": "#B3BAC4",
-        "opacity": 0.85
+        "strokeWidth": 1.3,
+        "color": "#c9ced4",
+        "opacity": 1
       },
       "encoding": {
         "detail": {
@@ -166,7 +157,7 @@
           5,
           3
         ],
-        "color": "#2F5D8C"
+        "color": "#5b636d"
       }
     },
     {
@@ -178,11 +169,11 @@
       "mark": {
         "type": "line",
         "strokeWidth": 2.6,
-        "color": "#B42318",
+        "color": "#c4532d",
         "point": {
           "filled": true,
           "size": 18,
-          "color": "#B42318"
+          "color": "#c4532d"
         }
       },
       "encoding": {
@@ -225,7 +216,7 @@
       "mark": {
         "type": "rule",
         "strokeWidth": 1,
-        "color": "#5B6472"
+        "color": "#16191d"
       },
       "params": [
         {
@@ -264,13 +255,13 @@
             "field": "value",
             "type": "quantitative",
             "title": "Value",
-            "format": ",.1f"
+            "format": ",.3~r"
           },
           {
             "field": "median",
             "type": "quantitative",
             "title": "Median authority",
-            "format": ",.1f"
+            "format": ",.3~r"
           }
         ]
       }
@@ -307,7 +298,7 @@
         "dy": -12,
         "fontWeight": 600,
         "dx": -4,
-        "fontSize": 13,
+        "fontSize": 12.5,
         "stroke": "white",
         "strokeWidth": 4,
         "strokeJoin": "round"
@@ -349,9 +340,9 @@
         "align": "right",
         "dy": -12,
         "fontWeight": 600,
-        "color": "#B42318",
+        "color": "#c4532d",
         "dx": -4,
-        "fontSize": 13
+        "fontSize": 12.5
       },
       "encoding": {
         "text": {
@@ -360,51 +351,28 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "padding": {
     "left": 6,
     "right": 12,
     "top": 6,
     "bottom": 6
+  },
+  "usermeta": {
+    "titles": {
+      "life_expectancy_male": "Male life expectancy at birth",
+      "pay_fulltime": "Median full-time pay of residents",
+      "gva_per_head": "Economic output (GVA) per resident",
+      "employment_rate": "Employment rate, ages 16 to 64",
+      "old_age_dependency": "People aged 65+ per 100 aged 16 to 64",
+      "emissions_per_head": "Greenhouse gas emissions per resident"
+    },
+    "units": {
+      "life_expectancy_male": "Years, three-year average",
+      "pay_fulltime": "£ a year",
+      "gva_per_head": "£ per resident, current prices",
+      "employment_rate": "% of residents aged 16 to 64",
+      "old_age_dependency": "Old-age dependency ratio",
+      "emissions_per_head": "Tonnes of CO2 equivalent per resident"
+    }
   }
 }

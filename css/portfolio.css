@@ -1,115 +1,275 @@
-/* PP434 portfolio: shared styles for portfolio.html and DevolutionDashboard.html
-   Cool paper, ink navy, one auditor-red accent; Newsreader for display, Public Sans for text and charts. */
-:root {
-  --paper: #F4F6F8;
-  --sheet: #FFFFFF;
-  --ink: #1B2A41;
-  --graphite: #5B6472;
-  --rule: #D5DAE1;
-  --red: #B42318;
-  --blue: #2F5D8C;
-  --measure: 68ch;
-  --wide: 920px;
-  --serif: "Newsreader", Georgia, "Times New Roman", serif;
-  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-* { box-sizing: border-box; }
-html { background: var(--paper); color: var(--ink); scroll-behavior: smooth; }
-body { margin: 0; font-family: var(--sans); font-size: 1rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-a { color: var(--blue); text-underline-offset: 2px; }
-a:hover { color: var(--red); }
-a:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; border-radius: 2px; }
-code { font-size: 0.86em; background: #E9EDF1; padding: 0.1em 0.3em; border-radius: 3px; overflow-wrap: anywhere; }
+/* Portfolio pages (portfolio.html, DevolutionDashboard.html). They use style.css and project/css/project.css,
+   so they share the project page's design: serif text, Inter for charts and labels, the same figures, controls,
+   tooltips and colours. This file adds only what the portfolio needs on top. */
 
-.page { max-width: var(--wide); margin: 0 auto; padding: 2.75rem 1.25rem 4rem; }
-.page.wide { max-width: 1240px; }
-
-/* Masthead: the title sits on a stepped rule, like a schedule of tax bands */
-.masthead { padding-bottom: 1.5rem; }
-.masthead h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(2.1rem, 5.2vw, 3.3rem);
-               line-height: 1.06; letter-spacing: -0.012em; margin: 0 0 0.9rem; max-width: 20ch; }
-.standfirst { font-family: var(--serif); font-size: clamp(1.15rem, 2.2vw, 1.35rem); line-height: 1.45;
-              margin: 0 0 1rem; max-width: 58ch; }
-.byline { color: var(--graphite); font-size: 0.9rem; margin: 0; max-width: 80ch; }
-.masthead::after { content: ""; display: block; width: 56px; height: 4px; background: var(--red); margin-top: 1.6rem; border-radius: 2px; }
-
-
-/* Contents: wraps on wide screens, scrolls sideways on phones */
-nav.toc { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule);
-          margin: 0 -1.25rem 0.5rem; padding: 0.55rem 1.25rem; }
-nav.toc ol { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; margin: 0; padding: 0; font-size: 0.88rem; }
-nav.toc a { text-decoration: none; color: var(--ink); white-space: nowrap; }
-nav.toc a:hover { color: var(--red); }
-@media (max-width: 680px) {
-  nav.toc ol { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-  nav.toc ol::-webkit-scrollbar { display: none; }
+/* The line in larger type under each challenge's heading */
+.portfolio .lead {
+    margin: 0 0 1rem;
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.3rem);
+    line-height: 1.45;
+    color: var(--ink-2);
+    text-wrap: pretty;
 }
 
-/* One section per coding challenge: the required label (h2), then the story (h3, note, charts, comment) */
-section.cc { border-top: 1px solid var(--rule); padding: 2.4rem 0 1rem; scroll-margin-top: 3rem; }
-section.cc > header { display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 0.4rem; }
-.cc-num { font-family: var(--serif); font-size: 1.75rem; line-height: 1; color: var(--red); font-weight: 600; min-width: 3.6rem; }
-section.cc h2 { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; line-height: 1.35; margin: 0; color: var(--ink); }
-.headline, .topic { font-family: var(--serif); font-weight: 600; font-size: clamp(1.35rem, 3vw, 1.65rem);
-                    line-height: 1.2; margin: 0.5rem 0 0.6rem; max-width: 34ch; }
-.topic { max-width: 40ch; }
-.note { max-width: var(--measure); margin: 0 0 0.5rem; }
-.comment { max-width: var(--measure); margin: 1rem 0 0.5rem; padding-left: 0.85rem; border-left: 3px solid var(--red); }
-section.cc h4 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; margin: 2.2rem 0 0; }
-.cta { margin: 1rem 0 0; font-weight: 600; display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; align-items: baseline; }
-.cta-meta { font-weight: 400; color: var(--graphite); font-size: 0.9rem; }
-
-figure.chart { margin: 1.4rem 0 0.4rem; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px;
-               padding: 1rem 1rem 0.5rem; overflow-x: auto; }
-figure.chart .vega-embed { width: 100%; }
-figure.chart img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
-figure.chart figcaption { color: var(--graphite); font-size: 0.84rem; padding: 0.45rem 0 0.15rem; }
-.slot { min-height: 9rem; display: grid; place-items: center; color: var(--graphite); border: 1px dashed var(--rule); border-radius: 3px; }
-.pair { display: grid; grid-template-columns: 1fr; gap: 0 1rem; }
-@media (min-width: 900px) { .pair.two { grid-template-columns: 1fr 1fr; } }
-
-dl.api { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.45rem 1.1rem; max-width: 80ch;
-         font-size: 0.95rem; margin: 1.1rem 0 0; }
-dl.api dt { font-weight: 600; }
-dl.api dd { margin: 0; }
-@media (max-width: 560px) { dl.api { grid-template-columns: 1fr; } dl.api dd { margin-bottom: 0.5rem; } }
-
-/* Dashboard (CC6): 3 x 2 on wide screens, 2 x 3 on tablets, one column on phones */
-.legend-line { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; font-size: 0.88rem; color: var(--graphite); margin: 0 0 1rem; }
-.key { display: inline-block; width: 22px; height: 0; border-top: 3px solid; vertical-align: middle; margin-right: 0.4rem; }
-.key.gm { border-color: var(--red); }
-.key.ldn { border-top-style: dashed; border-top-width: 2px; border-color: var(--blue); }
-.key.other { border-top-width: 1.5px; border-color: #B3BAC4; }
-.key.mayor { width: 0; height: 14px; border-top: 0; border-left: 1.5px dashed var(--graphite); margin: 0 0.55rem 0 0.3rem; }
-.grid6 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-.grid6 figure.chart { margin: 0; padding: 0.75rem 0.75rem 0.25rem; }
-@media (max-width: 1080px) { .grid6 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 680px)  { .grid6 { grid-template-columns: 1fr; } }
-
-footer.sources { border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1.4rem; font-size: 0.86rem; color: var(--graphite); }
-footer.sources h2 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; color: var(--ink); margin: 0 0 0.5rem; }
-footer.sources ol { padding-left: 1.2rem; margin: 0 0 1rem; }
-footer.sources li { margin-bottom: 0.3rem; max-width: 95ch; }
-
-/* Controls that Vega-Lite draws for interactive charts (CC9) */
-.vega-bindings { display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem; margin: 0.8rem 0 0.2rem; font-size: 0.9rem; }
-.vega-bind label { display: flex; align-items: center; gap: 0.45rem; }
-.vega-bind-name { font-weight: 600; }
-.vega-bindings select, .vega-bindings input { font: inherit; }
-.vega-bindings select { padding: 0.2rem 0.3rem; border: 1px solid var(--rule); border-radius: 3px; background: var(--sheet); color: var(--ink); max-width: 70vw; }
-.vega-bindings input[type="range"] { width: min(260px, 55vw); accent-color: var(--red); }
-
-/* Chart tooltips (vega-tooltip): page font, readable size */
-#vg-tooltip-element { font-family: var(--sans); font-size: 13px; color: var(--ink); background: rgba(255, 255, 255, 0.97);
-                      border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 4px 14px rgba(27, 42, 65, 0.12); padding: 7px 10px; }
-#vg-tooltip-element table tr td.key { color: var(--graphite); font-weight: 500; padding-right: 8px; }
-#vg-tooltip-element table tr td.value { font-variant-numeric: tabular-nums; }
-
-/* Phones: more width for the charts */
-@media (max-width: 560px) {
-  .page { padding: 1.75rem 0.85rem 3rem; }
-  figure.chart { padding: 0.65rem 0.45rem 0.35rem; }
-  section.cc { padding-top: 1.9rem; }
+/* Commentary the brief asks for (CC3, CC4, CC5, CC8), set off like the project's notes */
+.portfolio .comment {
+    margin: 1.75rem 0 0;
+    padding: 1rem 1.15rem;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--red);
+    border-radius: 2px 8px 8px 2px;
+    background: var(--paper);
+    font-size: 1.0625rem;
+    line-height: 1.5;
 }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Sub-heading inside a challenge (CC5: API, scraper) */
+.portfolio h3.part {
+    margin: 2.5rem 0 0.25rem;
+    font: 600 0.8125rem/1.3 var(--sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+
+/* CC5: functional description of the API, right under its chart */
+.api {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.55rem 1.25rem;
+    margin: 1.25rem 0 0;
+    font: 0.875rem/1.55 var(--sans);
+    color: var(--ink-2);
+}
+
+.api dt {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.api dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.api code {
+    font: 0.8125rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Links set apart from the text: the dashboard, the notebooks */
+.portfolio a.button-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 0.95rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    font: 500 0.875rem/1.2 var(--sans);
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.portfolio a.button-link:hover {
+    border-color: #b9bfc6;
+}
+
+.link-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    align-items: center;
+    margin: 1.25rem 0 0;
+    font: 0.875rem/1.4 var(--sans);
+    color: var(--ink-3);
+}
+
+/* Controls that Vega-Lite draws for an interactive chart: above the chart, looking like the project's controls */
+.chart-body .vega-embed {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-body .vega-bindings {
+    order: -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+    margin: 0 0 1rem;
+    font: 500 0.875rem/1.2 var(--sans);
+}
+
+.chart-body .vega-bind label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.chart-body .vega-bind-name {
+    color: var(--ink-3);
+}
+
+.chart-body .vega-bindings select {
+    min-width: 12rem;
+    padding: 0.5rem 2.1rem 0.5rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%235b636d' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+    font: 500 0.875rem/1.2 var(--sans);
+    color: var(--ink);
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.chart-body .vega-bindings select:hover {
+    border-color: #b9bfc6;
+}
+
+.chart-body .vega-bindings input[type="range"] {
+    width: min(16rem, 52vw);
+    height: 1.6rem;
+    margin: 0;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Range track and thumb as on the project's flat-tax slider */
+.chart-body .vega-bindings input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--grid);
+}
+
+.chart-body .vega-bindings input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--grid);
+}
+
+.chart-body .vega-bindings input[type="range"]::-moz-range-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--ink-3);
+}
+
+.chart-body .vega-bindings input[type="range"]::-webkit-slider-thumb {
+    box-sizing: border-box;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: calc(2px - 0.575rem);
+    border: 2px solid var(--paper);
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 1px 3px rgba(22, 25, 29, 0.35);
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: grab;
+}
+
+.chart-body .vega-bindings input[type="range"]::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 2px solid var(--paper);
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 1px 3px rgba(22, 25, 29, 0.35);
+    cursor: grab;
+}
+
+/* the number Vega-Lite prints beside a slider */
+.chart-body .vega-bind label > span:last-child {
+    min-width: 4.5rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+}
+
+/* Devolution dashboard: six small figures, 3 x 2 on computers, 2 x 3 on tablets, one column on phones */
+.dash-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    margin: 0 0 1.5rem;
+    font: 0.8125rem/1.5 var(--sans);
+    color: var(--ink-2);
+}
+
+.swatch {
+    display: inline-block;
+    width: 1.4rem;
+    height: 0;
+    margin-right: 0.45rem;
+    vertical-align: middle;
+    border-top: 2.6px solid var(--red);
+}
+
+.swatch.london {
+    border-top: 1.6px dashed var(--blue);
+}
+
+.swatch.others {
+    border-top: 1.3px solid #c9ced4;
+}
+
+.swatch.mayor {
+    width: 0;
+    height: 0.9rem;
+    margin: 0 0.6rem 0 0.3rem;
+    border-top: 0;
+    border-left: 1px dashed var(--ink-3);
+}
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.25rem 2rem;
+}
+
+.dash-cell .chart-head {
+    margin-bottom: 0.6rem;
+}
+
+.dash-cell .chart-title {
+    font-size: 1rem;
+}
+
+.dash-cell .chart-subtitle {
+    font-size: 0.8125rem;
+}
+
+@media (max-width: 62rem) {
+    .dash-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 40rem) {
+    .dash-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .api {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.2rem;
+    }
+
+    .api dd {
+        margin-bottom: 0.6rem;
+    }
+
+    .chart-body .vega-bind,
+    .chart-body .vega-bind label {
+        width: 100%;
+    }
+
+    .chart-body .vega-bindings select {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+}
+
+/* The project's grid gives every section display: grid, which would override the hidden attribute (CC10) */
+.portfolio [hidden] {
+    display: none !important;
+}

@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Line chart of the share of pre-tax national income received by the top 1% in the United States, the United Kingdom and France since 1900 (World Inequality Database via Our World in Data). Labels sit at the latest year of each line.",
-  "title": {
-    "text": "Top 1% share of pre-tax income",
-    "subtitle": "% of national income; gaps are years without estimates"
-  },
   "width": "container",
   "height": 300,
   "data": {
@@ -36,7 +32,7 @@
     "y": {
       "field": "share",
       "type": "quantitative",
-      "title": "% of national income",
+      "title": null,
       "scale": {
         "domain": [
           0,
@@ -58,9 +54,9 @@
           "France"
         ],
         "range": [
-          "#B42318",
-          "#B7791F",
-          "#2F5D8C"
+          "#c4532d",
+          "#b7a57a",
+          "#1f4e8c"
         ]
       }
     }
@@ -69,7 +65,7 @@
     {
       "mark": {
         "type": "line",
-        "strokeWidth": 2
+        "strokeWidth": 2.6
       }
     },
     {
@@ -120,7 +116,7 @@
       "encoding": {
         "y": null,
         "color": {
-          "value": "#5B6472"
+          "value": "#16191d"
         },
         "opacity": {
           "condition": {
@@ -140,19 +136,16 @@
           {
             "field": "United States",
             "type": "quantitative",
-            "title": "United States (%)",
             "format": ".1f"
           },
           {
             "field": "United Kingdom",
             "type": "quantitative",
-            "title": "United Kingdom (%)",
             "format": ".1f"
           },
           {
             "field": "France",
             "type": "quantitative",
-            "title": "France (%)",
             "format": ".1f"
           }
         ]
@@ -167,9 +160,10 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": 6,
+        "dx": 8,
         "dy": 0,
-        "fontWeight": 600
+        "fontWeight": 600,
+        "fontSize": 12.5
       },
       "encoding": {
         "x": {
@@ -201,9 +195,10 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": 6,
+        "dx": 8,
         "dy": -6,
-        "fontWeight": 600
+        "fontWeight": 600,
+        "fontSize": 12.5
       },
       "encoding": {
         "x": {
@@ -235,9 +230,10 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": 6,
+        "dx": 8,
         "dy": 7,
-        "fontWeight": 600
+        "fontWeight": 600,
+        "fontSize": 12.5
       },
       "encoding": {
         "x": {
@@ -261,47 +257,6 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "usermeta": {
     "compactDropLayers": [
       3,

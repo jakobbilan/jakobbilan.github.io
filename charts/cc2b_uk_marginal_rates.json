@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Stacked step-area chart of the marginal rate on an extra pound of earnings in the UK by gross earnings: income tax and its personal allowance taper, National Insurance, child benefit withdrawal, and student loan repayments for graduates on top in a lighter shade. A bold line marks the total without student loans; peaks are labelled.",
-  "title": {
-    "text": "Marginal rate on the next £1, UK",
-    "subtitle": "Bold line and labels: total without student loans"
-  },
   "width": "container",
   "height": 320,
   "data": {
@@ -106,7 +102,7 @@
           "field": "marginal_rate",
           "type": "quantitative",
           "stack": "zero",
-          "title": "Marginal rate",
+          "title": null,
           "scale": {
             "domain": [
               0,
@@ -144,19 +140,19 @@
               "Student loans (graduates only)"
             ],
             "range": [
-              "#2F5D8C",
-              "#B42318",
-              "#8FB3D9",
-              "#B7791F",
-              "#D3D8DF"
+              "#1f4e8c",
+              "#c4532d",
+              "#9fb3cf",
+              "#b7a57a",
+              "#cfd5dc"
             ]
           },
           "legend": {
             "orient": "top",
             "direction": "horizontal",
             "columns": 2,
-            "symbolType": "square",
-            "labelLimit": 400
+            "labelLimit": 400,
+            "symbolType": "square"
           }
         },
         "order": {
@@ -167,8 +163,8 @@
           {
             "field": "income",
             "type": "quantitative",
-            "title": "Earnings (£)",
-            "format": ",.0f"
+            "title": "Gross earnings",
+            "format": "$,.0f"
           },
           {
             "field": "component",
@@ -199,8 +195,8 @@
       "mark": {
         "type": "line",
         "interpolate": "step-after",
-        "color": "#1B2A41",
-        "strokeWidth": 2.2
+        "color": "#16191d",
+        "strokeWidth": 1.8
       },
       "encoding": {
         "y": {
@@ -228,9 +224,44 @@
       "mark": {
         "type": "text",
         "dy": -9,
-        "fontWeight": 700,
-        "fontSize": 14,
-        "color": "#1B2A41"
+        "fontWeight": 600,
+        "fontSize": 13,
+        "stroke": "white",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "y": {
+          "field": "rate",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "income": 70000,
+            "rate": 0.5326,
+            "label": "53%"
+          },
+          {
+            "income": 112570,
+            "rate": 0.62,
+            "label": "62%"
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "dy": -9,
+        "fontWeight": 600,
+        "fontSize": 13,
+        "color": "#16191d"
       },
       "encoding": {
         "y": {
@@ -262,7 +293,43 @@
         "type": "text",
         "dy": -9,
         "fontSize": 12,
-        "color": "#5B6472"
+        "fontWeight": 500,
+        "stroke": "white",
+        "strokeWidth": 4,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "y": {
+          "field": "rate",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "income": 70000,
+            "rate": 0.6826,
+            "label": "68%"
+          },
+          {
+            "income": 112570,
+            "rate": 0.77,
+            "label": "77%"
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "dy": -9,
+        "fontSize": 12,
+        "color": "#5b636d",
+        "fontWeight": 500
       },
       "encoding": {
         "y": {
@@ -275,50 +342,10 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "usermeta": {
     "compactDropLayers": [
-      3
+      4,
+      5
     ],
     "compactLegend": {
       "columns": 1

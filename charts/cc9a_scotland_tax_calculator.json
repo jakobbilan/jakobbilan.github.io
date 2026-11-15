@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Interactive step chart of the marginal income tax rate by gross income under Scotland's bands and the rest of the UK's. A menu chooses the tax year (2024-25 to 2026-27) and a slider chooses an income; a vertical line marks it and a readout gives the tax under each system and the difference.",
-  "title": {
-    "text": "Income tax: Scotland vs rest of UK",
-    "subtitle": "Marginal rate on the next £1; choose a year and an income below"
-  },
   "width": "container",
   "height": 340,
   "params": [
@@ -78,7 +74,7 @@
       "mark": {
         "type": "line",
         "interpolate": "step-after",
-        "strokeWidth": 2.2
+        "strokeWidth": 2.4
       },
       "encoding": {
         "x": {
@@ -111,7 +107,7 @@
         "y": {
           "field": "rate",
           "type": "quantitative",
-          "title": "Rate on the next £1",
+          "title": null,
           "scale": {
             "domain": [
               0,
@@ -146,8 +142,8 @@
               "Rest of UK"
             ],
             "range": [
-              "#B42318",
-              "#2F5D8C"
+              "#c4532d",
+              "#1f4e8c"
             ]
           },
           "legend": {
@@ -216,7 +212,7 @@
           2,
           2
         ],
-        "color": "#5B6472"
+        "color": "#5b636d"
       },
       "params": [
         {
@@ -247,8 +243,10 @@
         },
         "tooltip": [
           {
-            "field": "income_label",
-            "title": "Gross income"
+            "field": "gross",
+            "type": "quantitative",
+            "title": "Gross income",
+            "format": "$,.0f"
           },
           {
             "field": "Scotland",
@@ -279,7 +277,7 @@
       ],
       "mark": {
         "type": "rule",
-        "color": "#1B2A41",
+        "color": "#16191d",
         "strokeWidth": 1.2
       },
       "encoding": {
@@ -348,7 +346,7 @@
         "lineHeight": 17,
         "fontSize": 13,
         "fontWeight": 500,
-        "color": "#1B2A41"
+        "color": "#16191d"
       },
       "encoding": {
         "text": {
@@ -356,46 +354,5 @@
         }
       }
     }
-  ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  }
+  ]
 }

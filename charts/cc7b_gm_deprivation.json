@@ -1,10 +1,6 @@
 {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Choropleth of Greater Manchester's small areas (LSOAs) coloured by their national deprivation decile in the English Indices of Deprivation 2025, with council borders drawn on top.",
-  "title": {
-    "text": "Greater Manchester: deprivation",
-    "subtitle": "Decile within England, Indices of Deprivation 2025"
-  },
   "width": "container",
   "height": 460,
   "projection": {
@@ -21,7 +17,7 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#E8EBEF",
+        "fill": "#e6e8eb",
         "stroke": null
       }
     },
@@ -81,22 +77,32 @@
               9,
               10
             ],
-            "scheme": {
-              "name": "redyellowblue",
-              "count": 10
-            }
+            "range": [
+              "#b8431f",
+              "#cc6343",
+              "#dd8d72",
+              "#ecb7a3",
+              "#f3ddd4",
+              "#e3e9f1",
+              "#c9d6ea",
+              "#a9bfdf",
+              "#6b8fc4",
+              "#2f5a99"
+            ]
           },
           "legend": {
             "orient": "right",
             "direction": "vertical",
             "labelExpr": "datum.value == 1 ? '1 most deprived' : datum.value == 10 ? '10 least deprived' : datum.value",
-            "labelLimit": 220
+            "labelLimit": 220,
+            "symbolType": "square",
+            "symbolSize": 140
           }
         },
         "tooltip": [
           {
             "field": "properties.name",
-            "title": "Neighbourhood (LSOA)"
+            "title": "Neighbourhood"
           },
           {
             "field": "decile_label",
@@ -116,7 +122,7 @@
       "mark": {
         "type": "geoshape",
         "filled": false,
-        "stroke": "#1B2A41",
+        "stroke": "#16191d",
         "strokeWidth": 1
       },
       "encoding": {
@@ -155,7 +161,7 @@
         "fontSize": 11.5,
         "fontWeight": 600,
         "stroke": "white",
-        "strokeWidth": 3,
+        "strokeWidth": 4,
         "strokeJoin": "round"
       },
       "encoding": {
@@ -198,7 +204,7 @@
         "type": "text",
         "fontSize": 11.5,
         "fontWeight": 600,
-        "color": "#1B2A41"
+        "color": "#16191d"
       },
       "encoding": {
         "longitude": {
@@ -215,47 +221,6 @@
       }
     }
   ],
-  "config": {
-    "font": "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif",
-    "background": null,
-    "view": {
-      "stroke": null
-    },
-    "title": {
-      "anchor": "start",
-      "color": "#1B2A41",
-      "fontSize": 17,
-      "fontWeight": 600,
-      "subtitleColor": "#5B6472",
-      "subtitleFontSize": 13,
-      "offset": 14,
-      "subtitlePadding": 5
-    },
-    "axis": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "titleFontWeight": 500,
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "labelPadding": 4,
-      "titlePadding": 8,
-      "gridColor": "#D5DAE1",
-      "domainColor": "#AEB6C1",
-      "tickColor": "#AEB6C1"
-    },
-    "legend": {
-      "labelColor": "#5B6472",
-      "titleColor": "#5B6472",
-      "labelFontSize": 12.5,
-      "titleFontSize": 12.5,
-      "titleFontWeight": 500,
-      "symbolSize": 110
-    },
-    "text": {
-      "color": "#1B2A41",
-      "fontSize": 12.5
-    }
-  },
   "padding": {
     "left": 10,
     "right": 4,
