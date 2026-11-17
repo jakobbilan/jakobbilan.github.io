@@ -166,19 +166,28 @@
         <figure class="chart wide size-s" id="figure-cc3-2" aria-labelledby="title-figure-cc3-2">
             <div class="chart-head">
                 <p class="chart-number">CC3 · Chart 2</p>
-                <h3 class="chart-title" id="title-figure-cc3-2">Three accounting choices turn the top 400’s lower tax rate into a higher one</h3>
-                <p class="chart-subtitle">Total effective tax rate, United States, 2018–20: from Balkir et al. to Splinter, step by step</p>
+                <h3 class="chart-title" id="title-figure-cc3-2">Splinter’s four adjustments turn the top 400’s below-average tax rate into an above-average one</h3>
+                <p class="chart-subtitle">All taxes as % of income, United States, 2018–20 average: Balkir et al., adjusted by Splinter</p>
             </div>
-            <div class="chart-body" id="cc3b" data-spec="charts/cc3b_splinter_bridge.json" data-height="250 250"
-                role="img" aria-label="Bridge chart: the top 400's tax rate is 23.8% in Balkir et al., below everyone's 30.2%; Splinter's adjustments of +3, +8 and +3 points take it to 38%, above everyone's 25% when transfers count as income."></div>
+            <div class="chart-body" id="cc3b" data-spec="charts/cc3b_splinter_bridge.json" data-height="300 380"
+                role="img" aria-label="Bridge chart of total tax rates, United States, 2018–20. Full population: 30.2% in Balkir et al., 25% in Splinter, who counts transfers as income and refundable credits as negative taxes. Top 400: 23.8% in Balkir et al. (range 21.7–26.4%); Splinter adds 3 points for removing pure capital gains from income, 8 for splitting family fortunes across tax returns and 3 for likely missing state income taxes, reaching 38% (range 34–44%)."></div>
             <footer class="chart-foot">
-                <p class="chart-key">Blue: the top 400’s rate under each method; red: Splinter’s three adjustments, in percentage points; grey: everyone’s rate under the same method (Splinter counts transfers as income, which lowers it). The steps are rounded in the sources and sum to 37.8 against Splinter’s 38.</p>
-                <p>Sources: Balkir, Saez, Yagan and Zucman (2025), NBER Working Paper 34170; Splinter (2025), as reported by the Cato Institute (Michel, 9 September 2025) and the Tax Foundation.</p>
+                <p class="chart-key">Top 400: the wealthiest 0.0002% of tax units, 367 on average. Red: Splinter’s adjustments, in percentage points; outlined: what his income and tax definitions take off the full population’s rate. Ranges: each study’s alternative assumptions.</p>
+                <p>Sources: Balkir, Saez, Yagan and Zucman (2025), <a href="https://www.nber.org/papers/w34170">NBER Working Paper 34170</a>, Table 2 and section 3.4; Splinter (2025), <a href="https://www.davidsplinter.com/BillionaireTaxRate.pdf">Comment on “How Much Tax Do Billionaires Pay?”</a>, Table 1 and appendix.</p>
                 <p class="chart-actions">
                     <a href="data/cc3_splinter_bridge.csv" download>Data (CSV)</a>
                     <a href="charts/cc3b_splinter_bridge.json">Chart specification</a>
                     <button type="button" data-save="cc3b">Save image</button>
                 </p>
+                <details class="chart-notes">
+                    <summary>Notes and method</summary>
+                    <p>Both studies divide all taxes, at every level of government, by income, averaged over 2018–20. Balkir et al. measure income as national income, which counts company profits as their owners’ income, plus half of realized capital gains. Splinter starts from their figures and makes four adjustments (his Table 1): three to the top 400, one to the full population.</p>
+                    <p>“Pure” capital gains are realized gains from rising share prices that Balkir et al. judge not to reflect retained profits, so they count them as income. Splinter treats them as double counting of profits and removes them (about $20bn of the top 400’s $166bn a year) but keeps the tax paid on them. Balkir et al. (note 10) report that removing the gains and the tax on them together leaves rates virtually unchanged.</p>
+                    <p>Family fortunes: Splinter argues that Forbes estimates cover whole families; Smith, Zidar and Zwick (2023) count 2,370 adults possibly represented in the 400 entries. In his reading, Balkir et al. assign each fortune to a single tax unit; his baseline gives the top tax units 39% less income and 21% less tax. Other splits he considers add 4 to 13 points instead of 8.</p>
+                    <p>State income taxes: from 2018 the federal deduction for state and local taxes was capped at $10,000. Between 2014–17 and 2018–20 the top 400’s reported state income taxes fell 22% in real terms while their ordinary taxable income rose 22%. Splinter assumes these taxes grew with that income: $17bn rather than $11bn.</p>
+                    <p>Full population: Splinter adds government transfers such as Social Security to income and subtracts refundable tax credits from taxes, which lowers the rate from 30% to 25%; the top 400 are unaffected.</p>
+                    <p>Splinter reports whole percentages: 24, 27, 35 and 38% for the top 400, 30 and 25% for the full population. The bars run between these levels, starting from Balkir et al.’s 23.8% and 30.2%. Ranges: Balkir et al.’s sensitivity tests (share of capital gains counted, business returns) give 21.7–26.4%; Splinter’s alternative family splits give 34–44%. Neither rate counts charitable giving.</p>
+                </details>
             </footer>
         </figure>
             <p class="comment" data-maxwords="25"><span class="draft">[Comment]</span></p>
@@ -413,7 +422,8 @@
         </section>
         <footer class="page-foot">
             <p><strong>Sources.</strong> Balkir, A., Saez, E., Yagan, D. and Zucman, G. (2025), How Much Tax Do US Billionaires Pay? Evidence from Administrative Data, NBER Working Paper 34170.
-                Splinter, D. (2025), comment on Balkir et al., figures as reported in Michel, A. (2025), “What’s the Tax Rate for the Forbes 400?”, Cato Institute, and by the Tax Foundation.
+                Splinter, D. (2025), Comment on “How Much Tax Do Billionaires Pay?”, working paper, August.
+                Smith, M., Zidar, O. and Zwick, E. (2023), Top Wealth in America: New Estimates under Heterogeneous Returns, Quarterly Journal of Economics 138(1), 515–573.
                 World Inequality Database (WID.world), via the Our World in Data chart API.
                 Economics Observatory (2025), “Why do some people in Britain face marginal tax rates of over 60 percent?”.
                 World Bank, Poverty and Inequality Platform, World Bank Indicators API.
