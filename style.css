@@ -288,3 +288,48 @@ a:focus-visible {
     font-size: 1.25rem;
     line-height: 1.55;
 }
+
+/* Projects page, PP434 entry: the portfolio and the project as picture links
+   inside the Link field, side by side when the field is wide enough */
+.tiles {
+    list-style: none;
+    margin: 0.35rem 0 0.9rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.25rem 1.5rem;
+}
+
+.tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Picture above its link on screen; the link stays first for screen readers */
+.tile img {
+    order: -1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    margin-bottom: 0.45rem;
+}
+
+/* The link covers the whole tile, so the picture is clickable too */
+.tile a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 3px;
+}
+
+/* Keyboard focus outlines the whole tile, not just its link text */
+.tile a:focus-visible {
+    outline: none;
+}
+
+.tile a:focus-visible::after {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+}

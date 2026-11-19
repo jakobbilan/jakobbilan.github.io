@@ -75,6 +75,23 @@
                 "position": 2,
                 "item": {
                   "@type": "CreativeWork",
+                  "name": "Data science portfolio",
+                  "url": "https://jakobbilan.github.io/portfolio.html",
+                  "author": {
+                    "@id": "https://jakobbilan.github.io/#person"
+                  },
+                  "about": [
+                    "Data visualisation",
+                    "Taxation",
+                    "Inequality"
+                  ]
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "CreativeWork",
                   "name": "Paddy-Residue Burning in Punjab",
                   "author": {
                     "@id": "https://jakobbilan.github.io/#person"
@@ -88,7 +105,7 @@
               },
               {
                 "@type": "ListItem",
-                "position": 3,
+                "position": 4,
                 "item": {
                   "@type": "CreativeWork",
                   "name": "Mobilising Domestic Institutional Capital for Development",
@@ -104,7 +121,7 @@
               },
               {
                 "@type": "ListItem",
-                "position": 4,
+                "position": 5,
                 "item": {
                   "@type": "CreativeWork",
                   "name": "Turner MBA Impact Investing Network & Training (Turner MIINT)",
@@ -118,7 +135,7 @@
               },
               {
                 "@type": "ListItem",
-                "position": 5,
+                "position": 6,
                 "item": {
                   "@type": "CreativeWork",
                   "name": "Financing Cigéo, France’s Deep Geological Repository for Radioactive Waste",
@@ -161,7 +178,8 @@
         <section>
             <h2>Current</h2>
 
-            <!-- PP434: the two graded pages, portfolio.html and project.html -->
+            <!-- PP434: the two graded pages, portfolio.html and project.html, as picture
+                 links in the Link field. Pictures are in assets/projects, 600 x 400 -->
             <article class="paper">
                 <h3>Automated Data Visualisation for Policymaking (PP434)</h3>
                 <dl class="fields">
@@ -174,7 +192,21 @@
                     <dt>Description</dt>
                     <dd>Ten charting challenges, and a project comparing what homes in England pay in council tax, still banded on their 1991 values, with what they are worth today.</dd>
                     <dt>Link</dt>
-                    <dd><a href="portfolio.html">Portfolio</a> | <a href="project.html">Project</a> | <a href="https://github.com/jakobbilan/jakobbilan.github.io">Code and data</a></dd>
+                    <dd>
+                        <ul class="tiles">
+                            <li class="tile">
+                                <a href="portfolio.html">Data science portfolio</a>
+                                <img src="assets/projects/portfolio.svg" width="600" height="400" decoding="async"
+                                    alt="Line chart of the top 1% share of pre-tax national income since 1900, the United States highlighted against the United Kingdom and France">
+                            </li>
+                            <li class="tile">
+                                <a href="project.html">England’s council tax is stuck in 1991</a>
+                                <img src="assets/projects/council-tax.svg" width="600" height="400" decoding="async"
+                                    alt="Hexagon map of England’s councils, shaded by council tax as a share of home value">
+                            </li>
+                        </ul>
+                        <a href="https://github.com/jakobbilan/jakobbilan.github.io">Code and data</a>
+                    </dd>
                 </dl>
             </article>
 
