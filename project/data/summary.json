@@ -1,6 +1,6 @@
 {
-  "built": "2026-11-05T22:57Z",
-  "price_month": "2026-08",
+  "built": "2026-11-20T15:27Z",
+  "price_month": "2026-09",
   "sales_window": [
     "2024-01-01",
     "2026-07-31"
@@ -9,9 +9,9 @@
   "england": {
     "dwellings": 25937780.0,
     "bill_per_dwelling": 2220.0732310488147,
-    "value_per_dwelling": 345754.28692604386,
-    "rate_mix": 0.00642041963739759,
-    "revenue_neutral_rate": 0.00642041963739759,
+    "value_per_dwelling": 346311.5847993382,
+    "rate_mix": 0.00641008765207965,
+    "revenue_neutral_rate": 0.00641008765207965,
     "share_ad": 0.8078817847942268,
     "fuel_poor": 2472012.0,
     "fp_rate": 0.09949418400555039,
@@ -25,17 +25,17 @@
   "highest": {
     "lad": "E06000009",
     "name": "Blackpool",
-    "rate_mix": 0.014271161455023032,
-    "rate_press": 0.01820316517582298
+    "rate_mix": 0.014330607933329518,
+    "rate_press": 0.018300589820141263
   },
   "lowest": {
     "lad": "E09000033",
     "name": "Westminster",
-    "rate_mix": 0.0014357645382576266,
-    "rate_press": 0.0011829834333852566
+    "rate_mix": 0.001482146230246868,
+    "rate_press": 0.001218805522975625
   },
-  "gap_mix": 9.939764546867702,
-  "gap_press": 15.840360293478279,
+  "gap_mix": 9.668821902237404,
+  "gap_press": 15.241560350750218,
   "sources": {
     "ctsop_bands": {
       "url": "https://assets.publishing.service.gov.uk/media/6ab25147a9c3d267bcccecc1/CTSOP_1_1.zip",
@@ -64,8 +64,8 @@
       }
     },
     "hpi": {
-      "url": "https://publicdata.landregistry.gov.uk/market-trend-data/house-price-index-data/UK-HPI-full-file-2026-08.csv",
-      "month": "2026-08"
+      "url": "https://publicdata.landregistry.gov.uk/market-trend-data/house-price-index-data/UK-HPI-full-file-2026-09.csv",
+      "month": "2026-09"
     },
     "ppd": {
       "files": [
@@ -90,11 +90,11 @@
       "sales": 1820354,
       "sales_from": "2024-01-01",
       "sales_to": "2026-07-31",
-      "price_month": "2026-08",
+      "price_month": "2026-09",
       "fallback_share": 0.02588648926190606,
       "bill": 2220.0732310488147,
-      "value": 345754.28692604386,
-      "rate": 0.00642041963739759,
+      "value": 346311.5847993382,
+      "rate": 0.00641008765207965,
       "checks_passed": 8,
       "checks": 9
     },
@@ -105,64 +105,64 @@
       "surcharge_max": 7500
     },
     "fig1": {
-      "cheap_value": 117761.71686684396,
-      "cheap_rate": 0.014850647018350698,
-      "dear_value": 946717.6247615974,
-      "dear_rate": 0.0025257573042096228,
-      "ratio": 5.879680915343473,
+      "cheap_value": 117189.38080973507,
+      "cheap_rate": 0.01477778650935849,
+      "dear_value": 931615.7939649543,
+      "dear_rate": 0.0026436830258425204,
+      "ratio": 5.5898480887847475,
       "group_share": 0.025
     },
     "pair": {
       "a_name": "Burnley",
       "a_band_d": 2549.42,
       "a_bill": 1955.0722712456045,
-      "a_value": 157619.5743907407,
-      "a_price": 136703.0,
-      "a_rate": 0.012390280181312063,
-      "a_rate_press": 0.018649334689070467,
+      "a_value": 158641.10607959924,
+      "a_price": 137239.0,
+      "a_rate": 0.012310495917625099,
+      "a_rate_press": 0.01857649793426067,
       "a_share_ad": 0.957033957033957,
       "b_name": "Westminster",
       "b_band_d": 1049.55,
       "b_bill": 1399.0553201970445,
-      "b_value": 974629.2764975814,
-      "b_price": 887206.0,
-      "b_rate": 0.0014357645382576266,
-      "b_rate_press": 0.0011829834333852566,
+      "b_value": 944129.6172981794,
+      "b_price": 861130.0,
+      "b_rate": 0.001482146230246868,
+      "b_rate_press": 0.001218805522975625,
       "b_share_ad": 0.35240621447518,
-      "gap_mix": 8.62974384110942,
-      "gap_press": 15.764662600306277
+      "gap_mix": 8.30585786098491,
+      "gap_press": 15.241560350750218
     },
     "fig2": {
       "base": "1995-01",
-      "latest": "2026-08",
+      "latest": "2026-09",
       "london_start": 79687,
-      "london_end": 554430,
-      "london_x": 6.957596596684528,
+      "london_end": 545579,
+      "london_x": 6.84652452721272,
       "north_east_start": 39809,
-      "north_east_end": 165640,
-      "north_east_x": 4.160868145394257,
+      "north_east_end": 166649,
+      "north_east_x": 4.186214172674521,
       "england_start": 50231,
-      "england_end": 293525,
-      "england_x": 5.843503016065776,
-      "london_vs_north_east": 1.6721502228774112
+      "england_end": 292998,
+      "england_x": 5.833011486930381,
+      "london_vs_north_east": 1.635493131694827
     },
     "fig3": {
       "high_mix_name": "Blackpool",
-      "high_mix_rate": 0.014271161455023032,
+      "high_mix_rate": 0.014330607933329518,
       "low_mix_name": "Westminster",
-      "low_mix_rate": 0.0014357645382576266,
-      "gap_mix": 9.939764546867702,
-      "high_press_name": "Hartlepool",
-      "high_press_rate": 0.018738883806038425,
+      "low_mix_rate": 0.001482146230246868,
+      "gap_mix": 9.668821902237404,
+      "high_press_name": "Burnley",
+      "high_press_rate": 0.01857649793426067,
       "low_press_name": "Westminster",
-      "low_press_rate": 0.0011829834333852566,
-      "gap_press": 15.840360293478279
+      "low_press_rate": 0.001218805522975625,
+      "gap_press": 15.241560350750218
     },
     "fig4": {
       "council": "Westminster",
       "band_h": 2099.1,
       "compare": "Burnley",
-      "compare_rate": 0.012390280181312063,
+      "compare_rate": 0.012310495917625099,
       "charge_2m": 2500.0,
       "rate_2m_now": 0.00104955,
       "rate_2m_with": 0.00229955,
@@ -172,7 +172,7 @@
       "charge_10m": 7500.0,
       "rate_10m_now": 0.00020991,
       "rate_10m_with": 0.00095991,
-      "compare_vs_top": 12.907751957279393,
+      "compare_vs_top": 12.824635557109623,
       "sales_2m": 10815,
       "london_share": 0.6732316227461859,
       "top_name": "Westminster",
@@ -233,46 +233,46 @@
       "london_outside_share": 0.24021491814014462
     },
     "fig6": {
-      "theta_today": 0.2358430491590158,
-      "theta_equal": 0.46941694517160304,
+      "theta_today": 0.23815275807323694,
+      "theta_equal": 0.4719226687774638,
       "income1_less_neutral": 0.9869864451768368,
       "income1_less_fs": 0.9967485375160599,
       "income1_mean": 29304.361287948977,
       "income1_burden_today": 0.05824378881516929,
-      "income1_burden_neutral": 0.03711055182260001,
-      "income1_burden_fs": 0.027744393483395788,
-      "income2_less_neutral": 0.9439760905046083,
-      "income2_less_fs": 0.9877851151444147,
+      "income1_burden_neutral": 0.03724604948618143,
+      "income1_burden_fs": 0.02789057611024527,
+      "income2_less_neutral": 0.9445695886171687,
+      "income2_less_fs": 0.9883631977215839,
       "income2_mean": 33916.85175457697,
       "income2_burden_today": 0.057848834204918285,
-      "income2_burden_neutral": 0.04435383136178668,
-      "income2_burden_fs": 0.03315957562905824,
-      "income3_less_neutral": 0.789810597671709,
-      "income3_less_fs": 0.9599780458917894,
+      "income2_burden_neutral": 0.04448502028551604,
+      "income2_burden_fs": 0.03331126015120889,
+      "income3_less_neutral": 0.7917556546272134,
+      "income3_less_fs": 0.9621619019190587,
       "income3_mean": 37250.03662291893,
       "income3_burden_today": 0.056272220738046316,
-      "income3_burden_neutral": 0.05055916633109733,
-      "income3_burden_fs": 0.03779877517283824,
-      "income4_less_neutral": 0.4702440584445609,
-      "income4_less_fs": 0.8743160660892081,
+      "income3_burden_neutral": 0.05063119043111244,
+      "income3_burden_fs": 0.03791363351958107,
+      "income4_less_neutral": 0.46375920902561574,
+      "income4_less_fs": 0.8695728399247865,
       "income4_mean": 41155.97908510835,
       "income4_burden_today": 0.05376702675028338,
-      "income4_burden_neutral": 0.05679152522628584,
-      "income4_burden_fs": 0.04245817820043079,
-      "income5_less_neutral": 0.14063210550250113,
-      "income5_less_fs": 0.512619372442019,
+      "income4_burden_neutral": 0.05685078209331876,
+      "income4_burden_fs": 0.04257098636699566,
+      "income5_less_neutral": 0.14039316792686968,
+      "income5_less_fs": 0.5100199628490608,
       "income5_mean": 49965.896432122456,
       "income5_burden_today": 0.04708306984802763,
-      "income5_burden_neutral": 0.07005860939891612,
-      "income5_burden_fs": 0.05237684514514123,
+      "income5_burden_neutral": 0.0697891363621831,
+      "income5_burden_fs": 0.05225948110550368,
       "fs_rate": 0.0048,
-      "fs_revenue": 0.7476146842553736,
-      "fs_less": 0.8663096494442267,
-      "fs_councils_more": 31,
-      "neutral_rate": 0.00642041963739759,
-      "neutral_less": 0.6663595840784036,
-      "neutral_councils_more": 99,
-      "local_less": 0.5575579497979689,
+      "fs_revenue": 0.7488197136341367,
+      "fs_less": 0.8653937958528823,
+      "fs_councils_more": 30,
+      "neutral_rate": 0.00641008765207965,
+      "neutral_less": 0.6655227165982185,
+      "neutral_councils_more": 98,
+      "local_less": 0.5570154500686408,
       "local_councils_more": 75,
       "councils": 296
     }
@@ -291,7 +291,7 @@
     {
       "check": "replicates_july_2026_ranking",
       "status": "warn",
-      "detail": "86% of 295 councils within 0.015 points of the published Band D / price ratio"
+      "detail": "81% of 295 councils within 0.015 points of the published Band D / price ratio"
     },
     {
       "check": "dwellings_total",
@@ -321,7 +321,7 @@
     {
       "check": "revenue_neutral_rate",
       "status": "pass",
-      "detail": "0.642%"
+      "detail": "0.641%"
     }
   ]
 }
